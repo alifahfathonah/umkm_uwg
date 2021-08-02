@@ -26,7 +26,7 @@ class Pelanggan extends CI_Controller {
 					'nama' => $pelanggan->nama,
 					'alamat' => $pelanggan->alamat,
 					'telepon' => $pelanggan->telepon,
-					'keterangan' => $pelanggan->keterangan,
+					'tipe' => $pelanggan->tipe,
 					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$pelanggan->id.')">Edit</button> <button class="btn btn-sm btn-danger" onclick="remove('.$pelanggan->id.')">Delete</button>'
 				);
 			}
@@ -45,7 +45,7 @@ class Pelanggan extends CI_Controller {
 			'nama' => $this->input->post('nama'),
 			'alamat' => $this->input->post('alamat'),
 			'telepon' => $this->input->post('telepon'),
-			'keterangan' => $this->input->post('keterangan')
+			'tipe' => $this->input->post('tipe')
 		);
 		if ($this->pelanggan_model->create($data)) {
 			echo json_encode('sukses');
@@ -67,7 +67,7 @@ class Pelanggan extends CI_Controller {
 			'nama' => $this->input->post('nama'),
 			'alamat' => $this->input->post('alamat'),
 			'telepon' => $this->input->post('telepon'),
-			'keterangan' => $this->input->post('keterangan')
+			'tipe' => $this->input->post('tipe')
 		);
 		if ($this->pelanggan_model->update($id,$data)) {
 			echo json_encode('sukses');
@@ -77,7 +77,7 @@ class Pelanggan extends CI_Controller {
 	public function get_pelanggan()
 	{
 		$id = $this->input->post('id');
-		$pelanggan = $this->pelanggan_model->getSupplier($id);
+		$pelanggan = $this->pelanggan_model->detail($id);
 		if ($pelanggan->row()) {
 			echo json_encode($pelanggan->row());
 		}
@@ -92,6 +92,19 @@ class Pelanggan extends CI_Controller {
 			$data[] = array(
 				'id' => $pelanggan->id,
 				'text' => $pelanggan->nama
+			);
+		}
+		echo json_encode($data);
+	}
+
+	public function get_tipe()
+	{
+		header('Content-type: application/json');
+		$tipe = $this->pelanggan_model->get_tipe();
+		foreach ($tipe as $item) {
+			$data[] = array(
+				'id' => $item->id,
+				'text' => $item->nama
 			);
 		}
 		echo json_encode($data);

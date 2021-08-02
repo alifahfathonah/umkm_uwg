@@ -15,11 +15,11 @@ let url, pelanggan = $("#pelanggan").DataTable({
     }, {
         data: "nama"
     }, {
-        data: "jenis_kelamin"
-    }, {
         data: "alamat"
     }, {
         data: "telepon"
+    }, {
+        data: "tipe"
     }, {
         data: "action"
     }]
@@ -92,9 +92,11 @@ function add() {
     url = "add";
     $(".modal-title").html("Add Data");
     $('.modal button[type="submit"]').html("Add")
+    $('#tipe').val("").trigger('change');
 }
 
 function edit(id) {
+    $('#tipe').val("").trigger('change');
     $.ajax({
         url: get_pelangganUrl,
         type: "post",
@@ -107,7 +109,8 @@ function edit(id) {
             $('[name="nama"]').val(res.nama);
             $('[name="alamat"]').val(res.alamat);
             $('[name="telepon"]').val(res.telepon);
-            $('[name="keterangan"]').val(res.keterangan);
+            $('[name="tipe"]').append(`<option value='${res.tipe_id}'>${res.tipe}</option>`);
+            $('#tipe').val(res.tipe_id).trigger('change');
             $(".modal").modal("show");
             $(".modal-title").html("Edit Data");
             $('.modal button[type="submit"]').html("Edit");
@@ -139,4 +142,18 @@ $("#form").validate({
 $(".modal").on("hidden.bs.modal", () => {
     $("#form")[0].reset();
     $("#form").validate().resetForm()
+});
+
+$("#tipe").select2({
+    placeholder: "Tipe",
+    // minimumResultsForSearch: Infinity,
+    ajax: {
+        url: tipeUrl,
+        type: "post",
+        dataType: "json",
+        processResults: data => ({
+            results: data
+        }),
+        cache: true
+    }
 });

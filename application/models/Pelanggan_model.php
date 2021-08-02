@@ -11,8 +11,15 @@ class Pelanggan_model extends CI_Model {
 	}
 
 	public function read()
-	{
-		return $this->db->get($this->table);
+	{	
+		$this->db->select([
+			"pelanggan.*",
+			"tipe_pelanggan.id tipe_id",
+			"tipe_pelanggan.nama tipe"
+		])
+		->from($this->table)
+		->join("tipe_pelanggan", "tipe_pelanggan.id = pelanggan.tipe", "left");
+		return $this->db->get();
 	}
 
 	public function update($id, $data)
@@ -27,16 +34,28 @@ class Pelanggan_model extends CI_Model {
 		return $this->db->delete($this->table);
 	}
 
-	public function getSupplier($id)
+	public function detail($id)
 	{
-		$this->db->where('id', $id);
-		return $this->db->get($this->table);
+		$this->db->select([
+			"pelanggan.*",
+			"tipe_pelanggan.id tipe_id",
+			"tipe_pelanggan.nama tipe"
+		])
+		->from($this->table)
+		->join("tipe_pelanggan", "tipe_pelanggan.id = pelanggan.tipe", "left")
+		->where('pelanggan.id', $id);
+		return $this->db->get();
 	}
 
 	public function search($search="")
 	{
 		$this->db->like('nama', $search);
 		return $this->db->get($this->table)->result();
+	}
+
+	public function get_tipe()
+	{
+		return $this->db->get("tipe_pelanggan")->result();
 	}
 
 }

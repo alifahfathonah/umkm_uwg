@@ -8,7 +8,9 @@
   <title>Pelanggan</title>
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css') ?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/select2/css/select2.min.css') ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
   <?php $this->load->view('partials/head'); ?>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -47,7 +49,7 @@
                   <th>Nama Customer</th>
                   <th>Alamat</th>
                   <th>No. Telepon</th>
-                  <th>Keterangan</th>
+                  <th>Tipe</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -87,8 +89,8 @@
         <input type="text" class="form-control" placeholder="Telepon" name="telepon" required>
       </div>
       <div class="form-group">
-        <label>Keterangan</label>
-        <input type="text" class="form-control" placeholder="Keterangan" name="keterangan" required>
+        <label>Tipe</label>
+        <select name="tipe" id="tipe" class="form-control select2" required></select>
       </div>
       <button class="btn btn-success" type="submit">Add</button>
       <button class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -104,13 +106,16 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/jquery-validation/jquery.validate.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/vendor/adminlte/plugins/select2/js/select2.min.js') ?>"></script>
+
 <script>
   var readUrl = '<?php echo site_url('pelanggan/read') ?>';
   var addUrl = '<?php echo site_url('pelanggan/add') ?>';
   var deleteUrl = '<?php echo site_url('pelanggan/delete') ?>';
   var editUrl = '<?php echo site_url('pelanggan/edit') ?>';
   var get_pelangganUrl = '<?php echo site_url('pelanggan/get_pelanggan') ?>';
+  var tipeUrl = '<?php echo site_url('pelanggan/get_tipe') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/pelanggan.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/pelanggan.js') ?>"></script>
 </body>
 </html>
