@@ -12,15 +12,25 @@ let produk = $("#produk").DataTable({
         [1, "asc"]
     ],
     columns: [
-        { data: null }, 
-        { data: "barcode" },
-        { data: "nama" },
-        { data: "satuan" },
-        { data: "kategori" },
-        { data: "harga" },
-        { data: "stok" },
-        { data: "action" }
-    ]
+        { name: null, title: "No", data: null }, 
+        { name: "barcode", title: "Kode Item", data: "barcode" },
+        { name: "nama", title: "Nama Barang", data: "nama" },
+        { name: "satuan", title: "Satuan", data: "satuan" },
+        { name: "kategori", title: "Kategori", data: "kategori" },
+        { name: "pelanggan", title: "Pelanggan", data: "pelanggan" },
+        { name: "harga", title: "Harga", data: "harga" },
+        { name: "diskon", title: "Diskon(%)", data: "diskon" },
+        { name: "stok", title: "Stok", data: "stok" },
+        { name: "action", title: "Actions", data: "action" }
+    ],
+    rowsGroup: [
+        'barcode:name',
+        'nama:name',
+        'satuan:name',
+        'kategori:name',
+        'stok:name',
+        'action:name',
+    ],
 });
 
 function reloadTable() {
@@ -101,6 +111,7 @@ function edit(id) {
             id: id
         },
         success: res => {
+            console.log(res)
             $('[name="id"]').val(res.id);
             $('[name="barcode"]').val(res.barcode);
             $('[name="nama_produk"]').val(res.nama_produk);
@@ -108,6 +119,15 @@ function edit(id) {
             $('[name="kategori"]').append(`<option value='${res.kategori_id}'>${res.kategori}</option>`);
             $('[name="harga"]').val(res.harga);
             $('[name="stok"]').val(res.stok);
+
+            if (res.pelanggan.length > 0) {
+                res.pelanggan.forEach(r => {
+                    $(`[name="id_${r.pelanggan.toLowerCase()}"]`).val(r.id);
+                    $(`[name="harga_${r.pelanggan.toLowerCase()}"]`).val(r.harga);
+                    $(`[name="diskon_${r.pelanggan.toLowerCase()}"]`).val(r.diskon);
+                });
+            }
+
             $(".modal").modal("show");
             $(".modal-title").html("Edit Data");
             $('.modal button[type="submit"]').html("Edit");

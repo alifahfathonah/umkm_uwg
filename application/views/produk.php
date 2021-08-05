@@ -21,6 +21,10 @@
     .my-table > thead > tr > th{
       border: none;
     }
+
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+      vertical-align:middle;
+    }
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -52,20 +56,7 @@
             <button class="btn btn-success" data-toggle="modal" data-target="#modal" onclick="add()">Add</button>
           </div>
           <div class="card-body">
-            <table class="table w-100 table-bordered table-hover" id="produk">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Kode Item</th>
-                  <th>Nama Barang</th>
-                  <th>Satuan</th>
-                  <th>Kategori</th>
-                  <th>Harga</th>
-                  <th>Stok</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-            </table>
+            <table class="table w-100 table-bordered table-hover" id="produk"></table>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -116,7 +107,10 @@
           <tbody>
             <?php foreach($tipe_pelanggan as $key => $value): ?>
             <tr>
-              <td><?=$value->nama ?></td>
+              <td>
+                <?=$value->nama ?>
+                <input type="hidden" class="form-control" name="id_<?=strtolower($value->nama) ?>" value="">
+              </td>
               <td>
                 <input type="text" class="form-control" name="harga_<?=strtolower($value->nama) ?>" value="">
               </td>
@@ -155,7 +149,9 @@
   var getProdukUrl = '<?php echo site_url('produk/get_produk') ?>';
   var kategoriSearchUrl = '<?php echo site_url('kategori_produk/search') ?>';
   var satuanSearchUrl = '<?php echo site_url('satuan_produk/search') ?>';
+  var listPelanggan = <?php echo json_encode($tipe_pelanggan); ?>;
 </script>
-<script src="<?php echo base_url('assets/js/produk.min.js') ?>"></script>
+<script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
+<script src="<?php echo base_url('assets/js/unminify/produk.js') ?>"></script>
 </body>
 </html>

@@ -32,8 +32,10 @@ class Produk extends CI_Controller {
 					'kategori' => $produk->kategori,
 					'satuan' => $produk->satuan,
 					'harga' => $produk->harga,
+					'pelanggan' => $produk->pelanggan,
+					'diskon' => !empty($produk->diskon)? $produk->diskon : "-",
 					'stok' => $produk->stok,
-					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$produk->id.')">Edit</button> <button class="btn btn-sm btn-danger" onclick="remove('.$produk->id.')">Delete</button>'
+					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$produk->id.')"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="remove('.$produk->id.')"><i class="fas fa-trash"></i></button>'
 				);
 			}
 		} else {
@@ -61,7 +63,7 @@ class Produk extends CI_Controller {
 				$pelanggan = strtolower($value->nama);
 				$data["pelanggan"][] = [
 					"tipe" => $value->id,
-					"id" => $this->input->post("id".$pelanggan),
+					"id" => $this->input->post("id_".$pelanggan),
 					"harga" => $this->input->post("harga_".$pelanggan),
 					"diskon" => $this->input->post("diskon_".$pelanggan),
 				];
@@ -89,7 +91,6 @@ class Produk extends CI_Controller {
 			'nama_produk' => $this->input->post('nama_produk'),
 			'satuan' => $this->input->post('satuan'),
 			'kategori' => $this->input->post('kategori'),
-			'harga' => $this->input->post('harga'),
 			'stok' => $this->input->post('stok')
 		);
 
@@ -99,7 +100,7 @@ class Produk extends CI_Controller {
 				$pelanggan = strtolower($value->nama);
 				$data["pelanggan"][] = [
 					"tipe" => $value->id,
-					"id" => $this->input->post("id".$pelanggan),
+					"id" => $this->input->post("id_".$pelanggan),
 					"harga" => $this->input->post("harga_".$pelanggan),
 					"diskon" => $this->input->post("diskon_".$pelanggan),
 				];
@@ -115,10 +116,9 @@ class Produk extends CI_Controller {
 	{
 		header('Content-type: application/json');
 		$id = $this->input->post('id');
-		$kategori = $this->produk_model->getProduk($id);
-		if ($kategori->row()) {
-			echo json_encode($kategori->row());
-		}
+		$produk = $this->produk_model->getProduk($id);
+
+		echo json_encode($produk);
 	}
 
 	public function get_barcode()

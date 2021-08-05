@@ -38,7 +38,8 @@ class Produk_model extends CI_Model {
 		->join('tipe_produk_pelanggan', 'produk.id = tipe_produk_pelanggan.produk', 'left')
 		->join('tipe_pelanggan', 'tipe_pelanggan.id = tipe_produk_pelanggan.tipe', 'left')
 		->join('kategori_produk', 'produk.kategori = kategori_produk.id', 'left')
-		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left');
+		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')
+		->group_by("tipe_produk_pelanggan.id");
 
 		return $this->db->get();
 	}
@@ -48,25 +49,24 @@ class Produk_model extends CI_Model {
 		$pelanggan = $data["pelanggan"];
 		unset($data["pelanggan"]);
 		
+		$this->db->trans_start();
 		$this->db->where('id', $id);
 		$q = $this->db->update($this->table, $data);
-
-		print_r($this->db->affected_rows());
-		exit;
+		
 		if($q){
 			if(!empty($pelanggan)){
 				foreach($pelanggan as $key => $value){
-					$detail = $this->db->get_where('tipe_produk_pelanggan', ["id"=>$value["id"]]);
+					$detail = $this->db->get_where('tipe_produk_pelanggan', ["id"=>$value["id"]])->row();
 					if($detail && $value["id"]){
 						$this->db->where('id', $value["id"])->update("tipe_produk_pelanggan",[
-							"produk" => $produk_id,
+							"produk" => $id,
 							"tipe" => $value["tipe"],
 							"harga" => $value["harga"],
 							"diskon" => $value["diskon"],
 						]);
 					}else{
 						$this->db->insert("tipe_produk_pelanggan",[
-							"produk" => $produk_id,
+							"produk" => $id,
 							"tipe" => $value["tipe"],
 							"harga" => $value["harga"],
 							"diskon" => $value["diskon"],
@@ -74,10 +74,14 @@ class Produk_model extends CI_Model {
 					}
 				}
 			}
+		}
 
-			return $produk_id;
-		}else{
+		if($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
 			return;
+		}else{
+			$this->db->trans_complete();
+			return true;
 		}
 	}
 
@@ -104,15 +108,23 @@ class Produk_model extends CI_Model {
 
 	public function getProduk($id)
 	{
-		$this->db->select('produk.id, produk.barcode, produk.nama_produk, tipe_pelanggan.nama pelanggan, tipe_produk_pelanggan.harga, tipe_produk_pelanggan.diskon, produk.stok, kategori_produk.kategori, satuan_produk.satuan')
+		$produk = [];
+
+		$q1 = $this->db->select('produk.id, produk.barcode, produk.nama_produk,  produk.stok, kategori_produk.kategori, satuan_produk.satuan')
 		->from($this->table)
-		->join('tipe_produk_pelanggan', 'produk.id = tipe_produk_pelanggan.produk', 'left')
-		->join('tipe_pelanggan', 'tipe_pelanggan.id = tipe_produk_pelanggan.tipe', 'left')
 		->join('kategori_produk', 'produk.kategori = kategori_produk.id', 'left')
 		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')
 		->where('produk.id', $id);
+		$produk = $q1->get()->row_array();
 
-		return $this->db->get();
+
+		$q2 = $this->db->select('tipe_produk_pelanggan.id, tipe_pelanggan.nama pelanggan, harga, diskon')
+		->from('tipe_produk_pelanggan')
+		->join('tipe_pelanggan', 'tipe_pelanggan.id = tipe_produk_pelanggan.tipe', 'left')
+		->where('tipe_produk_pelanggan.produk', $id);
+		$produk["pelanggan"] = $q2->get()->result_array();
+
+		return $produk;
 	}
 
 	public function getBarcode($search='')
