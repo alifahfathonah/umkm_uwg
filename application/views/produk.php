@@ -12,6 +12,16 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/select2/css/select2.min.css') ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
   <?php $this->load->view('partials/head'); ?>
+  <style>
+    .my-table{
+      box-shadow: 2px 3px 10px 1px #d8d8d8;
+      border-radius: 10px;
+    }
+
+    .my-table > thead > tr > th{
+      border: none;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -94,9 +104,29 @@
         <label>Kategori</label>
         <select name="kategori" id="kategori" class="form-control select2" required></select>
       </div>
-      <div class="form-group">
-        <label>Harga</label>
-        <input type="text" class="form-control" placeholder="Harga" name="harga" required>
+      <div class="form-group my-4">
+        <table class="table my-table">
+          <thead>
+            <tr>
+              <th class="text-center" width="35%">Pelanggan</th>
+              <th class="text-center">Harga</th>
+              <th class="text-center">Dikon(%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($tipe_pelanggan as $key => $value): ?>
+            <tr>
+              <td><?=$value->nama ?></td>
+              <td>
+                <input type="text" class="form-control" name="harga_<?=strtolower($value->nama) ?>" value="">
+              </td>
+              <td>
+                <input type="text" class="form-control" name="diskon_<?=strtolower($value->nama) ?>" value="">
+              </td>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
       </div>
       <div class="form-group">
         <label>Stok</label>

@@ -9,12 +9,16 @@ class Produk extends CI_Controller {
 		if ($this->session->userdata('status') !== 'login' ) {
 			redirect('/');
 		}
-		$this->load->model('produk_model');
+		$this->load->model([
+			'produk_model',
+			'pelanggan_model'
+		]);
 	}
 
 	public function index()
 	{
-		$this->load->view('produk');
+		$d['tipe_pelanggan'] = $this->pelanggan_model->get_tipe();
+		$this->load->view('produk', $d);
 	}
 
 	public function read()
@@ -48,9 +52,22 @@ class Produk extends CI_Controller {
 			'nama_produk' => $this->input->post('nama_produk'),
 			'satuan' => $this->input->post('satuan'),
 			'kategori' => $this->input->post('kategori'),
-			'harga' => $this->input->post('harga'),
 			'stok' => $this->input->post('stok')
 		);
+
+		$tipe_pelanggan = $this->pelanggan_model->get_tipe();
+		if(!empty($tipe_pelanggan)){
+			foreach($tipe_pelanggan as $key => $value){
+				$pelanggan = strtolower($value->nama);
+				$data["pelanggan"][] = [
+					"tipe" => $value->id,
+					"id" => $this->input->post("id".$pelanggan),
+					"harga" => $this->input->post("harga_".$pelanggan),
+					"diskon" => $this->input->post("diskon_".$pelanggan),
+				];
+			}
+		}
+
 		if ($this->produk_model->create($data)) {
 			echo json_encode($data);
 		}
@@ -75,6 +92,20 @@ class Produk extends CI_Controller {
 			'harga' => $this->input->post('harga'),
 			'stok' => $this->input->post('stok')
 		);
+
+		$tipe_pelanggan = $this->pelanggan_model->get_tipe();
+		if(!empty($tipe_pelanggan)){
+			foreach($tipe_pelanggan as $key => $value){
+				$pelanggan = strtolower($value->nama);
+				$data["pelanggan"][] = [
+					"tipe" => $value->id,
+					"id" => $this->input->post("id".$pelanggan),
+					"harga" => $this->input->post("harga_".$pelanggan),
+					"diskon" => $this->input->post("diskon_".$pelanggan),
+				];
+			}
+		}
+		
 		if ($this->produk_model->update($id,$data)) {
 			echo json_encode('sukses');
 		}
