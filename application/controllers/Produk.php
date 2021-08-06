@@ -171,6 +171,13 @@ class Produk extends CI_Controller {
 		echo json_encode($produk);
 	}
 
+	public function get_list()
+	{
+		header('Content-type: application/json');
+		$data = $this->produk_model->getListProduk();
+		echo json_encode($data);
+	}
+
 }
 
 /* End of file Produk.php */

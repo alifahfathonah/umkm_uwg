@@ -110,6 +110,13 @@ class Pelanggan extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function get_list()
+	{
+		header('Content-type: application/json');
+		$data = $this->pelanggan_model->getListPelanggan();
+		echo json_encode($data);
+	}
+
 }
 
 /* End of file Pelanggan.php */

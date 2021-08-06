@@ -58,6 +58,12 @@ class Pelanggan_model extends CI_Model {
 		return $this->db->get("tipe_pelanggan")->result();
 	}
 
+	public function getListPelanggan()
+	{
+		$this->db->select('*, nama text');
+		return $this->db->get($this->table)->result_array();
+	}
+
 }
 
 /* End of file Pelanggan_model.php */

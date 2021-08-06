@@ -20,6 +20,11 @@
         text-align: center !important;
       }
     }
+
+  .form-control:disabled, .form-control[readonly] {
+    background: #f5f5f5;
+    opacity: 1;
+  }
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -51,12 +56,19 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Barcode</label>
+              <label>Produk</label>
               <div class="form-inline">
-                <select id="barcode" class="form-control select2 col-sm-6" onchange="getNama()"></select>
-                <span class="ml-3 text-muted" id="nama_produk"></span>
+                <select id="produk" class="form-control select2 col-sm-6" onchange="getProduk()"></select>
+                <input type="readonly" disabled="true" class="form-control col-sm-4" style="margin-left:1rem;" placeholder="Barcode" id="barcode">
               </div>
               <small class="form-text text-muted" id="sisa"></small>
+            </div>
+            <div class="form-group">
+              <label>Pelanggan</label>
+              <div class="form-inline">
+                <select id="pelanggan" class="form-control select2 col-sm-6" onchange="getPelanggan()"></select>
+                <input type="readonly" disabled="true" class="form-control col-sm-4" style="margin-left:1rem;" placeholder="Tipe" id="tipe_pelanggan">
+              </div>
             </div>
             <div class="form-group">
               <label>Jumlah</label>
@@ -115,10 +127,6 @@
         <input type="text" class="form-control" name="tanggal" id="tanggal" required>
       </div>
       <div class="form-group">
-        <label>Pelanggan</label>
-        <select name="pelannggan" id="pelanggan" class="form-control select2"></select>
-      </div>
-      <div class="form-group">
         <label>Jumlah Uang</label>
         <input placeholder="Jumlah Uang" type="number" class="form-control" name="jumlah_uang" onkeyup="kembalian()" required>
       </div>
@@ -154,8 +162,8 @@
   var produkGetNamaUrl = '<?php echo site_url('produk/get_nama') ?>';
   var produkGetStokUrl = '<?php echo site_url('produk/get_stok') ?>';
   var addUrl = '<?php echo site_url('transaksi/add') ?>';
-  var getBarcodeUrl = '<?php echo site_url('produk/get_barcode') ?>';
-  var pelangganSearchUrl = '<?php echo site_url('pelanggan/search') ?>';
+  var listProduk = '<?php echo site_url('produk/get_list') ?>';
+  var listPelanggan = '<?php echo site_url('pelanggan/get_list') ?>';
   var cetakUrl = '<?php echo site_url('transaksi/cetak/') ?>';
 </script>
 <script src="<?php echo base_url('assets/js/unminify/transaksi.js') ?>"></script>

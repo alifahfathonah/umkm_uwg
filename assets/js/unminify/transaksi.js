@@ -177,10 +177,10 @@ function kembalian() {
     $(".kembalian").html(jumlah_uang - total - diskon);
     checkUang()
 }
-$("#barcode").select2({
-    placeholder: "Barcode",
+$("#produk").select2({
+    placeholder: "Produk",
     ajax: {
-        url: getBarcodeUrl,
+        url: listProduk,
         type: "post",
         dataType: "json",
         data: params => ({
@@ -195,7 +195,7 @@ $("#barcode").select2({
 $("#pelanggan").select2({
     placeholder: "Pelanggan",
     ajax: {
-        url: pelangganSearchUrl,
+        url: listPelanggan,
         type: "post",
         dataType: "json",
         data: params => ({
