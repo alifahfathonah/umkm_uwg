@@ -29,7 +29,7 @@ class Transaksi extends CI_Controller {
 					'nama_produk' => '<table>'.$this->transaksi_model->getProduk($barcode, $transaksi->qty).'</table>',
 					'total_bayar' => $transaksi->total_bayar,
 					'jumlah_uang' => $transaksi->jumlah_uang,
-					'diskon' => $transaksi->diskon,
+					// 'diskon' => $transaksi->diskon,
 					'pelanggan' => $transaksi->pelanggan,
 					'action' => '<a class="btn btn-sm btn-success" href="'.site_url('transaksi/cetak/').$transaksi->id.'">Print</a> <button class="btn btn-sm btn-danger" onclick="remove('.$transaksi->id.')">Delete</button>'
 				);
@@ -50,7 +50,7 @@ class Transaksi extends CI_Controller {
 		$barcode = array();
 		foreach ($produk as $produk) {
 			$this->transaksi_model->removeStok($produk->id, $produk->stok);
-			$this->transaksi_model->addTerjual($produk->id, $produk->terjual);
+			$this->transaksi_model->addTerjual($produk->id, $produk->jumlah);
 			array_push($barcode, $produk->id);
 		}
 		$data = array(
@@ -59,7 +59,6 @@ class Transaksi extends CI_Controller {
 			'qty' => implode(',', $this->input->post('qty')),
 			'total_bayar' => $this->input->post('total_bayar'),
 			'jumlah_uang' => $this->input->post('jumlah_uang'),
-			'diskon' => $this->input->post('diskon'),
 			'pelanggan' => $this->input->post('pelanggan'),
 			'nota' => $this->input->post('nota'),
 			'kasir' => $this->session->userdata('id')

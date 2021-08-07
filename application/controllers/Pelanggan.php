@@ -76,11 +76,11 @@ class Pelanggan extends CI_Controller {
 
 	public function get_pelanggan()
 	{
-		$id = $this->input->post('id');
+		header('Content-type: application/json');
+		$id = !empty($this->input->post('id'))? $this->input->post('id') : !empty($this->input->get('id'))? $this->input->get('id') : null ;
+		
 		$pelanggan = $this->pelanggan_model->detail($id);
-		if ($pelanggan->row()) {
-			echo json_encode($pelanggan->row());
-		}
+		echo json_encode($pelanggan);
 	}
 
 	public function search()

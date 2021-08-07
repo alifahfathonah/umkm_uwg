@@ -25,6 +25,26 @@
     background: #f5f5f5;
     opacity: 1;
   }
+
+  .label-diskon{
+    background: red;
+    color: white;
+    font-weight: bold;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.6rem;
+    box-shadow: 1px 1px 5px 2px #929292;
+  }
+
+  .label-diskon-subtotal{
+    text-decoration: line-through;
+    font-weight: bold;
+    color: #797979;
+    font-size: 0.8rem;
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 1rem;
+    background: #ddd;
+  }
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -56,18 +76,22 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Produk</label>
-              <div class="form-inline">
-                <select id="produk" class="form-control select2 col-sm-6" onchange="getProduk()"></select>
-                <input type="readonly" disabled="true" class="form-control col-sm-4" style="margin-left:1rem;" placeholder="Barcode" id="barcode">
-              </div>
-              <small class="form-text text-muted" id="sisa"></small>
-            </div>
-            <div class="form-group">
               <label>Pelanggan</label>
               <div class="form-inline">
-                <select id="pelanggan" class="form-control select2 col-sm-6" onchange="getPelanggan()"></select>
+                <select id="pelanggan" class="form-control select2 col-sm-6" onchange="setPelanggan(event)"></select>
                 <input type="readonly" disabled="true" class="form-control col-sm-4" style="margin-left:1rem;" placeholder="Tipe" id="tipe_pelanggan">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Produk</label>
+              <div class="form-inline">
+                <select id="produk" class="form-control select2 col-sm-6" onchange="setProduk()"></select>
+                <input type="readonly" disabled="true" class="form-control col-sm-4" style="margin-left:1rem;" placeholder="Barcode" id="barcode">
+              </div>
+              <div style="display: flex; flex-direction: row; align-items: center;" id="produk_detail">
+                <small class="form-text text-muted" id="sisa"></small>
+                <small class="form-text text-muted" style="margin:0 0.5rem; font-weight:bold;">-</small>
+                <small class="form-text" id="harga" style="font-weight:bold; color:red;"></small>
               </div>
             </div>
             <div class="form-group">
@@ -96,7 +120,9 @@
                 <th>Barcode</th>
                 <th>Nama</th>
                 <th>Harga</th>
+                <th>Diskon</th>
                 <th>Jumlah</th>
+                <th>Sub Total</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -131,10 +157,6 @@
         <input placeholder="Jumlah Uang" type="number" class="form-control" name="jumlah_uang" onkeyup="kembalian()" required>
       </div>
       <div class="form-group">
-        <label>Diskon</label>
-        <input placeholder="Diskon" type="number" class="form-control" onkeyup="kembalian()" name="diskon">
-      </div>
-      <div class="form-group">
         <b>Total Bayar:</b> <span class="total_bayar"></span>
       </div>
       <div class="form-group">
@@ -159,12 +181,18 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/moment/moment.min.js') ?>"></script>
 <script>
-  var produkGetNamaUrl = '<?php echo site_url('produk/get_nama') ?>';
+  var produkUrl = '<?php echo site_url('produk/get_produk') ?>';
+  var pelangganUrl = '<?php echo site_url('pelanggan/get_pelanggan') ?>';
   var produkGetStokUrl = '<?php echo site_url('produk/get_stok') ?>';
   var addUrl = '<?php echo site_url('transaksi/add') ?>';
   var listProduk = '<?php echo site_url('produk/get_list') ?>';
   var listPelanggan = '<?php echo site_url('pelanggan/get_list') ?>';
   var cetakUrl = '<?php echo site_url('transaksi/cetak/') ?>';
+  
+  // temporary
+  let pelanggan_now = {};
+  let product_now = {};
+  let product_cart = [];
 </script>
 <script src="<?php echo base_url('assets/js/unminify/transaksi.js') ?>"></script>
 </body>

@@ -44,7 +44,7 @@ class Pelanggan_model extends CI_Model {
 		->from($this->table)
 		->join("tipe_pelanggan", "tipe_pelanggan.id = pelanggan.tipe", "left")
 		->where('pelanggan.id', $id);
-		return $this->db->get();
+		return $this->db->get()->row_array();
 	}
 
 	public function search($search="")

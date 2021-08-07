@@ -117,12 +117,13 @@ class Produk_model extends CI_Model {
 		->where('produk.id', $id);
 		$produk = $q1->get()->row_array();
 
-
 		$q2 = $this->db->select('tipe_produk_pelanggan.id, tipe_pelanggan.nama pelanggan, harga, diskon')
 		->from('tipe_produk_pelanggan')
 		->join('tipe_pelanggan', 'tipe_pelanggan.id = tipe_produk_pelanggan.tipe', 'left')
 		->where('tipe_produk_pelanggan.produk', $id);
-		$produk["pelanggan"] = $q2->get()->result_array();
+		$pelanggan = $q2->get()->result_array();
+		
+		if (!empty($pelanggan)) $produk["pelanggan"] = $pelanggan;
 
 		return $produk;
 	}

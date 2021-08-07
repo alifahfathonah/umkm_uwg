@@ -19,17 +19,107 @@ function nota(jumlah) {
     return hasil
 }
 
-function getNama() {
+function setProduk() {
+    if ($("#produk").val() != null) {
+        $.ajax({
+            url: produkUrl+"?id=" + $("#produk").val(),
+            type: "get",
+            dataType: "json",
+            success: res => {
+                product_now = res;
+                $("#barcode").val(product_now.barcode);
+
+                if (product_cart.length > 0) {
+                    let check_product = product_cart.filter(r => r.id == product_now.id);
+                    if (check_product.length > 0) {
+                        product_now.stok = check_product[0].stok;
+                    }else{
+                        product_now.stok = res.stok;
+                    }
+                }else{
+                    product_now.stok = res.stok;
+                }
+
+                $("#sisa").html(`Sisa ${product_now.stok}`);
+                
+                if (product_now.pelanggan.length > 0) {
+                    tipe_pelanggan = product_now.pelanggan.filter(r => r.pelanggan == $("#tipe_pelanggan").val())
+                    product_now.harga = tipe_pelanggan[0].harga;
+                    product_now.diskon = tipe_pelanggan[0].diskon;
+                    $("#harga").html(`RP${tipe_pelanggan[0].harga}`);
+                }
+    
+                $("#produk_detail").fadeIn();
+                checkEmpty()
+            },
+            error: err => {
+                console.log(err)
+            }
+        })
+    }
+}
+
+function setPelanggan(element) {
     $.ajax({
-        url: produkGetNamaUrl,
-        type: "post",
+        url: pelangganUrl+"?id=" + $("#pelanggan").val(),
+        type: "get",
         dataType: "json",
-        data: {
-            id: $("#barcode").val()
-        },
         success: res => {
-            $("#nama_produk").html(res.nama_produk);
-            $("#sisa").html(`Sisa ${res.stok}`);
+            // Reset data if change customer
+            if (pelanggan_now.id != res.id) {
+                if(product_cart.length > 0){
+                    Swal.fire({
+                        title: 'Mengubah pelanggan akan menghapus semua data yang ada di keranjang, apakah anda yakin?',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: `Yes`,
+                        denyButtonText: `No`,
+                        customClass: {
+                          cancelButton: 'order-1 right-gap',
+                          confirmButton: 'order-2',
+                          denyButton: 'order-3',
+                        }
+                      }).then((result) => {
+                          if (result.value) {
+                            pelanggan_now = res;
+                            $("#tipe_pelanggan").val(res.tipe);
+                            $("#produk_detail").hide();
+                            $("#produk").val("").trigger("change");
+                            $("#barcode").val("");
+                            if(res.tipe == null || res.tipe == ""){
+                                $("#produk").attr("disabled", true);
+                            }else{
+                                $("#produk").attr("disabled", false);
+                            }
+                            $("#total").html("0");
+                            $("#jumlah").val("");
+                            $("#tambah").attr("disabled", true);
+                            $("#bayar").attr("disabled", true);
+    
+                            product_cart = [];
+                            product_now = {};
+                            transaksi.clear().draw();
+                        } else {
+                            $("#pelanggan").val(pelanggan_now.id).trigger("change");
+                        }
+                    });
+                }else{
+                    pelanggan_now = res;
+                    $("#tipe_pelanggan").val(res.tipe);
+                    $("#produk_detail").hide();
+                    $("#produk").val("").trigger("change");
+                    $("#barcode").val("");
+                    if(res.tipe == null || res.tipe == ""){
+                        $("#produk").attr("disabled", true);
+                    }else{
+                        $("#produk").attr("disabled", false);
+                    }
+                    $("#total").html("0");
+                    $("#jumlah").val("");
+                    $("#tambah").attr("disabled", true);
+                    $("#bayar").attr("disabled", true);
+                }
+            }
             checkEmpty()
         },
         error: err => {
@@ -39,56 +129,58 @@ function getNama() {
 }
 
 function checkStok() {
-    $.ajax({
-        url: produkGetStokUrl,
-        type: "post",
-        dataType: "json",
-        data: {
-            id: $("#barcode").val()
-        },
-        success: res => {
-            let barcode = $("#barcode").val(),
-                nama_produk = res.nama_produk,
-                jumlah = parseInt($("#jumlah").val()),
-                stok = parseInt(res.stok),
-                harga = parseInt(res.harga),
-                dataBarcode = res.barcode,
-                total = parseInt($("#total").html());
-            if (stok < jumlah) Swal.fire("Gagal", "Stok Tidak Cukup", "warning");
-            else {
-                let a = transaksi.rows().indexes().filter((a, t) => dataBarcode === transaksi.row(a).data()[0]);
-                if (a.length > 0) {
-                    let row = transaksi.row(a[0]),
-                        data = row.data();
-                    if (stok < data[3] + jumlah) {
-                        Swal.fire('stok', "Stok Tidak Cukup", "warning")
-                    } else {
-                        data[3] = data[3] + jumlah;
-                        row.data(data).draw();
-                        indexProduk = produk.findIndex(a => a.id == barcode);
-                        produk[indexProduk].stok = stok - data[3];
-                        $("#total").html(total + harga * jumlah)
-                    }
-                } else {
-                    produk.push({
-                        id: barcode,
-                        stok: stok - jumlah,
-                        terjual: jumlah
-                    });
-                    transaksi.row.add([
-                        dataBarcode,
-                        nama_produk,
-                        harga,
-                        jumlah,
-                        `<button name="${barcode}" class="btn btn-sm btn-danger" onclick="remove('${barcode}')">Hapus</btn>`]).draw();
-                    $("#total").html(total + harga * jumlah);
-                    $("#jumlah").val("");
-                    $("#tambah").attr("disabled", "disabled");
-                    $("#bayar").removeAttr("disabled")
-                } 
+    let jumlah = parseFloat($('#jumlah').val());
+
+    if(parseInt(product_now.stok) >= parseInt(jumlah)) {
+        if (product_cart.length > 0) {
+            let found = false;
+            product_cart.forEach((r,i) => {
+                if(r.id == product_now.id){
+                    product_cart[i].stok = product_cart[i].stok - jumlah;
+                    product_cart[i].jumlah = product_cart[i].jumlah + jumlah;
+                    product_now = product_cart[i];
+                    found = true;
+                }
+            });
+
+            if (!found) {
+                product_now.stok = product_now.stok - jumlah;
+                product_now.jumlah = jumlah;
+                product_cart.push(product_now);
             }
+        }else{
+            product_now.stok = product_now.stok - jumlah
+            product_now.jumlah = jumlah;
+            product_cart.push(product_now);
         }
-    })
+    
+        let total = 0;
+        let sub_total = 0;
+        let sub_total_ori = 0;
+        transaksi.clear().draw();
+        product_cart.forEach((r,i)=> {
+            sub_total = (parseFloat(r.harga) - parseFloat((r.harga * r.diskon)/100)) * parseInt(r.jumlah);        
+            sub_total_ori = parseFloat(r.harga) * parseInt(r.jumlah);        
+            total += sub_total
+    
+            transaksi.row.add([
+            r.barcode,
+            r.nama_produk,
+            r.harga,
+            (parseFloat(r.diskon)>0)?`<span class="label-diskon">${r.diskon+"%"}</span>`: '',
+            r.jumlah,
+            (parseFloat(r.diskon)>0)?sub_total+`<span class="label-diskon-subtotal">${sub_total_ori}</span>`:sub_total,
+            `<button name="${r.id}" class="btn btn-sm btn-danger" onclick="remove('${r.id}')">Hapus</btn>`]).draw();
+        });   
+        transaksi.columns.adjust().draw(); // Redraw the DataTable
+        $("#sisa").html(`Sisa ${product_now.stok}`);
+        $("#total").html(total);
+        $("#jumlah").val("");
+        $("#tambah").attr("disabled", "disabled");
+        $("#bayar").removeAttr("disabled")
+    }else{
+        Swal.fire("Gagal", "Stok Tidak Cukup", "warning");
+    }
 }
 
 function bayarCetak() {
@@ -121,37 +213,38 @@ function checkUang() {
     }
 }
 
-function remove(nama) {
-    let data = transaksi.row($("[name=" + nama + "]").closest("tr")).data(),
-        stok = data[3],
-        harga = data[2],
-        total = parseInt($("#total").html());
-        akhir = total - stok * harga
+function remove(id) {
+    
+    var removeIndex = product_cart.map((r,i) =>{ return (r.id=="5")? i : null });
+
+    let data = transaksi.row($("[name=" + id + "]").closest("tr")).data(),
+    stok = parseFloat(data[4]),
+    harga = parseFloat(data[2]),
+    diskon = parseFloat(product_cart[removeIndex[0]].diskon),
+        total = parseFloat($("#total").html());
+        akhir = total - (stok * ((diskon > 0)? harga-(harga * diskon/100): harga))
     $("#total").html(akhir);
-    transaksi.row($("[name=" + nama + "]").closest("tr")).remove().draw();
+
+    transaksi.row($("[name=" + id + "]").closest("tr")).remove().draw();
     $("#tambah").attr("disabled", "disabled");
     if (akhir < 1) {
         $("#bayar").attr("disabled", "disabled")
     }
+    
+    ~removeIndex && product_cart.splice(removeIndex[0], 1);
 }
 
 function add() {
-    let data = transaksi.rows().data(),
-        qty = [];
-    $.each(data, (index, value) => {
-        qty.push(value[3])
-    });
     $.ajax({
         url: addUrl,
         type: "post",
         dataType: "json",
         data: {
-            produk: JSON.stringify(produk),
+            produk: JSON.stringify(product_cart),
             tanggal: $("#tanggal").val(),
-            qty: qty,
+            qty: product_cart.map(r=>r.jumlah),
             total_bayar: $("#total").html(),
             jumlah_uang: $('[name="jumlah_uang"]').val(),
-            diskon: $('[name="diskon"]').val(),
             pelanggan: $("#pelanggan").val(),
             nota: $("#nota").html()
         },
@@ -230,3 +323,10 @@ $("#form").validate({
     }
 });
 $("#nota").html(nota(15));
+$("#produk_detail").hide();
+
+// $('#pelanggan').on('select2:select', function (e) {
+//     var data = e.params.data;
+//     console.log(data);
+//     console.log(e);
+// });

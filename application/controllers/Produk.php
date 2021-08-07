@@ -115,9 +115,9 @@ class Produk extends CI_Controller {
 	public function get_produk()
 	{
 		header('Content-type: application/json');
-		$id = $this->input->post('id');
+		$id = !empty($this->input->post('id'))? $this->input->post('id') : !empty($this->input->get('id'))? $this->input->get('id') : null ;
+		
 		$produk = $this->produk_model->getProduk($id);
-
 		echo json_encode($produk);
 	}
 

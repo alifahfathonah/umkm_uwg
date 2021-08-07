@@ -26,7 +26,7 @@ class Transaksi_model extends CI_Model {
 
 	public function read()
 	{
-		$this->db->select('transaksi.id, transaksi.tanggal, transaksi.barcode, transaksi.qty, transaksi.total_bayar, transaksi.jumlah_uang, transaksi.diskon, pelanggan.nama as pelanggan');
+		$this->db->select('transaksi.id, transaksi.tanggal, transaksi.barcode, transaksi.qty, transaksi.total_bayar, transaksi.jumlah_uang, pelanggan.nama as pelanggan');
 		$this->db->from($this->table);
 		$this->db->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left outer');
 		return $this->db->get();
@@ -44,7 +44,7 @@ class Transaksi_model extends CI_Model {
 		foreach ($barcode as $key => $value) {
 			$this->db->select('nama_produk');
 			$this->db->where('id', $value);
-			$data[] = '<tr><td>'.$this->db->get('produk')->row()->nama_produk.' ('.$total[$key].')</td></tr>';
+			$data[] = '<tr><td>'.$this->db->get('produk')->row_array()["nama_produk"].' ('.$total[$key].')</td></tr>';
 		}
 		return join($data);
 	}

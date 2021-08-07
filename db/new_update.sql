@@ -7,3 +7,6 @@ INSERT INTO `tipe_pelanggan` (`id`, `nama`) VALUES (NULL, 'Konsumen'), (NULL, 'R
 -- Tipe Produk
 ALTER TABLE `produk` DROP `harga`;
 CREATE TABLE `umkm_db`.`tipe_produk_pelanggan` ( `id` INT NOT NULL AUTO_INCREMENT , `produk` INT NOT NULL , `tipe` TINYINT(1) NOT NULL , `harga` DOUBLE NOT NULL , `diskon` DOUBLE NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+-- Transaksi
+ALTER TABLE `transaksi` DROP `diskon`;
