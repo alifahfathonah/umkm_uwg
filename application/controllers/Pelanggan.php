@@ -78,7 +78,7 @@ class Pelanggan extends CI_Controller {
 	{
 		header('Content-type: application/json');
 		$id = !empty($this->input->post('id'))? $this->input->post('id') : !empty($this->input->get('id'))? $this->input->get('id') : null ;
-		
+
 		$pelanggan = $this->pelanggan_model->detail($id);
 		echo json_encode($pelanggan);
 	}

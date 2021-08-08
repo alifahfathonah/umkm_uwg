@@ -51,23 +51,28 @@ function remove(id) {
         title: "Hapus",
         text: "Hapus data ini?",
         type: "warning",
-        showCancelButton: true
-    }).then(() => {
-        $.ajax({
-            url: deleteUrl,
-            type: "post",
-            dataType: "json",
-            data: {
-                id: id
-            },
-            success: a => {
-                Swal.fire("Sukses", "Sukses Menghapus Data", "success");
-                reloadTable()
-            },
-            error: a => {
-                console.log(a)
-            }
-        })
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: `Yes`,
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: deleteUrl,
+                type: "post",
+                dataType: "json",
+                data: {
+                    id: id
+                },
+                success: a => {
+                    Swal.fire("Sukses", "Sukses Menghapus Data", "success");
+                    reloadTable()
+                },
+                error: a => {
+                    console.log(a)
+                }
+            })
+        }
     })
 }
 
@@ -98,12 +103,9 @@ function add() {
 function edit(id) {
     $('#tipe').val("").trigger('change');
     $.ajax({
-        url: get_pelangganUrl,
-        type: "post",
+        url: get_pelangganUrl+"?id="+id,
+        type: "get",
         dataType: "json",
-        data: {
-            id: id
-        },
         success: res => {
             $('[name="id"]').val(res.id);
             $('[name="nama"]').val(res.nama);

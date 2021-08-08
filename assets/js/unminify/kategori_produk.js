@@ -45,23 +45,28 @@ function remove(id) {
         title: "Hapus",
         text: "Hapus data ini?",
         type: "warning",
-        showCancelButton: true
-    }).then(() => {
-        e.value && $.ajax({
-            url: deleteUrl,
-            type: "post",
-            dataType: "json",
-            data: {
-                id: id
-            },
-            success: () => {
-                Swal.fire("Sukses", "Sukses Menghapus Data", "success");
-                reloadTable()
-            },
-            error: err => {
-                console.log(err)
-            }
-        })
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: `Yes`,
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.value) {
+            e.value && $.ajax({
+                url: deleteUrl,
+                type: "post",
+                dataType: "json",
+                data: {
+                    id: id
+                },
+                success: () => {
+                    Swal.fire("Sukses", "Sukses Menghapus Data", "success");
+                    reloadTable()
+                },
+                error: err => {
+                    console.log(err)
+                }
+            })
+        }
     })
 }
 

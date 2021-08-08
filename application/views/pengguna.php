@@ -105,6 +105,6 @@
   var editUrl = '<?php echo site_url('pengguna/edit') ?>';
   var getPenggunaUrl = '<?php echo site_url('pengguna/get_pengguna') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/pengguna.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/pengguna.js') ?>"></script>
 </body>
 </html>

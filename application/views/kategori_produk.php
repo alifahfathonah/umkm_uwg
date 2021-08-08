@@ -96,6 +96,6 @@
   var editUrl = '<?php echo site_url('kategori_produk/edit') ?>';
   var get_kategoriUrl = '<?php echo site_url('kategori_produk/get_kategori') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/kategori_produk.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/kategori_produk.js') ?>"></script>
 </body>
 </html>

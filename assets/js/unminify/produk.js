@@ -59,23 +59,28 @@ function remove(id) {
         title: "Hapus",
         text: "Hapus data ini?",
         type: "warning",
-        showCancelButton: true
-    }).then(() => {
-        $.ajax({
-            url: deleteUrl,
-            type: "post",
-            dataType: "json",
-            data: {
-                id: id
-            },
-            success: () => {
-                Swal.fire("Sukses", "Sukses Menghapus Data", "success");
-                reloadTable();
-            },
-            error: () => {
-                console.log(a);
-            }
-        })
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: `Yes`,
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: deleteUrl,
+                type: "post",
+                dataType: "json",
+                data: {
+                    id: id
+                },
+                success: () => {
+                    Swal.fire("Sukses", "Sukses Menghapus Data", "success");
+                    reloadTable();
+                },
+                error: () => {
+                    console.log(a);
+                }
+            })
+        }
     })
 }
 
@@ -104,19 +109,17 @@ function add() {
 
 function edit(id) {
     $.ajax({
-        url: getProdukUrl,
-        type: "post",
+        url: getProdukUrl+"?id="+id,
+        type: "get",
         dataType: "json",
-        data: {
-            id: id
-        },
         success: res => {
-            console.log(res)
             $('[name="id"]').val(res.id);
             $('[name="barcode"]').val(res.barcode);
             $('[name="nama_produk"]').val(res.nama_produk);
             $('[name="satuan"]').append(`<option value='${res.satuan_id}'>${res.satuan}</option>`);
+            $('[name="satuan"]').val((res.satuan_id != null)? res.satuan_id : "").trigger('change');
             $('[name="kategori"]').append(`<option value='${res.kategori_id}'>${res.kategori}</option>`);
+            $('[name="kategori"]').val((res.kategori_id != null)? res.kategori_id : "").trigger('change');
             $('[name="harga"]').val(res.harga);
             $('[name="stok"]').val(res.stok);
 

@@ -69,16 +69,13 @@ function setPelanggan(element) {
             if (pelanggan_now.id != res.id) {
                 if(product_cart.length > 0){
                     Swal.fire({
-                        title: 'Mengubah pelanggan akan menghapus semua data yang ada di keranjang, apakah anda yakin?',
+                        title: "Reset Keranjang",
+                        text: 'Mengubah pelanggan akan menghapus semua data yang ada di keranjang, apakah anda yakin?',
+                        type: "warning",
                         showDenyButton: true,
                         showCancelButton: true,
                         confirmButtonText: `Yes`,
                         denyButtonText: `No`,
-                        customClass: {
-                          cancelButton: 'order-1 right-gap',
-                          confirmButton: 'order-2',
-                          denyButton: 'order-3',
-                        }
                       }).then((result) => {
                           if (result.value) {
                             pelanggan_now = res;
@@ -264,10 +261,9 @@ function add() {
 }
 
 function kembalian() {
-    let total = $("#total").html(),
-        jumlah_uang = $('[name="jumlah_uang"').val(),
-        diskon = $('[name="diskon"]').val();
-    $(".kembalian").html(jumlah_uang - total - diskon);
+    let total = parseFloat($("#total").html()),
+        jumlah_uang = parseFloat($('[name="jumlah_uang"').val());
+    $(".kembalian").html(jumlah_uang - total);
     checkUang()
 }
 $("#produk").select2({

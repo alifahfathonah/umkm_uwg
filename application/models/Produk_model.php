@@ -110,7 +110,7 @@ class Produk_model extends CI_Model {
 	{
 		$produk = [];
 
-		$q1 = $this->db->select('produk.id, produk.barcode, produk.nama_produk,  produk.stok, kategori_produk.kategori, satuan_produk.satuan')
+		$q1 = $this->db->select('produk.id, produk.barcode, produk.nama_produk,  produk.stok, produk.kategori kategori_id, kategori_produk.kategori, produk.satuan satuan_id, satuan_produk.satuan')
 		->from($this->table)
 		->join('kategori_produk', 'produk.kategori = kategori_produk.id', 'left')
 		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')

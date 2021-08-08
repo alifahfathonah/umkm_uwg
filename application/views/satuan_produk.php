@@ -96,6 +96,6 @@
   var editUrl = '<?php echo site_url('satuan_produk/edit') ?>';
   var get_satuanUrl = '<?php echo site_url('satuan_produk/get_satuan') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/satuan_produk.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/satuan_produk.js') ?>"></script>
 </body>
 </html>
