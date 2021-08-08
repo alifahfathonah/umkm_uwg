@@ -96,7 +96,10 @@
             </div>
             <div class="form-group">
               <label>Jumlah</label>
-              <input type="number" class="form-control col-sm-6" placeholder="Jumlah" id="jumlah" onkeyup="checkEmpty()">
+              <div class="form-inline">
+                <input type="number" class="form-control col-sm-6" placeholder="Jumlah" id="jumlah" onkeyup="checkEmpty()">
+                <input type="readonly" disabled="true" class="form-control col-sm-4" style="margin-left:1rem;" placeholder="Satuan" id="satuan">
+              </div>
             </div>
             <div class="form-group">
               <button id="tambah" class="btn btn-success" onclick="checkStok()" disabled>Tambah</button>

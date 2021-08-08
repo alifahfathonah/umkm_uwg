@@ -10,6 +10,21 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css') ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>">
   <?php $this->load->view('partials/head'); ?>
+  <style>
+    .label-produk{
+      background: #eee;
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.9rem;
+      margin-right: 0.2rem;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      display: inline-flex;
+    }
+
+    .label-produk strong{
+      margin-left: 0.2rem;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -42,7 +57,7 @@
                 <tr>
                   <th>No</th>
                   <th>Tanggal</th>
-                  <th>Nama Produk</th> 
+                  <th>Produk</th> 
                   <th>Total Bayar</th> 
                   <th>Jumlah Uang</th> 
                   <th>Pelanggan</th> 

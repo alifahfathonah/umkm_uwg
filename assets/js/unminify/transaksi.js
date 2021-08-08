@@ -28,6 +28,7 @@ function setProduk() {
             success: res => {
                 product_now = res;
                 $("#barcode").val(product_now.barcode);
+                $("#satuan").val(product_now.satuan);
 
                 if (product_cart.length > 0) {
                     let check_product = product_cart.filter(r => r.id == product_now.id);
@@ -83,6 +84,7 @@ function setPelanggan(element) {
                             $("#produk_detail").hide();
                             $("#produk").val("").trigger("change");
                             $("#barcode").val("");
+                            $("#satuan").val("");
                             if(res.tipe == null || res.tipe == ""){
                                 $("#produk").attr("disabled", true);
                             }else{
@@ -106,6 +108,7 @@ function setPelanggan(element) {
                     $("#produk_detail").hide();
                     $("#produk").val("").trigger("change");
                     $("#barcode").val("");
+                    $("#satuan").val("");
                     if(res.tipe == null || res.tipe == ""){
                         $("#produk").attr("disabled", true);
                     }else{
@@ -165,7 +168,7 @@ function checkStok() {
             r.nama_produk,
             r.harga,
             (parseFloat(r.diskon)>0)?`<span class="label-diskon">${r.diskon+"%"}</span>`: '',
-            r.jumlah,
+            r.jumlah+" "+r.satuan,
             (parseFloat(r.diskon)>0)?sub_total+`<span class="label-diskon-subtotal">${sub_total_ori}</span>`:sub_total,
             `<button name="${r.id}" class="btn btn-sm btn-danger" onclick="remove('${r.id}')">Hapus</btn>`]).draw();
         });   
@@ -215,11 +218,12 @@ function remove(id) {
     var removeIndex = product_cart.map((r,i) =>{ return (r.id=="5")? i : null });
 
     let data = transaksi.row($("[name=" + id + "]").closest("tr")).data(),
-    stok = parseFloat(data[4]),
-    harga = parseFloat(data[2]),
+    jumlah = parseFloat(product_cart[removeIndex[0]].jumlah),
+    harga = parseFloat(product_cart[removeIndex[0]].harga),
     diskon = parseFloat(product_cart[removeIndex[0]].diskon),
         total = parseFloat($("#total").html());
-        akhir = total - (stok * ((diskon > 0)? harga-(harga * diskon/100): harga))
+        akhir = total - (jumlah * ((diskon > 0)? harga-(harga * diskon/100): harga))
+
     $("#total").html(akhir);
 
     transaksi.row($("[name=" + id + "]").closest("tr")).remove().draw();
@@ -239,7 +243,6 @@ function add() {
         data: {
             produk: JSON.stringify(product_cart),
             tanggal: $("#tanggal").val(),
-            qty: product_cart.map(r=>r.jumlah),
             total_bayar: $("#total").html(),
             jumlah_uang: $('[name="jumlah_uang"]').val(),
             pelanggan: $("#pelanggan").val(),
@@ -320,6 +323,7 @@ $("#form").validate({
 });
 $("#nota").html(nota(15));
 $("#produk_detail").hide();
+$("#produk").attr("disabled", true);
 
 // $('#pelanggan').on('select2:select', function (e) {
 //     var data = e.params.data;

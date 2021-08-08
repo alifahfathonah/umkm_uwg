@@ -19,26 +19,9 @@ class Transaksi extends CI_Controller {
 
 	public function read()
 	{
-		// header('Content-type: application/json');
-		if ($this->transaksi_model->read()->num_rows() > 0) {
-			foreach ($this->transaksi_model->read()->result() as $transaksi) {
-				$barcode = explode(',', $transaksi->barcode);
-				$tanggal = new DateTime($transaksi->tanggal);
-				$data[] = array(
-					'tanggal' => $tanggal->format('d-m-Y H:i:s'),
-					'nama_produk' => '<table>'.$this->transaksi_model->getProduk($barcode, $transaksi->qty).'</table>',
-					'total_bayar' => $transaksi->total_bayar,
-					'jumlah_uang' => $transaksi->jumlah_uang,
-					// 'diskon' => $transaksi->diskon,
-					'pelanggan' => $transaksi->pelanggan,
-					'action' => '<a class="btn btn-sm btn-success" href="'.site_url('transaksi/cetak/').$transaksi->id.'">Print</a> <button class="btn btn-sm btn-danger" onclick="remove('.$transaksi->id.')">Delete</button>'
-				);
-			}
-		} else {
-			$data = array();
-		}
+		header('Content-type: application/json');
 		$transaksi = array(
-			'data' => $data
+			'data' => $this->transaksi_model->read()
 		);
 		echo json_encode($transaksi);
 	}
@@ -47,26 +30,30 @@ class Transaksi extends CI_Controller {
 	{
 		$produk = json_decode($this->input->post('produk'));
 		$tanggal = new DateTime($this->input->post('tanggal'));
-		$barcode = array();
-		foreach ($produk as $produk) {
-			$this->transaksi_model->removeStok($produk->id, $produk->stok);
-			$this->transaksi_model->addTerjual($produk->id, $produk->jumlah);
-			array_push($barcode, $produk->id);
-		}
-		$data = array(
+		$data = [
 			'tanggal' => $tanggal->format('Y-m-d H:i:s'),
-			'barcode' => implode(',', $barcode),
-			'qty' => implode(',', $this->input->post('qty')),
 			'total_bayar' => $this->input->post('total_bayar'),
 			'jumlah_uang' => $this->input->post('jumlah_uang'),
 			'pelanggan' => $this->input->post('pelanggan'),
 			'nota' => $this->input->post('nota'),
-			'kasir' => $this->session->userdata('id')
-		);
-		if ($this->transaksi_model->create($data)) {
-			echo json_encode($this->db->insert_id());
+			'kasir' => $this->session->userdata('id'),
+			'item' => []
+		];
+
+		foreach ($produk as $produk) {
+			$this->transaksi_model->removeStok($produk->id, ["stok" => $produk->stok, "terjual" => $produk->jumlah]);
+			
+			$data["item"][] = [
+				'produk' => $produk->id,
+				'qty' => $produk->jumlah
+			];
 		}
-		$data = $this->input->post('form');
+		
+		if ($create = $this->transaksi_model->create($data)) {
+			echo json_encode($create);
+		}else{
+			echo json_encode(0);
+		}
 	}
 
 	public function delete()

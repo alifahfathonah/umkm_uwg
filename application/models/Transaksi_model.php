@@ -5,31 +5,61 @@ class Transaksi_model extends CI_Model {
 
 	private $table = 'transaksi';
 
-	public function removeStok($id, $stok)
+	public function removeStok($id, $data)
 	{
 		$this->db->where('id', $id);
-		$this->db->set('stok', $stok);
+		$this->db->set($data);
 		return $this->db->update('produk');
-	}
-
-	public function addTerjual($id, $jumlah)
-	{
-		$this->db->where('id', $id);
-		$this->db->set('terjual', $jumlah);
-		return $this->db->update('produk');;
 	}
 
 	public function create($data)
 	{
-		return $this->db->insert($this->table, $data);
+		$this->db->trans_start();
+		
+		$produk = $data["item"];
+		unset($data["item"]);
+
+		$this->db->insert($this->table, $data);
+		$transaksi = $this->db->insert_id();
+
+		if(!empty($produk)){
+			foreach ($produk as $key => $value) {
+				$this->db->insert("transaksi_item", [
+					"transaksi_id" => $transaksi,
+					"produk_id" => $value["produk"],
+					"qty" => $value["qty"]
+				]);
+			}
+		}
+		
+		if($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return;
+		}else{
+			$this->db->trans_complete();
+			return $transaksi;
+		}
 	}
 
 	public function read()
 	{
-		$this->db->select('transaksi.id, transaksi.tanggal, transaksi.barcode, transaksi.qty, transaksi.total_bayar, transaksi.jumlah_uang, pelanggan.nama as pelanggan');
-		$this->db->from($this->table);
-		$this->db->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left outer');
-		return $this->db->get();
+		$this->db->select('
+			transaksi.id, 
+			transaksi.nota, 
+			transaksi.tanggal, 
+			transaksi.total_bayar, 
+			transaksi.jumlah_uang, 
+			pelanggan.id pelanggan_id,
+			pelanggan.nama as pelanggan,
+			CONCAT(\'<a class="btn btn-sm btn-success" href="'.site_url('transaksi/cetak/').'\', transaksi.id, \'">Print</a> <button class="btn btn-sm btn-danger" onclick="remove(\', transaksi.id, \')">Delete</button>\') action,
+			GROUP_CONCAT(\'<span class="label-produk">\',produk.nama_produk,\' <strong>(\',transaksi_item.qty, satuan_produk.satuan, \')</strong>\',\'</span>\' SEPARATOR \' \') produk
+		')->from($this->table)
+		->join('transaksi_item', 'transaksi.id = transaksi_item.transaksi_id', 'left')
+		->join('produk', 'produk.id = transaksi_item.produk_id', 'left')
+		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')
+		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')
+		->group_by("transaksi.id");
+		return $this->db->get()->result_array();
 	}
 
 	public function delete($id)

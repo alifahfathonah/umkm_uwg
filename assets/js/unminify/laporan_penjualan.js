@@ -11,12 +11,11 @@ let laporan_penjualan = $("#laporan_penjualan").DataTable( {
         [1, "asc"]],
         columns:[ {
             data: null
-        }
-        , {
+        }, {
             data: "tanggal"
         }
         , {
-            data: "nama_produk"
+            data: "produk"
         }
         , {
             data: "total_bayar"
