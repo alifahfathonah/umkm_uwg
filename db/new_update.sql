@@ -13,3 +13,7 @@ ALTER TABLE `transaksi` DROP `diskon`;
 ALTER TABLE `transaksi` DROP `barcode`;
 ALTER TABLE `transaksi` DROP `qty`;
 CREATE TABLE `umkm_db`.`transaksi_item` ( `id` INT NOT NULL AUTO_INCREMENT , `transaksi_id` INT NOT NULL , `produk_id` INT NOT NULL , `qty` INT(5) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+-- Utang Piutang
+CREATE TABLE `umkm_db`.`transaksi_utang` ( `id` INT NOT NULL AUTO_INCREMENT , `transaksi_id` INT NOT NULL , `hutang` DOUBLE NOT NULL , `status` ENUM('Lunas','Belum Lunas') NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `umkm_db`.`transaksi_cicilan` ( `id` INT NOT NULL AUTO_INCREMENT , `tanggal` DATETIME NOT NULL , `trans_terakhir` DOUBLE NOT NULL , `sisa` DOUBLE NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

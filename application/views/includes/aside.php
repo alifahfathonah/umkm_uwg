@@ -101,6 +101,12 @@
             <p>Transaksi</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="<?php echo site_url('cicilan') ?>" class="nav-link <?php echo $uri == 'cicilan' ? 'active' : 'no' ?>">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <p>Utang Piutang</p>
+          </a>
+        </li>
         <li class="nav-item has-treeview <?php echo $uri == 'laporan_penjualan' || $uri == 'laporan_stok_masuk' || $uri == 'laporan_stok_keluar' ? 'menu-open' : 'no' ?>">
           <a href="<?php echo site_url('laporan') ?>" class="nav-link <?php echo $uri == 'laporan_penjualan' || $uri == 'laporan_stok_masuk' || $uri == 'laporan_stok_keluar' ? 'active' : 'no' ?>">
             <i class="fas fa-book nav-icon"></i>
