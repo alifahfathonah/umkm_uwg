@@ -14,90 +14,41 @@ class Cicilan extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('supplier');
+		$this->load->view('cicilan');
 	}
 
 	public function read()
 	{
 		header('Content-type: application/json');
 		if ($this->cicilan_model->read()->num_rows() > 0) {
-			foreach ($this->cicilan_model->read()->result() as $supplier) {
+			foreach ($this->cicilan_model->read()->result() as $cicilan) {
 				$data[] = array(
-					'nama' => $supplier->nama,
-					'alamat' => $supplier->alamat,
-					'telepon' => $supplier->telepon,
-					'keterangan' => $supplier->keterangan,
-					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$supplier->id.')">Edit</button> <button class="btn btn-sm btn-danger" onclick="remove('.$supplier->id.')">Delete</button>'
+					'nota' => $cicilan->nota,
+					'pelanggan' => $cicilan->pelanggan,
+					'total_bayar' => $cicilan->total_bayar,
+					'hutang' => $cicilan->hutang,
+					'status' => $cicilan->status,
+					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$cicilan->id.')">Edit</button> <button class="btn btn-sm btn-danger" onclick="remove('.$cicilan->id.')">Delete</button>'
 				);
 			}
 		} else {
 			$data = array();
 		}
-		$supplier = array(
+		$cicilan = array(
 			'data' => $data
 		);
-		echo json_encode($supplier);
+		echo json_encode($cicilan);
 	}
 
-	public function add()
+	public function get_cicilan()
 	{
-		$data = array(
-			'nama' => $this->input->post('nama'),
-			'alamat' => $this->input->post('alamat'),
-			'telepon' => $this->input->post('telepon'),
-			'keterangan' => $this->input->post('keterangan')
-		);
-		if ($this->cicilan_model->create($data)) {
-			echo json_encode('sukses');
-		}
-	}
+		$id = !empty($this->input->post('id'))? $this->input->post('id') : !empty($this->input->get('id'))? $this->input->get('id') : null ;
+		$cicilan = $this->cicilan_model->detail($id);
 
-	public function delete()
-	{
-		$id = $this->input->post('id');
-		if ($this->cicilan_model->delete($id)) {
-			echo json_encode('sukses');
-		}
-	}
-
-	public function edit()
-	{
-		$id = $this->input->post('id');
-		$data = array(
-			'nama' => $this->input->post('nama'),
-			'alamat' => $this->input->post('alamat'),
-			'telepon' => $this->input->post('telepon'),
-			'keterangan' => $this->input->post('keterangan')
-		);
-		if ($this->cicilan_model->update($id,$data)) {
-			echo json_encode('sukses');
-		}
-	}
-
-	public function get_supplier()
-	{
-		$id = $this->input->post('id');
-		$supplier = $this->cicilan_model->getSupplier($id);
-		if ($supplier->row()) {
-			echo json_encode($supplier->row());
-		}
-	}
-
-	public function search()
-	{
-		header('Content-type: application/json');
-		$supplier = $this->input->post('supplier');
-		$search = $this->cicilan_model->search($supplier);
-		foreach ($search as $supplier) {
-			$data[] = array(
-				'id' => $supplier->id,
-				'text' => $supplier->nama
-			);
-		}
-		echo json_encode($data);
+		echo json_encode($cicilan);
 	}
 
 }
 
-/* End of file Supplier.php */
-/* Location: ./application/controllers/Supplier.php */
+/* End of file cicilan.php */
+/* Location: ./application/controllers/cicilan.php */

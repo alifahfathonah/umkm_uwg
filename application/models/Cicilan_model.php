@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cicilan_model extends CI_Model {
 
-	private $table = 'supplier';
+	private $table = 'transaksi_utang';
 
 	public function create($data)
 	{
@@ -11,8 +11,19 @@ class Cicilan_model extends CI_Model {
 	}
 
 	public function read()
-	{
-		return $this->db->get($this->table);
+	{	
+		$this->db->select('
+			transaksi_utang.id,
+			transaksi.nota,
+			pelanggan.nama as pelanggan,
+			transaksi.total_bayar,
+			transaksi_utang.hutang,
+			transaksi_utang.status
+
+		')->from($this->table)
+		->join('transaksi', 'transaksi_utang.transaksi_id = transaksi.id','left')
+		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left');
+		return $this->db->get();
 	}
 
 	public function update($id, $data)
@@ -27,16 +38,10 @@ class Cicilan_model extends CI_Model {
 		return $this->db->delete($this->table);
 	}
 
-	public function getSupplier($id)
+	public function detail($id)
 	{
 		$this->db->where('id', $id);
-		return $this->db->get($this->table);
-	}
-
-	public function search($search="")
-	{
-		$this->db->like('nama', $search);
-		return $this->db->get($this->table)->result();
+		return $this->db->get($this->table)->row_array();
 	}
 
 }

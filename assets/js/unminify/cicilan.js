@@ -13,13 +13,13 @@ let url, cicilan = $("#cicilan").DataTable({
     columns: [{
         data: null
     }, {
-        data: "nama"
+        data: "nota"
     }, {
-        data: "alamat"
+        data: "total_bayar"
     }, {
-        data: "telepon"
+        data: "hutang"
     }, {
-        data: "keterangan"
+        data: "status"
     }, {
         data: "action"
     }]

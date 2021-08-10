@@ -36,18 +36,15 @@
     <section class="content">
       <div class="container-fluid">
         <div class="card">
-          <div class="card-header">
-            <button class="btn btn-success" data-toggle="modal" data-target="#modal" onclick="add()">Add</button>
-          </div>
           <div class="card-body">
             <table class="table w-100 table-bordered table-hover" id="cicilan">
               <thead>
                 <tr>
                   <th>No</th>
-                  <th>Nama Perusahaan</th>
-                  <th>Alamat</th>
-                  <th>Telepon</th>
-                  <th>Keterangan</th>
+                  <th>Nota</th>
+                  <th>Total Bayar</th>
+                  <th>Sisa Kekurangan</th>
+                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -75,20 +72,29 @@
     <form id="form">
       <input type="hidden" name="id">
       <div class="form-group">
-        <label>Nama</label>
-        <input type="text" class="form-control" placeholder="Nama" name="nama" required>
+        <label>Nota</label>
+        <input type="text" class="form-control" placeholder="Nota" name="nota" required>
       </div>
       <div class="form-group">
-        <label>Alamat</label>
-        <input type="text" class="form-control" placeholder="Alamat" name="alamat" required>
+        <label>Kekurangan</label>
+        <input type="text" class="form-control" placeholder="Kekurangan" name="kekurangan" required>
       </div>
       <div class="form-group">
-        <label>Telepon</label>
-        <input type="number" class="form-control" placeholder="Telepon" name="telepon" required>
+        <label>Status</label>
+        <input type="text" class="form-control" placeholder="Status" name="status" required>
       </div>
-      <div class="form-group">
-        <label>Keterangan</label>
-        <textarea name="keterangan" class="form-control" placeholder="Keterangan" required></textarea>
+      <div class="form-group my-4">
+        <table class="table my-table">
+          <thead>
+            <tr>
+              <th class="text-center" width="35%">Tanggal</th>
+              <th class="text-center">Transaksi Terakhir</th>
+              <th class="text-center">Sisa Pembayaran</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
       <button class="btn btn-success" type="submit">Add</button>
       <button class="btn btn-danger" data-dismiss="modal">Close</button>

@@ -204,7 +204,8 @@ function checkEmpty() {
 function checkUang() {
     let jumlah_uang = $('[name="jumlah_uang"').val(),
         total_bayar = parseInt($(".total_bayar").html());
-    if (jumlah_uang !== "" && jumlah_uang >= total_bayar) {
+
+    if (jumlah_uang.length > 0) {
         $("#add").removeAttr("disabled");
         $("#cetak").removeAttr("disabled")
     } else {

@@ -9,7 +9,7 @@ class Transaksi extends CI_Controller {
 		if ($this->session->userdata('status') !== 'login' ) {
 			redirect('/');
 		}
-		$this->load->model('transaksi_model');
+		$this->load->model(['transaksi_model', 'cicilan_model']);
 	}
 
 	public function index()
@@ -50,6 +50,16 @@ class Transaksi extends CI_Controller {
 		}
 		
 		if ($create = $this->transaksi_model->create($data)) {
+			if($data["jumlah_uang"] < $data["total_bayar"]){
+				$data_cicilan = [
+					"transaksi_id" => $create,
+					"hutang" => $data["total_bayar"] - $data["jumlah_uang"],
+					"status" => "Belum Lunas"
+				];
+
+				$this->cicilan_model->create($data_cicilan);
+			}
+
 			echo json_encode($create);
 		}else{
 			echo json_encode(0);
