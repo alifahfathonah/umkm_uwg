@@ -73,18 +73,18 @@
       <input type="hidden" name="id">
       <div class="form-group">
         <label>Nota</label>
-        <input type="text" class="form-control" placeholder="Nota" name="nota" required>
+        <input type="text" class="form-control" placeholder="Nota" name="nota" disabled="true">
       </div>
       <div class="form-group">
         <label>Kekurangan</label>
-        <input type="text" class="form-control" placeholder="Kekurangan" name="kekurangan" required>
+        <input type="text" class="form-control" placeholder="Kekurangan" name="kekurangan" disabled="true">
       </div>
       <div class="form-group">
         <label>Status</label>
-        <input type="text" class="form-control" placeholder="Status" name="status" required>
+        <input type="text" class="form-control" placeholder="Status" name="status" disabled="true">
       </div>
-      <div class="form-group my-4">
-        <table class="table my-table">
+      <div class="form-group mt-4 mb-5">
+        <table id="tbl_cicilan" class="table my-table">
           <thead>
             <tr>
               <th class="text-center" width="35%">Tanggal</th>

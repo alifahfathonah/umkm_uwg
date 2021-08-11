@@ -101,21 +101,30 @@ function add() {
 
 function edit(id) {
     $.ajax({
-        url: get_cicilanUrl,
-        type: "post",
+        url: get_cicilanUrl+"?id="+id,
+        type: "get",
         dataType: "json",
-        data: {
-            id: id
-        },
         success: res => {
             $('[name="id"]').val(res.id);
-            $('[name="nama"]').val(res.nama);
-            $('[name="alamat"]').val(res.alamat);
-            $('[name="telepon"]').val(res.telepon);
-            $('[name="keterangan"]').val(res.keterangan);
+            $('[name="nota"]').val(res.nota);
+            $('[name="kekurangan"]').val(res.hutang);
+            $('[name="status"]').val(res.status);
+
+            if(res.cicilan.length > 0) {
+                // $("#tbl_cicilan")
+            }else{
+                $("#tbl_cicilan tbody").append(`
+                    <tr>
+                        <td align="center">2021-01-01</td>
+                        <td align="center">5000</td>
+                        <td align="center">34000</td>
+                    </tr>
+                `);
+            }
+
             $(".modal").modal("show");
-            $(".modal-title").html("Edit Data");
-            $('.modal button[type="submit"]').html("Edit");
+            $(".modal-title").html("Detail Pembayaran");
+            $('.modal button[type="submit"]').html("Simpan");
             url = "edit"
         },
         error: err => {

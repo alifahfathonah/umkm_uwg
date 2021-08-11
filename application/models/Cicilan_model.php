@@ -40,8 +40,14 @@ class Cicilan_model extends CI_Model {
 
 	public function detail($id)
 	{
-		$this->db->where('id', $id);
-		return $this->db->get($this->table)->row_array();
+		$detail = $this->db->select("transaksi_utang.*, transaksi.nota")
+			->from($this->table)
+			->join("transaksi", "transaksi.id = transaksi_utang.transaksi_id")
+			->where("transaksi_utang.id = $id")
+			->get()->row_array();
+		$detail["cicilan"] = $this->db->get("transaksi_cicilan", ["utang_id" => $id])->result_array();
+
+		return $detail;
 	}
 
 }

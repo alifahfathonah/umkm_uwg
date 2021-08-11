@@ -28,7 +28,7 @@ class Cicilan extends CI_Controller {
 					'total_bayar' => $cicilan->total_bayar,
 					'hutang' => $cicilan->hutang,
 					'status' => $cicilan->status,
-					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$cicilan->id.')">Edit</button> <button class="btn btn-sm btn-danger" onclick="remove('.$cicilan->id.')">Delete</button>'
+					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$cicilan->id.')">Detail Pembayaran</button>'
 				);
 			}
 		} else {
