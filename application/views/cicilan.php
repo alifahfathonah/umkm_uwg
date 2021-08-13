@@ -69,7 +69,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <form id="form">
+    <form id="form" class="was-validated">
       <input type="hidden" name="id">
       <div class="form-group">
         <label>Nota</label>
@@ -84,19 +84,27 @@
         <input type="text" class="form-control" placeholder="Status" name="status" disabled="true">
       </div>
       <div class="form-group mt-4 mb-5">
+        <div class="my-2" style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        ">
+          <label>Daftar Cicilan</label>
+          <button class="btn btn-default" type="button" onclick="newCicilan()"><i class="fa fa-plus"></i> Transaksi</button>
+        </div>
         <table id="tbl_cicilan" class="table my-table">
           <thead>
             <tr>
-              <th class="text-center" width="35%">Tanggal</th>
-              <th class="text-center">Transaksi Terakhir</th>
-              <th class="text-center">Sisa Pembayaran</th>
+              <th class="text-center" width="40%">Tanggal</th>
+              <th class="text-center" width="30%">Transaksi Terakhir</th>
+              <th class="text-center" width="30%">Sisa Pembayaran</th>
             </tr>
           </thead>
           <tbody>
           </tbody>
         </table>
       </div>
-      <button class="btn btn-success" type="submit">Add</button>
+      <button class="btn btn-success" type="submit">Simpan</button>
       <button class="btn btn-danger" data-dismiss="modal">Close</button>
     </form>
   </div>
@@ -116,6 +124,8 @@
   var removeUrl = '<?php echo site_url('cicilan/delete') ?>';
   var editUrl = '<?php echo site_url('cicilan/edit') ?>';
   var get_cicilanUrl = '<?php echo site_url('cicilan/get_cicilan') ?>';
+
+  let cicilan_now = [];
 </script>
 <script src="<?php echo base_url('assets/js/unminify/cicilan.js') ?>"></script>
 </body>

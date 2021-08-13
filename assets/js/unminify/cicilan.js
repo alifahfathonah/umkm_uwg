@@ -111,13 +111,32 @@ function edit(id) {
             $('[name="status"]').val(res.status);
 
             if(res.cicilan.length > 0) {
-                // $("#tbl_cicilan")
+                cicilan_now = res.cicilan;
+
+                cicilan_now.forEach(r => {
+                    $("#tbl_cicilan tbody").append(`
+                        <tr>
+                            <td align="center">
+                                <input type="date" class="form-control" placeholder="Date" required="true" value="${r.tanggal}">
+                            </td>
+                            <td align="center">
+                                <input type="text" class="form-control is-invalid" placeholder="" name="status" required="required" value="${r.trans_terakhir}">
+                            </td>
+                            <td align="center">${res.sisa}</td>
+                        </tr>
+                    `);    
+                });
             }else{
+                cicilan_now = [];
                 $("#tbl_cicilan tbody").append(`
                     <tr>
-                        <td align="center">2021-01-01</td>
-                        <td align="center">5000</td>
-                        <td align="center">34000</td>
+                        <td align="center">
+                            <input type="date" class="form-control" placeholder="Date" required="true" value="${valToday()}">
+                        </td>
+                        <td align="center">
+                            <input type="text" class="form-control" placeholder="" name="status" required>
+                        </td>
+                        <td align="center">${res.hutang}</td>
                     </tr>
                 `);
             }
@@ -132,6 +151,34 @@ function edit(id) {
         }
     })
 }
+
+function newCicilan() {
+    $("#tbl_cicilan tbody").append(`
+        <tr>
+            <td align="center">
+                <input type="date" class="form-control" placeholder="Date" name="Date" required="true" value="${valToday()}">
+            </td>
+            <td align="center">
+                <input type="text" class="form-control" placeholder="" name="status" required>
+            </td>
+            <td align="center">
+                <span>0</span>
+            </td>
+        </tr>
+    `);
+}
+
+function valToday() {
+    var now = new Date();
+    var month = (now.getMonth() + 1);               
+    var day = now.getDate();
+    if (month < 10) 
+        month = "0" + month;
+    if (day < 10) 
+        day = "0" + day;
+    return now.getFullYear() + '-' + month + '-' + day;
+}
+
 cicilan.on("order.dt search.dt", () => {
     cicilan.column(0, {
         search: "applied",
