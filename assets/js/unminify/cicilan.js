@@ -116,13 +116,9 @@ function edit(id) {
                 cicilan_now.forEach(r => {
                     $("#tbl_cicilan tbody").append(`
                         <tr>
-                            <td align="center">
-                                <input type="date" class="form-control" placeholder="Date" required="true" value="${r.tanggal}">
-                            </td>
-                            <td align="center">
-                                <input type="text" class="form-control is-invalid" placeholder="" name="status" required="required" value="${r.trans_terakhir}">
-                            </td>
-                            <td align="center">${res.sisa}</td>
+                            <td align="center">${r.tanggal}</td>
+                            <td align="center">${r.trans_terakhir}</td>
+                            <td align="center">${r.sisa}</td>
                         </tr>
                     `);    
                 });
