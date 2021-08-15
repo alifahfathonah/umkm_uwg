@@ -123,14 +123,16 @@ function edit(id) {
                     `);    
                 });
             }else{
+                var id = "id" + Math.random().toString(10).slice(2)
                 cicilan_now = [];
+
                 $("#tbl_cicilan tbody").append(`
                     <tr>
                         <td align="center">
-                            <input type="date" class="form-control" placeholder="Date" required="true" value="${valToday()}">
+                            <input type="date" class="form-control" placeholder="Date" required="true" onchange="updateCicilan(${id})" name="date_${id}" value="${valToday()}">
                         </td>
                         <td align="center">
-                            <input type="text" class="form-control" placeholder="" name="status" required>
+                            <input type="text" class="form-control" placeholder="" name="status" onchange="updateCicilan(${id})" name="bayar_${id}" required>
                         </td>
                         <td align="center">${res.hutang}</td>
                     </tr>
@@ -149,19 +151,43 @@ function edit(id) {
 }
 
 function newCicilan() {
+    var id = "id" + Math.random().toString(10).slice(2)
+
     $("#tbl_cicilan tbody").append(`
         <tr>
             <td align="center">
-                <input type="date" class="form-control" placeholder="Date" name="Date" required="true" value="${valToday()}">
+                <input type="date" class="form-control" placeholder="Date" name="Date" onchange="updateCicilan(${id})" name="date_${id}" required="true" value="${valToday()}">
             </td>
             <td align="center">
-                <input type="text" class="form-control" placeholder="" name="status" required>
+                <input type="text" class="form-control" placeholder="" name="status" onchange="updateCicilan(${id})" name="bayar_${id}" required>
             </td>
             <td align="center">
                 <span>0</span>
             </td>
         </tr>
     `);
+}
+
+function updateCicilan(id) {
+    let find_cicilan = cicilan_now.filter(r => r.id == id);
+
+    if (find_cicilan.length > 0) {
+        cicilan_now.forEach((r,i)=>{
+            if(r.id == id){
+                cicilan_now[i] = {
+                    "id": id,
+                    "tanggal": $("date_"+id).val(),
+                    "trans_terakhir": $("bayar_"+id).val(),        
+                };
+            }
+        });
+    }else{
+        cicilan_now.push({
+            "id": id,
+            "tanggal": $("date_"+id).val(),
+            "trans_terakhir": $("bayar_"+id).val(),
+        });
+    }
 }
 
 function valToday() {
