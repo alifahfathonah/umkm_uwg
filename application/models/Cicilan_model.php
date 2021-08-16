@@ -50,6 +50,11 @@ class Cicilan_model extends CI_Model {
 		return $detail;
 	}
 
+	public function create_cicilan($data)
+	{
+		return $this->db->insert($this->table, $data);
+	}
+
 }
 
 /* End of file cicilan_model.php */

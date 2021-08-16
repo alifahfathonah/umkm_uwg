@@ -81,7 +81,10 @@ function editData() {
         url: editUrl,
         type: "post",
         dataType: "json",
-        data: $("#form").serialize(),
+        data: {
+            "id": $('[name="id"]').val(),
+            "cicilan": JSON.stringify(cicilan_now)
+        },
         success: () => {
             $(".modal").modal("hide");
             Swal.fire("Sukses", "Sukses Mengedit Data", "success");
@@ -109,6 +112,7 @@ function edit(id) {
             $('[name="nota"]').val(res.nota);
             $('[name="kekurangan"]').val(res.hutang);
             $('[name="status"]').val(res.status);
+            $("#tbl_cicilan tbody").html('');
 
             if(res.cicilan.length > 0) {
                 cicilan_now = res.cicilan;
@@ -123,16 +127,16 @@ function edit(id) {
                     `);    
                 });
             }else{
-                var id = "id" + Math.random().toString(10).slice(2)
+                var id = myID();
                 cicilan_now = [];
 
                 $("#tbl_cicilan tbody").append(`
                     <tr>
                         <td align="center">
-                            <input type="date" class="form-control" placeholder="Date" required="true" onchange="updateCicilan(${id})" name="date_${id}" value="${valToday()}">
+                            <input type="date" class="form-control" placeholder="Date" required="true" onchange="updateCicilan('${id}')" name="date_${id}" value="${valToday()}">
                         </td>
                         <td align="center">
-                            <input type="text" class="form-control" placeholder="" name="status" onchange="updateCicilan(${id})" name="bayar_${id}" required>
+                            <input type="text" class="form-control" placeholder="" onchange="updateCicilan('${id}')" name="bayar_${id}" required>
                         </td>
                         <td align="center">${res.hutang}</td>
                     </tr>
@@ -150,16 +154,31 @@ function edit(id) {
     })
 }
 
+function myID() {
+    var n = 4;
+    var add = 1, max = 12 - add;   // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.
+
+    if ( n > max ) {
+            return generate(max) + generate(n - max);
+    }
+
+    max        = Math.pow(10, n+add);
+    var min    = max/10; // Math.pow(10, n) basically
+    var number = Math.floor( Math.random() * (max - min + 1) ) + min;
+
+    return  (Math.random() + 1).toString(36).substring(7) + ("" + number).substring(add); 
+}
+
 function newCicilan() {
-    var id = "id" + Math.random().toString(10).slice(2)
+    var id = myID();
 
     $("#tbl_cicilan tbody").append(`
         <tr>
             <td align="center">
-                <input type="date" class="form-control" placeholder="Date" name="Date" onchange="updateCicilan(${id})" name="date_${id}" required="true" value="${valToday()}">
+                <input type="date" class="form-control" placeholder="Date" onchange="updateCicilan('${id}')" name="date_${id}" required="true" value="${valToday()}">
             </td>
             <td align="center">
-                <input type="text" class="form-control" placeholder="" name="status" onchange="updateCicilan(${id})" name="bayar_${id}" required>
+                <input type="text" class="form-control" placeholder="" onchange="updateCicilan('${id}')" name="bayar_${id}" required>
             </td>
             <td align="center">
                 <span>0</span>
@@ -176,16 +195,17 @@ function updateCicilan(id) {
             if(r.id == id){
                 cicilan_now[i] = {
                     "id": id,
-                    "tanggal": $("date_"+id).val(),
-                    "trans_terakhir": $("bayar_"+id).val(),        
+                    "tanggal": $(`[name="date_${id}"]`).val(),
+                    "trans_terakhir": $(`[name="bayar_${id}"]`).val(),        
                 };
             }
         });
     }else{
+        console.log("push")
         cicilan_now.push({
             "id": id,
-            "tanggal": $("date_"+id).val(),
-            "trans_terakhir": $("bayar_"+id).val(),
+            "tanggal": $(`[name="date_${id}"]`).val(),
+            "trans_terakhir": $(`[name="bayar_${id}"]`).val(),        
         });
     }
 }
