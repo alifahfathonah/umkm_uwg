@@ -81,12 +81,17 @@ class Cicilan_model extends CI_Model {
 			$sisa = $last_trans - $item->trans_terakhir;
 
 			if(!$get_cicillan){
-				$this->db->insert("transaksi_cicilan", [
-					'utang_id' => $id,
-					'tanggal' => $item->tanggal,
-					'trans_terakhir' => $item->trans_terakhir,
-					'sisa' => $sisa,
-				]);
+				$utang = $this->get_utang($id);
+				
+				if($utang["status"] != "Lunas"){
+					$this->db->insert("transaksi_cicilan", [
+						'utang_id' => $id,
+						'tanggal' => $item->tanggal,
+						'trans_terakhir' => $item->trans_terakhir,
+						'sisa' => $sisa,
+					]);
+				}
+				
 			}
 
 			if($sisa == 0){

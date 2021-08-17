@@ -76,14 +76,16 @@ class Transaksi extends CI_Controller {
 
 	public function cetak($id)
 	{
-		$produk = $this->transaksi_model->getAll($id);
+		$transaksi = $this->transaksi_model->getPrintTranskaksi($id);
+		print_r($transaksi);
+		exit;
 		$tanggal = new DateTime($produk->tanggal);
 		$barcode = explode(',', $produk->barcode);
 		$qty = explode(',', $produk->qty);
 
 		$produk->tanggal = $tanggal->format('d m Y H:i:s');
 
-		$dataProduk = $this->transaksi_model->getName($barcode);
+		$dataProduk = $this->transaksi_model->getProduk($barcode);
 		foreach ($dataProduk as $key => $value) {
 			$value->total = $qty[$key];
 			$value->harga = $value->harga * $qty[$key];

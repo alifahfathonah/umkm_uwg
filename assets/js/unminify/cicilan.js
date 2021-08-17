@@ -117,6 +117,9 @@ function edit(id) {
             if(res.status == "Lunas"){
                 $("#btn-add-cicilan").hide();                
                 $("#btn-save-cicilan").attr("disabled", true);                
+            }else{
+                $("#btn-add-cicilan").show();                
+                $("#btn-save-cicilan").attr("disabled", false);
             }
 
             if(res.cicilan.length > 0) {

@@ -104,23 +104,43 @@ class Transaksi_model extends CI_Model {
 		return $this->db->query("SELECT transaksi.qty FROM transaksi WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$hari' LIMIT 1")->row();
 	}
 
-	public function getAll($id)
+	public function getPrintTranskaksi($id)
 	{
-		$this->db->select('transaksi.nota, transaksi.tanggal, transaksi.barcode, transaksi.qty, transaksi.total_bayar, transaksi.jumlah_uang, pengguna.nama as kasir');
-		$this->db->from('transaksi');
-		$this->db->join('pengguna', 'transaksi.kasir = pengguna.id');
-		$this->db->where('transaksi.id', $id);
-		return $this->db->get()->row();
-	}
+		$transaksi = $this->db->select('
+			transaksi.id,   
+			transaksi.nota, 
+			transaksi.tanggal, 
+			transaksi.total_bayar, 
+			transaksi.jumlah_uang, 
+			pelanggan.id pelanggan_id,
+			pelanggan.nama as pelanggan,
+			SUM(transaksi_item.qty) qty,
+			pengguna.nama as kasir
+		')->from($this->table)
+		->join('transaksi_item', 'transaksi.id = transaksi_item.transaksi_id', 'left')
+		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')
+		->join('pengguna', 'transaksi.kasir = pengguna.id', 'left')
+		->where('transaksi.id', $id)
+		->group_by("transaksi.id")->get()->row_array();
 
-	public function getName($barcode)
-	{
-		foreach ($barcode as $b) {
-			$this->db->select('nama_produk, harga');
-			$this->db->where('id', $b);
-			$data[] = $this->db->get('produk')->row();
-		}
-		return $data;
+		$transaksi["item"] = $this->db->select('
+			produk.id,
+			produk.nama_produk,
+			transaksi_item.qty,
+			satuan_produk.satuan,
+			tipe_produk_pelanggan.harga,
+			tipe_produk_pelanggan.diskon
+		')->from('transaksi_item')
+		->join('transaksi', 'transaksi_item.transaksi_id = transaksi.id', 'left')
+		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')
+		->join('produk', 'produk.id = transaksi_item.produk_id', 'left')
+		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')
+		->join('tipe_produk_pelanggan', 'produk.id = tipe_produk_pelanggan.produk and tipe_produk_pelanggan.tipe = pelanggan.tipe', 'left')
+		->where('transaksi_id', $id)
+		->group_by("transaksi_item.id")
+		->get()->result_array();
+
+		return $transaksi;
 	}
 
 }
