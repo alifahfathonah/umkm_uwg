@@ -24,9 +24,10 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col">
+          <div class="col" style="display: flex; align-items: center; justify-content: space-between;">
             <h1 class="m-0 text-dark">Laporan Stok Masuk</h1>
-          </div><!-- /.col -->
+            <a href="<?=site_url(); ?>stok_masuk/cetak_all" class="btn btn-sm btn-info" target="_blank"><i class="fa fa-print"></i> Print All</a>
+          </div>
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>

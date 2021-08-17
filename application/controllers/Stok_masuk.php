@@ -95,6 +95,27 @@ class Stok_masuk extends CI_Controller {
 		echo json_encode($stok_masuk);
 	}
 
+	public function cetak_all(){
+		if ($this->stok_masuk_model->laporan()->num_rows() > 0) {
+			foreach ($this->stok_masuk_model->laporan()->result() as $stok_masuk) {
+				$tanggal = new DateTime($stok_masuk->tanggal);
+				$data[] = array(
+					'tanggal' => $tanggal->format('d-m-Y H:i:s'),
+					'barcode' => $stok_masuk->barcode,
+					'nama_produk' => $stok_masuk->nama_produk,
+					'jumlah' => $stok_masuk->jumlah,
+					'keterangan' => $stok_masuk->keterangan,
+					'supplier' => $stok_masuk->supplier
+				);
+			}
+		} else {
+			$data = array();
+		}
+
+		$d["transaksi"] = $data;
+		$this->load->view('cetak/stok_masuk_all', $d);
+	}
+
 	public function stok_hari()
 	{
 		header('Content-type: application/json');
