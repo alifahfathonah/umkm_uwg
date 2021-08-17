@@ -74,13 +74,18 @@ class Transaksi extends CI_Controller {
 		}
 	}
 
+	public function cetak_all(){
+		$d["transaksi"] = $this->transaksi_model->read();
+		$this->load->view('cetak/transaksi_all', $d);
+	}
+
 	public function cetak($id)
 	{
 		$transaksi = $this->transaksi_model->getPrintTranskaksi($id);
 
 		$tanggal = new DateTime($transaksi["tanggal"]);
 		$transaksi["tanggal"] = $tanggal->format('d m Y H:i:s');
-		$this->load->view('cetak', $transaksi);
+		$this->load->view('cetak/transaksi', $transaksi);
 	}
 
 	public function penjualan_bulan()
