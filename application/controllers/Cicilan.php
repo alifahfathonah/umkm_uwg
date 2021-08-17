@@ -42,33 +42,30 @@ class Cicilan extends CI_Controller {
 
 	public function edit()
 	{
-		$id = new DateTime($this->input->post('id'));
+		$id = $this->input->post('id');
 		$cicilan = json_decode($this->input->post('cicilan'));
-
-		foreach ($produk as $produk) {
-			$this->transaksi_model->removeStok($produk->id, ["stok" => $produk->stok, "terjual" => $produk->jumlah]);
-			
-			$data["item"][] = [
-				'produk' => $produk->id,
-				'qty' => $produk->jumlah
-			];
+		$utang = $this->cicilan_model->get_utang($id);
+		
+		if($utang){
+			$create = $this->cicilan_model->create_cicilan($id, $cicilan);
+			if($create){
+				echo json_encode([
+					"success" => true,
+					"message" => "create success",
+				]);
+			}else{
+				echo json_encode([
+					"success" => false,
+					"message" => "create failed",
+				]);
+			}
+		}else{
+			echo json_encode([
+				"success" => false,
+				"message" => "invalid id",
+			]);
 		}
 		
-		if ($create = $this->transaksi_model->create($data)) {
-			if($data["jumlah_uang"] < $data["total_bayar"]){
-				$data_cicilan = [
-					"transaksi_id" => $create,
-					"hutang" => $data["total_bayar"] - $data["jumlah_uang"],
-					"status" => "Belum Lunas"
-				];
-
-				$this->cicilan_model->create($data_cicilan);
-			}
-
-			echo json_encode($create);
-		}else{
-			echo json_encode(0);
-		}
 	}
 
 	public function get_cicilan()

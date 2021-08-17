@@ -90,7 +90,7 @@
           justify-content: space-between;
         ">
           <label>Daftar Cicilan</label>
-          <button class="btn btn-default" type="button" onclick="newCicilan()"><i class="fa fa-plus"></i> Transaksi</button>
+          <button class="btn btn-default" id="btn-add-cicilan" type="button" onclick="newCicilan()"><i class="fa fa-plus"></i> Transaksi</button>
         </div>
         <table id="tbl_cicilan" class="table my-table">
           <thead>
@@ -104,7 +104,7 @@
           </tbody>
         </table>
       </div>
-      <button class="btn btn-success" type="submit">Simpan</button>
+      <button class="btn btn-success" id="btn-save-cicilan" type="submit">Simpan</button>
       <button class="btn btn-danger" data-dismiss="modal">Close</button>
     </form>
   </div>

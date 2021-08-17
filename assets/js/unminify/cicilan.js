@@ -114,6 +114,11 @@ function edit(id) {
             $('[name="status"]').val(res.status);
             $("#tbl_cicilan tbody").html('');
 
+            if(res.status == "Lunas"){
+                $("#btn-add-cicilan").hide();                
+                $("#btn-save-cicilan").attr("disabled", true);                
+            }
+
             if(res.cicilan.length > 0) {
                 cicilan_now = res.cicilan;
 
