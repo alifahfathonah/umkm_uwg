@@ -112,6 +112,7 @@ class Transaksi_model extends CI_Model {
 			transaksi.tanggal, 
 			transaksi.total_bayar, 
 			transaksi.jumlah_uang, 
+			(transaksi.jumlah_uang - transaksi.total_bayar) kembalian,
 			pelanggan.id pelanggan_id,
 			pelanggan.nama as pelanggan,
 			SUM(transaksi_item.qty) qty,

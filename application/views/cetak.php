@@ -3,12 +3,25 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Cetak</title>
+	<style>
+		.span-diskon{
+			margin-left: 5px;
+			background: red;
+			font-weight: bold;
+			color: white;
+			padding: 1px 5px;
+			font-size: 13px;
+			border-radius: 5px;
+		}
+	</style>
 </head>
 <body>
 	<div style="width: 500px; margin: auto;">
 		<br>
 		<center>
-			<?php echo $this->session->userdata('toko')->nama; ?><br>
+			<h2 style="font-weight:bold;">
+				<?php echo $this->session->userdata('toko')->nama; ?><br>
+			</h2>
 			<?php echo $this->session->userdata('toko')->alamat; ?><br><br>
 			<table width="100%">
 				<tr>
@@ -24,12 +37,12 @@
 					<td width="10%" align="right"></td>
 					<td align="right" width="17%"><?php echo $kasir ?></td>
 				</tr>
-				<?php foreach ($produk as $key): ?>
+				<?php foreach ($item as $key): ?>
 					<tr>
-						<td><?php echo $key->nama_produk ?></td>
+						<td><?php echo $key["nama_produk"] ?> <?php echo !empty($key["diskon"])? '<span class="span-diskon">'.$key["diskon"].'%</span>' : '';  ?></td>
 						<td></td>
-						<td align="right"><?php echo $key->total ?></td>
-						<td align="right"><?php echo $key->harga ?></td>
+						<td align="right"><?php echo $key["qty"]." ".$key["satuan"] ?></td>
+						<td align="right"><?php echo ($key["harga"] - ($key["harga"] * $key["diskon"] / 100) * $key["qty"]) ?></td>
 					</tr>
 				<?php endforeach ?>
 			</table>
@@ -40,7 +53,7 @@
 						Harga Jual
 					</td>
 					<td width="23%" align="right">
-						<?php echo $total ?>
+						<?php echo $total_bayar ?>
 					</td>
 				</tr>
 			</table>
@@ -51,7 +64,7 @@
 						Total
 					</td>
 					<td width="23%" align="right">
-						<?php echo $total ?>
+						<?php echo $total_bayar ?>
 					</td>
 				</tr>
 				<tr>
@@ -59,7 +72,7 @@
 						Bayar
 					</td>
 					<td width="23%" align="right">
-						<?php echo $bayar ?>
+						<?php echo $jumlah_uang ?>
 					</td>
 				</tr>
 				<tr>

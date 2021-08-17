@@ -77,30 +77,10 @@ class Transaksi extends CI_Controller {
 	public function cetak($id)
 	{
 		$transaksi = $this->transaksi_model->getPrintTranskaksi($id);
-		print_r($transaksi);
-		exit;
-		$tanggal = new DateTime($produk->tanggal);
-		$barcode = explode(',', $produk->barcode);
-		$qty = explode(',', $produk->qty);
 
-		$produk->tanggal = $tanggal->format('d m Y H:i:s');
-
-		$dataProduk = $this->transaksi_model->getProduk($barcode);
-		foreach ($dataProduk as $key => $value) {
-			$value->total = $qty[$key];
-			$value->harga = $value->harga * $qty[$key];
-		}
-
-		$data = array(
-			'nota' => $produk->nota,
-			'tanggal' => $produk->tanggal,
-			'produk' => $dataProduk,
-			'total' => $produk->total_bayar,
-			'bayar' => $produk->jumlah_uang,
-			'kembalian' => $produk->jumlah_uang - $produk->total_bayar,
-			'kasir' => $produk->kasir
-		);
-		$this->load->view('cetak', $data);
+		$tanggal = new DateTime($transaksi["tanggal"]);
+		$transaksi["tanggal"] = $tanggal->format('d m Y H:i:s');
+		$this->load->view('cetak', $transaksi);
 	}
 
 	public function penjualan_bulan()
