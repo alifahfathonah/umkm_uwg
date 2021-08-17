@@ -39,8 +39,9 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col">
+          <div class="col" style="display: flex; align-items: center; justify-content: space-between;">
             <h1 class="m-0 text-dark">Laporan Penjualan</h1>
+            <button class="btn btn-sm btn-info" onclick="PrintAll()"><i class="fa fa-print"></i> Print All</button>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
