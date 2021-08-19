@@ -46,6 +46,8 @@
                   <th>No</th>
                   <th>Username</th>
                   <th>Nama</th>
+                  <th>Role</th>
+                  <th>Toko</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -83,6 +85,15 @@
       <div class="form-group">
         <label>Nama</label>
         <input type="text" class="form-control" placeholder="Nama" name="nama" required>
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select class="form-control" placeholder="Role" name="role" required>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Toko</label>
+        <select class="form-control select2 col-sm-6" placeholder="Toko" name="toko"></select>
       </div>
       <button class="btn btn-success" type="submit">Add</button>
       <button class="btn btn-danger" data-dismiss="modal">Close</button>
