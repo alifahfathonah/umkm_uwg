@@ -17,3 +17,20 @@ CREATE TABLE `umkm_db`.`transaksi_item` ( `id` INT NOT NULL AUTO_INCREMENT , `tr
 -- Utang Piutang
 CREATE TABLE `umkm_db`.`transaksi_utang` ( `id` INT NOT NULL AUTO_INCREMENT , `transaksi_id` INT NOT NULL , `hutang` DOUBLE NOT NULL , `status` ENUM('Lunas','Belum Lunas') NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 CREATE TABLE `umkm_db`.`transaksi_cicilan` ( `id` INT NOT NULL AUTO_INCREMENT , `utang_id` INT NOT NULL, `tanggal` DATETIME NOT NULL , `trans_terakhir` DOUBLE NOT NULL , `sisa` DOUBLE NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+-- Role Pengguna
+CREATE TABLE `umkm_db`.`role_pengguna` ( `id` INT NOT NULL AUTO_INCREMENT , `nama` VARCHAR(20) NOT NULL , `deskripsi` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+INSERT INTO `role_pengguna` (`id`, `nama`, `deskripsi`) VALUES ('1', 'Admin', 'Memiliki hak akses untuk mengelola seluruh pengguna toko'), ('2', 'Admin Toko', 'Hanya memiliki akses untuk toko yang terkait')
+
+-- Toko
+ALTER TABLE `pengguna` ADD `toko_id` INT NULL;
+ALTER TABLE `pelanggan` ADD `toko_id` INT NULL;
+ALTER TABLE `produk` ADD `toko_id` INT NULL;
+ALTER TABLE `stok_keluar` ADD `toko_id` INT NULL;
+ALTER TABLE `stok_masuk` ADD `toko_id` INT NULL;
+ALTER TABLE `supplier` ADD `toko_id` INT NULL;
+ALTER TABLE `tipe_produk_pelanggan` ADD `toko_id` INT NULL;
+ALTER TABLE `transaksi` ADD `toko_id` INT NULL;
+ALTER TABLE `transaksi_cicilan` ADD `toko_id` INT NULL;
+ALTER TABLE `transaksi_item` ADD `toko_id` INT NULL;
+ALTER TABLE `transaksi_utang` ADD `toko_id` INT NULL;
