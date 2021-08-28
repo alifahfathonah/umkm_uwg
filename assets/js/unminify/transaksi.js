@@ -246,6 +246,7 @@ function add() {
             tanggal: $("#tanggal").val(),
             total_bayar: $("#total").html(),
             jumlah_uang: $('[name="jumlah_uang"]').val(),
+            ongkir: $('[name="ongkir"]').val(),
             pelanggan: $("#pelanggan").val(),
             nota: $("#nota").html()
         },
@@ -266,7 +267,13 @@ function add() {
 
 function kembalian() {
     let total = parseFloat($("#total").html()),
-        jumlah_uang = parseFloat($('[name="jumlah_uang"').val());
+        jumlah_uang = parseFloat($('[name="jumlah_uang"').val()),
+        ongkir = parseFloat($('[name="ongkir"').val());
+    console.log(total);
+    console.log(jumlah_uang);
+    console.log(ongkir);
+    total = total - ongkir;
+    $('#total').html(total);
     $(".kembalian").html(jumlah_uang - total);
     checkUang()
 }

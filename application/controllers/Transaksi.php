@@ -34,6 +34,7 @@ class Transaksi extends CI_Controller {
 			'tanggal' => $tanggal->format('Y-m-d H:i:s'),
 			'total_bayar' => $this->input->post('total_bayar'),
 			'jumlah_uang' => $this->input->post('jumlah_uang'),
+			'ongkir' => $this->input->post('ongkir'),
 			'pelanggan' => $this->input->post('pelanggan'),
 			'nota' => $this->input->post('nota'),
 			'kasir' => $this->session->userdata('id'),
@@ -93,7 +94,7 @@ class Transaksi extends CI_Controller {
 		header('Content-type: application/json');
 		$day = $this->input->post('day');
 		foreach ($day as $key => $value) {
-			$now = date($day[$value].' m Y');
+			$now = date("Y-m") . "-" . $day[$value];
 			if ($qty = $this->transaksi_model->penjualanBulan($now) !== []) {
 				$data[] = array_sum($this->transaksi_model->penjualanBulan($now));
 			} else {
@@ -115,7 +116,7 @@ class Transaksi extends CI_Controller {
 	public function transaksi_terakhir($value='')
 	{
 		header('Content-type: application/json');
-		$now = date('d m Y');
+		$now = date('Y-m-d');
 		foreach ($this->transaksi_model->transaksiTerakhir($now) as $key) {
 			$total = explode(',', $key);
 		}

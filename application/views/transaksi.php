@@ -160,6 +160,10 @@
         <input placeholder="Jumlah Uang" type="number" class="form-control" name="jumlah_uang" onkeyup="kembalian()" required>
       </div>
       <div class="form-group">
+        <label>Ongkir</label>
+        <input placeholder="Ongkir" type="number" class="form-control" name="ongkir" onkeyup="kembalian()">
+      </div>
+      <div class="form-group">
         <b>Total Bayar:</b> <span class="total_bayar"></span>
       </div>
       <div class="form-group">

@@ -82,7 +82,13 @@ class Transaksi_model extends CI_Model {
 
 	public function penjualanBulan($date)
 	{
-		$qty = $this->db->query("SELECT qty FROM transaksi WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$date'")->result();
+		$qty = $this->db->query("
+			SELECT SUM(transaksi_item.qty) qty
+			FROM transaksi 
+			LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
+			WHERE DATE(tanggal) = '$date'
+			GROUP BY transaksi.id
+			")->result();
 		$d = [];
 		$data = [];
 		foreach ($qty as $key) {
@@ -101,7 +107,13 @@ class Transaksi_model extends CI_Model {
 
 	public function transaksiTerakhir($hari)
 	{
-		return $this->db->query("SELECT transaksi.qty FROM transaksi WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$hari' LIMIT 1")->row();
+		return $this->db->query("
+			SELECT SUM(transaksi_item.qty) qty
+			FROM transaksi
+			LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
+			WHERE DATE(tanggal) = '$hari'
+			GROUP BY transaksi.id
+			LIMIT 1")->row();
 	}
 
 	public function getPrintTranskaksi($id)

@@ -34,3 +34,6 @@ ALTER TABLE `transaksi` ADD `toko_id` INT NULL;
 ALTER TABLE `transaksi_cicilan` ADD `toko_id` INT NULL;
 ALTER TABLE `transaksi_item` ADD `toko_id` INT NULL;
 ALTER TABLE `transaksi_utang` ADD `toko_id` INT NULL;
+
+-- Ongkir
+ALTER TABLE `transaksi` ADD `ongkir` DOUBLE NULL AFTER `jumlah_uang`;
