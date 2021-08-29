@@ -20,6 +20,8 @@ let stok_masuk = $("#stok_masuk").DataTable({
         data: "nama_produk"
     }, {
         data: "jumlah"
+    },{
+        data: "harga"
     }, {
         data: "keterangan"
     }]

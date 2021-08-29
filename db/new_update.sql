@@ -37,3 +37,6 @@ ALTER TABLE `transaksi_utang` ADD `toko_id` INT NULL;
 
 -- Ongkir
 ALTER TABLE `transaksi` ADD `ongkir` DOUBLE NULL AFTER `jumlah_uang`;
+
+-- Harga Stok Masuk
+ALTER TABLE `stok_masuk` ADD `harga` DOUBLE NULL AFTER `jumlah`;

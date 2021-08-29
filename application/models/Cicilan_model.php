@@ -17,12 +17,13 @@ class Cicilan_model extends CI_Model {
 			transaksi.nota,
 			pelanggan.nama as pelanggan,
 			transaksi.total_bayar,
-			IF(transaksi_utang.status="Lunas", 0, transaksi_utang.hutang) hutang,
+			IF(transaksi_utang.status="Lunas", 0, IFNULL(last_cicilan.sisa, transaksi_utang.hutang)) hutang,
 			transaksi_utang.status
 
 		')->from($this->table)
 		->join('transaksi', 'transaksi_utang.transaksi_id = transaksi.id','left')
-		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left');
+		->join('(SELECT id,utang_id,sisa FROM transaksi_cicilan ORDER BY tanggal DESC, id DESC LIMIT 1) last_cicilan', 'transaksi_utang.id = last_cicilan.utang_id','left')
+		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')->order_by("transaksi_utang.id DESC");
 		return $this->db->get();
 	}
 
@@ -42,11 +43,12 @@ class Cicilan_model extends CI_Model {
 	{
 		$detail = $this->db->select("
 				transaksi_utang.*, 
-				IF(transaksi_utang.status='Lunas', 0, transaksi_utang.hutang) hutang,
+				IF(transaksi_utang.status='Lunas', 0, IFNULL(last_cicilan.sisa, transaksi_utang.hutang)) hutang,
 				transaksi.nota
 			")
 			->from($this->table)
 			->join("transaksi", "transaksi.id = transaksi_utang.transaksi_id")
+			->join('(SELECT id,utang_id,sisa FROM transaksi_cicilan ORDER BY tanggal DESC, id DESC LIMIT 1) last_cicilan', 'transaksi_utang.id = last_cicilan.utang_id','left')
 			->where("transaksi_utang.id = $id")
 			->get()->row_array();
 		$detail["cicilan"] = $this->db->order_by("sisa", "desc")->get_where("transaksi_cicilan", ["utang_id" => $id])->result_array();
@@ -61,8 +63,8 @@ class Cicilan_model extends CI_Model {
 
 	public function last_trans($id) 
 	{
-		$last_trans = $this->db->from("transaksi_cicilan")->order_by("sisa", "asc")->limit("1")->get()->row_array();
-
+		$last_trans = $this->db->from("transaksi_cicilan")->where("utang_id", $id)->order_by("sisa", "asc")->limit("1")->get()->row_array();
+		
 		if($last_trans){
 			return $last_trans["sisa"];
 		}else{

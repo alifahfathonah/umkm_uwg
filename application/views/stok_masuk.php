@@ -51,6 +51,7 @@
                   <th>Barcode</th>
                   <th>Nama Produk</th>
                   <th>Jumlah</th>
+                  <th>Harga</th>
                   <th>Keterangan</th>
                 </tr>
               </thead>
@@ -87,6 +88,10 @@
       <div class="form-group">
         <label>Jumlah</label>
         <input type="number" class="form-control" placeholder="Jumlah" name="jumlah" required>
+      </div>
+      <div class="form-group">
+        <label>Harga</label>
+        <input type="number" class="form-control" placeholder="Harga" name="harga" required>
       </div>
       <div class="form-group">
         <label>Keterangan</label>
@@ -126,6 +131,6 @@
   var getBarcodeUrl = '<?php echo site_url('produk/get_barcode') ?>';
   var supplierSearchUrl = '<?php echo site_url('supplier/search') ?>';
 </script>
-<script src="<?php echo base_url('assets/js/stok_masuk.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/stok_masuk.js') ?>"></script>
 </body>
 </html>

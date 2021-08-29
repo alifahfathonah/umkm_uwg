@@ -28,6 +28,7 @@ class Stok_masuk extends CI_Controller {
 					'barcode' => $stok_masuk->barcode,
 					'nama_produk' => $stok_masuk->nama_produk,
 					'jumlah' => $stok_masuk->jumlah,
+					'harga' => $stok_masuk->harga,
 					'keterangan' => $stok_masuk->keterangan
 				);
 			}
@@ -44,6 +45,7 @@ class Stok_masuk extends CI_Controller {
 	{
 		$id = $this->input->post('barcode');
 		$jumlah = $this->input->post('jumlah');
+		$harga = $this->input->post('harga');
 		$stok = $this->stok_masuk_model->getStok($id)->stok;
 		$rumus = max($stok + $jumlah,0);
 		$addStok = $this->stok_masuk_model->addStok($id, $rumus);
@@ -53,6 +55,7 @@ class Stok_masuk extends CI_Controller {
 				'tanggal' => $tanggal->format('Y-m-d H:i:s'),
 				'barcode' => $id,
 				'jumlah' => $jumlah,
+				'harga' => $harga,
 				'keterangan' => $this->input->post('keterangan'),
 				'supplier' => $this->input->post('supplier')
 			);
@@ -82,6 +85,7 @@ class Stok_masuk extends CI_Controller {
 					'barcode' => $stok_masuk->barcode,
 					'nama_produk' => $stok_masuk->nama_produk,
 					'jumlah' => $stok_masuk->jumlah,
+					'harga' => $stok_masuk->harga,
 					'keterangan' => $stok_masuk->keterangan,
 					'supplier' => $stok_masuk->supplier
 				);
@@ -104,6 +108,7 @@ class Stok_masuk extends CI_Controller {
 					'barcode' => $stok_masuk->barcode,
 					'nama_produk' => $stok_masuk->nama_produk,
 					'jumlah' => $stok_masuk->jumlah,
+					'harga' => $stok_masuk->harga,
 					'keterangan' => $stok_masuk->keterangan,
 					'supplier' => $stok_masuk->supplier
 				);

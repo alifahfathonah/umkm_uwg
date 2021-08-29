@@ -12,7 +12,7 @@ class Stok_masuk_model extends CI_Model {
 
 	public function read()
 	{
-		$this->db->select('stok_masuk.tanggal, stok_masuk.jumlah, stok_masuk.keterangan, produk.barcode, produk.nama_produk');
+		$this->db->select('stok_masuk.tanggal, stok_masuk.jumlah, stok_masuk.harga, stok_masuk.keterangan, produk.barcode, produk.nama_produk');
 		$this->db->from($this->table);
 		$this->db->join('produk', 'produk.id = stok_masuk.barcode');
 		return $this->db->get();
@@ -20,7 +20,7 @@ class Stok_masuk_model extends CI_Model {
 
 	public function laporan()
 	{
-		$this->db->select('stok_masuk.tanggal, stok_masuk.jumlah, stok_masuk.keterangan, produk.barcode, produk.nama_produk, supplier.nama as supplier');
+		$this->db->select('stok_masuk.tanggal, stok_masuk.jumlah, stok_masuk.harga, stok_masuk.keterangan, produk.barcode, produk.nama_produk, supplier.nama as supplier');
 		$this->db->from($this->table);
 		$this->db->join('produk', 'produk.id = stok_masuk.barcode');
 		$this->db->join('supplier', 'supplier.id = stok_masuk.supplier', 'left outer');
