@@ -237,6 +237,7 @@ function remove(id) {
 }
 
 function add() {
+    $('#total').html($('.total_bayar').html())
     $.ajax({
         url: addUrl,
         type: "post",
@@ -244,7 +245,7 @@ function add() {
         data: {
             produk: JSON.stringify(product_cart),
             tanggal: $("#tanggal").val(),
-            total_bayar: $("#total").html(),
+            total_bayar: $(".total_bayar").html(),
             jumlah_uang: $('[name="jumlah_uang"]').val(),
             ongkir: $('[name="ongkir"]').val(),
             pelanggan: $("#pelanggan").val(),
@@ -266,15 +267,12 @@ function add() {
 }
 
 function kembalian() {
-    let total = parseFloat($("#total").html()),
-        jumlah_uang = parseFloat($('[name="jumlah_uang"').val()),
-        ongkir = parseFloat($('[name="ongkir"').val());
-    console.log(total);
-    console.log(jumlah_uang);
-    console.log(ongkir);
-    total = total - ongkir;
-    $('#total').html(total);
-    $(".kembalian").html(jumlah_uang - total);
+    let total = parseFloat(($("#total").html())? $("#total").html() : 0 ),
+        jumlah_uang = parseFloat(($('[name="jumlah_uang"').val())? $('[name="jumlah_uang"').val() : 0 ),
+        ongkir = parseFloat(($('[name="ongkir"').val())? $('[name="ongkir"').val() : 0 );
+
+    $('.total_bayar').html(total+ongkir);
+    $(".kembalian").html(jumlah_uang - (total+ongkir));
     checkUang()
 }
 $("#produk").select2({
