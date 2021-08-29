@@ -12,8 +12,12 @@ class Pengguna_model extends CI_Model {
 
 	public function read()
 	{
-		$this->db->where('role', '2');
-		return $this->db->get($this->table);
+		$this->db->select("pengguna.*, pengguna.role role_id, role_pengguna.nama role, toko.nama toko")
+		->from($this->table)
+		->join("role_pengguna", "pengguna.role = role_pengguna.id", "left")
+		->join("toko", "pengguna.toko_id = toko.id", "left")
+		->where("role != 1");
+		return $this->db->get();
 	}
 
 	public function update($id, $data)
@@ -35,10 +39,16 @@ class Pengguna_model extends CI_Model {
 		return $this->db->get($this->table);
 	}
 
-	public function search($search="")
+	public function search_role($search="")
 	{
-		$this->db->like('kategori', $search);
-		return $this->db->get($this->table)->result();
+		$this->db->like('nama', $search);
+		return $this->db->get("role_pengguna")->result();
+	}
+
+	public function search_toko($search="")
+	{
+		$this->db->like('nama', $search);
+		return $this->db->get("toko")->result();
 	}
 
 }

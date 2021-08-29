@@ -17,6 +17,10 @@ let url, pengguna = $("#pengguna").DataTable({
     }, {
         data: "nama"
     }, {
+        data: "role"
+    }, {
+        data: "toko"
+    }, {
         data: "action"
     }]
 });
@@ -136,4 +140,36 @@ $("#form").validate({
 $(".modal").on("hidden.bs.modal", () => {
     $("#form")[0].reset();
     $("#form").validate().resetForm()
+});
+
+$("#role").select2({
+    placeholder: "Role",
+    ajax: {
+        url: roleSearchUrl,
+        type: "post",
+        dataType: "json",
+        data: params => ({
+            role: params.term
+        }),
+        processResults: data => ({
+            results: data
+        }),
+        cache: true
+    }
+});
+
+$("#toko").select2({
+    placeholder: "toko",
+    ajax: {
+        url: tokoSearchUrl,
+        type: "post",
+        dataType: "json",
+        data: params => ({
+            toko: params.term
+        }),
+        processResults: data => ({
+            results: data
+        }),
+        cache: true
+    }
 });

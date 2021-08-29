@@ -25,6 +25,8 @@ class Pengguna extends CI_Controller {
 				$data[] = array(
 					'username' => $pengguna->username,
 					'nama' => $pengguna->nama,
+					'role' => $pengguna->role,
+					'toko' => $pengguna->toko,
 					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$pengguna->id.')">Edit</button> <button class="btn btn-sm btn-danger" onclick="remove('.$pengguna->id.')">Delete</button>'
 				);
 			}
@@ -78,6 +80,34 @@ class Pengguna extends CI_Controller {
 		if ($pengguna->row()) {
 			echo json_encode($pengguna->row());
 		}
+	}
+
+	public function search_role()
+	{
+		header('Content-type: application/json');
+		$role = $this->input->post('role');
+		$search = $this->pengguna_model->search_role($role);
+		foreach ($search as $role) {
+			$data[] = array(
+				'id' => $role->id,
+				'text' => $role->nama
+			);
+		}
+		echo json_encode($data);
+	}
+
+	public function search_toko()
+	{
+		header('Content-type: application/json');
+		$toko = $this->input->post('toko');
+		$search = $this->pengguna_model->search_toko($toko);
+		foreach ($search as $toko) {
+			$data[] = array(
+				'id' => $toko->id,
+				'text' => $toko->nama
+			);
+		}
+		echo json_encode($data);
 	}
 
 }

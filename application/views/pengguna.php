@@ -88,12 +88,11 @@
       </div>
       <div class="form-group">
         <label>Role</label>
-        <select class="form-control" placeholder="Role" name="role" required>
-        </select>
+        <select id="role" class="form-control select2" placeholder="Role" name="role" required></select>
       </div>
       <div class="form-group">
         <label>Toko</label>
-        <select class="form-control select2 col-sm-6" placeholder="Toko" name="toko"></select>
+        <select id="toko" class="form-control select2" placeholder="Toko" name="toko"></select>
       </div>
       <button class="btn btn-success" type="submit">Add</button>
       <button class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -109,12 +108,15 @@
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/jquery-validation/jquery.validate.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/vendor/adminlte/plugins/select2/js/select2.min.js') ?>"></script>
 <script>
   var readUrl = '<?php echo site_url('pengguna/read') ?>';
   var addUrl = '<?php echo site_url('pengguna/add') ?>';
   var deleteUrl = '<?php echo site_url('pengguna/delete') ?>';
   var editUrl = '<?php echo site_url('pengguna/edit') ?>';
   var getPenggunaUrl = '<?php echo site_url('pengguna/get_pengguna') ?>';
+  var roleSearchUrl = '<?php echo site_url('pengguna/search_role') ?>';
+  var tokoSearchUrl = '<?php echo site_url('pengguna/search_toko') ?>';
 </script>
 <script src="<?php echo base_url('assets/js/unminify/pengguna.js') ?>"></script>
 </body>
