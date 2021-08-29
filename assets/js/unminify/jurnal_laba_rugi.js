@@ -7,6 +7,15 @@ let jurnal_laba_rugi=$("#jurnal_laba_rugi").DataTable( {
         orderable: false,
         targets: 0
     }],
+    initComplete: (d) => {
+        let data = d.json.data;
+
+        if(data.length>0){
+            $('#saldo_akhir').text(data[data.length - 1].saldo);
+        }else{
+            $('#saldo_akhir').text(0);
+        }
+    },
     // order:[[1, "asc"]],
     columns:[ 
         { data: null }, 

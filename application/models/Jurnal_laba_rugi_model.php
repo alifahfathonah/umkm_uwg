@@ -52,7 +52,7 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 LEFT JOIN produk ON produk.id = stok_masuk.barcode
                 WHERE produk.nama_produk IS NOT NULL
                 GROUP BY stok_masuk.id, produk.id
-            ) ORDER BY tanggal DESC, id DESC, produk_id ASC
+            ) ORDER BY tanggal ASC, id ASC, produk_id ASC
         ");
 
         return $q->result_array();
