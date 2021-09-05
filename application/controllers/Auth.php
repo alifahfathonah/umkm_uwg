@@ -16,17 +16,18 @@ class Auth extends CI_Controller {
 				$username = $this->input->post('username');
 				if ($this->auth_model->getUser($username)->num_rows() > 0) {
 					$data = $this->auth_model->getUser($username)->row();
-					$toko = $this->auth_model->getToko();
 					if (password_verify($this->input->post('password'), $data->password)) {
+						$toko = (!empty($data->toko_id))? $this->auth_model->getToko($data->toko_id) : [];
 						$userdata = array(
 							'id' => $data->id,
 							'username' => $data->username,
 							'password' => $data->password,
 							'nama' => $data->nama,
-							'role' => $data->role == '1' ? 'admin' : 'kasir',
+							'role' => $data->role,
 							'status' => 'login',
 							'toko' => $toko
 						);
+						
 						$this->session->set_userdata($userdata);
 						echo json_encode('sukses');
 					} else {

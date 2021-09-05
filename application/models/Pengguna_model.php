@@ -34,9 +34,12 @@ class Pengguna_model extends CI_Model {
 
 	public function getPengguna($id)
 	{
-		$this->db->select('id, username, nama');
-		$this->db->where('id', $id);
-		return $this->db->get($this->table);
+		$this->db->select("pengguna.*, pengguna.role role_id, role_pengguna.nama role, toko.nama toko")
+		->from($this->table)
+		->join("role_pengguna", "pengguna.role = role_pengguna.id", "left")
+		->join("toko", "pengguna.toko_id = toko.id", "left")
+		->where('pengguna.id', $id);
+		return $this->db->get();
 	}
 
 	public function search_role($search="")

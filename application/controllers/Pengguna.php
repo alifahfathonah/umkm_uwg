@@ -45,7 +45,8 @@ class Pengguna extends CI_Controller {
 			'username' => $this->input->post('username'),
 			'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
 			'nama' => $this->input->post('nama'),
-			'role' => '2'
+			'role' => $this->input->post('role'),
+			'toko_id' => $this->input->post('toko')
 		);
 		if ($this->pengguna_model->create($data)) {
 			echo json_encode('sukses');
@@ -66,7 +67,9 @@ class Pengguna extends CI_Controller {
 		$data = array(
 			'username' => $this->input->post('username'),
 			'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-			'nama' => $this->input->post('nama')
+			'nama' => $this->input->post('nama'),
+			'role' => $this->input->post('role'),
+			'toko_id' => $this->input->post('toko')
 		);
 		if ($this->pengguna_model->update($id,$data)) {
 			echo json_encode('sukses');

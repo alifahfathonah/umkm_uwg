@@ -1,8 +1,11 @@
+<?php
+$user = $this->session->userdata();
+?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="<?php echo site_url('') ?>" class="brand-link text-center">
-    <span class="brand-text font-weight-light"><?php echo $this->session->userdata('toko')->nama ?></span>
+    <span class="brand-text font-weight-light"><?php echo !empty($user["toko"]) && $user["role"] == "2"? $user["user"]->nama : "Super Admin"; ?></span>
   </a>
   <?php $uri = $this->uri->segment(1) ?>
   <?php $role = $this->session->userdata('role'); ?>
@@ -140,7 +143,7 @@
             </li>
           </ul>
         </li>
-        <?php if ($role === 'admin'): ?>
+        <?php if ($role == 1): ?>
           <li class="nav-item">
             <a href="<?php echo site_url('pengaturan') ?>" class="nav-link <?php echo $uri == 'pengaturan' ? 'active' : 'no' ?>">
               <i class="fas fa-cog nav-icon"></i>

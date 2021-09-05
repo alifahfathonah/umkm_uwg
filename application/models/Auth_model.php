@@ -16,10 +16,11 @@ class Auth_model extends CI_Model {
 		return $this->db->get('pengguna');
 	}
 
-	public function getToko()
+	public function getToko($id)
 	{
+		$this->db->where("id", $id);
 		$this->db->select('nama, alamat');
-		return $this->db->get('toko')->row();
+		return $this->db->get('toko')->row_array();
 	}
 
 }

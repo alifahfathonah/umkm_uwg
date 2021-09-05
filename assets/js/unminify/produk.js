@@ -192,4 +192,6 @@ $("#satuan").select2({
 $(".modal").on("hidden.bs.modal", () => {
     $("#form")[0].reset();
     $("#form").validate().resetForm();
+    $('[name="satuan"]').val("").trigger("change");
+    $('[name="kategori"]').val("").trigger("change");
 });

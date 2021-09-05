@@ -95,7 +95,7 @@ function editData() {
 function add() {
     url = "add";
     $(".modal-title").html("Add Data");
-    $('.modal button[type="submit"]').html("Add")
+    $('.modal button[type="submit"]').html("Add");
 }
 
 function edit(id) {
@@ -110,6 +110,10 @@ function edit(id) {
             $('[name="id"]').val(res.id);
             $('[name="username"]').val(res.username);
             $('[name="nama"]').val(res.nama);
+            $('[name="role"]').append(`<option value='${res.role_id}'>${res.role}</option>`);
+            $('[name="role"]').val((res.role_id != null)? res.role_id : "").trigger('change');
+            $('[name="toko"]').append(`<option value='${res.toko_id}'>${res.toko}</option>`);
+            $('[name="toko"]').val((res.toko_id != null)? res.toko_id : "").trigger('change');
             $(".modal").modal("show");
             $(".modal-title").html("Edit Data");
             $('.modal button[type="submit"]').html("Edit");
@@ -139,7 +143,9 @@ $("#form").validate({
 });
 $(".modal").on("hidden.bs.modal", () => {
     $("#form")[0].reset();
-    $("#form").validate().resetForm()
+    $("#form").validate().resetForm();
+    $('[name="role"]').val("").trigger("change");
+    $('[name="toko"]').val("").trigger("change");
 });
 
 $("#role").select2({
@@ -159,7 +165,7 @@ $("#role").select2({
 });
 
 $("#toko").select2({
-    placeholder: "toko",
+    placeholder: "Toko",
     ajax: {
         url: tokoSearchUrl,
         type: "post",
