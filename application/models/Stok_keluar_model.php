@@ -7,11 +7,17 @@ class Stok_keluar_model extends CI_Model {
 
 	public function create($data)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+
 		return $this->db->insert($this->table, $data);
 	}
 
 	public function read()
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("stok_keluar.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->select('stok_keluar.tanggal, stok_keluar.jumlah, stok_keluar.keterangan, produk.barcode, produk.nama_produk');
 		$this->db->from($this->table);
 		$this->db->join('produk', 'produk.id = stok_keluar.barcode');

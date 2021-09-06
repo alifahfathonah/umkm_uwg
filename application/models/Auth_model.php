@@ -19,7 +19,7 @@ class Auth_model extends CI_Model {
 	public function getToko($id)
 	{
 		$this->db->where("id", $id);
-		$this->db->select('nama, alamat');
+		$this->db->select('id, nama, alamat');
 		return $this->db->get('toko')->row_array();
 	}
 

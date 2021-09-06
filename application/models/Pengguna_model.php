@@ -7,6 +7,9 @@ class Pengguna_model extends CI_Model {
 
 	public function create($data)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+		
 		return $this->db->insert($this->table, $data);
 	}
 
@@ -17,8 +20,8 @@ class Pengguna_model extends CI_Model {
 		->join("role_pengguna", "pengguna.role = role_pengguna.id", "left")
 		->join("toko", "pengguna.toko_id = toko.id", "left");
 
-		if($user["role"] == 2){
-			$this->db->where("pengguna.role", $user["role"]);
+		if($user["role"] != 1){
+			$this->db->where("pengguna.role != 1");
 			$this->db->where("pengguna.toko_id", $user["toko"]["id"]);
 		}
 
@@ -27,6 +30,9 @@ class Pengguna_model extends CI_Model {
 
 	public function update($id, $data)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+
 		$this->db->where('id', $id);
 		return $this->db->update($this->table, $data);
 	}
@@ -47,15 +53,18 @@ class Pengguna_model extends CI_Model {
 		return $this->db->get();
 	}
 
-	public function search_role($search="")
+	public function search_role($search="", $role)
 	{
 		$this->db->like('nama', $search);
+
+		if($role != 1) $this->db->where('id !=', 1);
 		return $this->db->get("role_pengguna")->result();
 	}
 
 	public function search_toko($search="")
 	{
 		$this->db->like('nama', $search);
+
 		return $this->db->get("toko")->result();
 	}
 

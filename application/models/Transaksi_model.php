@@ -19,6 +19,9 @@ class Transaksi_model extends CI_Model {
 		$produk = $data["item"];
 		unset($data["item"]);
 
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+
 		$this->db->insert($this->table, $data);
 		$transaksi = $this->db->insert_id();
 
@@ -43,6 +46,9 @@ class Transaksi_model extends CI_Model {
 
 	public function read()
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("transaksi.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->select('
 			transaksi.id, 
 			transaksi.nota, 
@@ -82,11 +88,15 @@ class Transaksi_model extends CI_Model {
 
 	public function penjualanBulan($date)
 	{
+		$userdata = $this->session->userdata();
+		$where = ($userdata["role"] != 1)? 'transaksi.toko_id ='.$userdata["toko"]["id"] : '1=1';
+
 		$qty = $this->db->query("
 			SELECT SUM(transaksi_item.qty) qty
 			FROM transaksi 
 			LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
 			WHERE DATE(tanggal) = '$date'
+			AND $where
 			GROUP BY transaksi.id
 			")->result();
 		$d = [];
@@ -102,22 +112,31 @@ class Transaksi_model extends CI_Model {
 
 	public function transaksiHari($hari)
 	{
-		return $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$hari'")->row();
+		$userdata = $this->session->userdata();
+		$where = ($userdata["role"] != 1)? 'transaksi.toko_id ='.$userdata["toko"]["id"] : '1=1';
+
+		return $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$hari' AND $where")->row();
 	}
 
 	public function transaksiTerakhir($hari)
 	{
+		$userdata = $this->session->userdata();
+		$where = ($userdata["role"] != 1)? 'transaksi.toko_id ='.$userdata["toko"]["id"] : '1=1';
+
 		return $this->db->query("
 			SELECT SUM(transaksi_item.qty) qty
 			FROM transaksi
 			LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
-			WHERE DATE(tanggal) = '$hari'
+			WHERE DATE(tanggal) = '$hari' AND $where
 			GROUP BY transaksi.id
 			LIMIT 1")->row();
 	}
 
 	public function getPrintTranskaksi($id)
 	{
+		$userdata = $this->session->userdata();
+		$where = ($userdata["role"] != 1)? 'transaksi.toko_id ='.$userdata["toko"]["id"] : '1=1';
+
 		$transaksi = $this->db->select('
 			transaksi.id,   
 			transaksi.nota, 
@@ -134,6 +153,7 @@ class Transaksi_model extends CI_Model {
 		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')
 		->join('pengguna', 'transaksi.kasir = pengguna.id', 'left')
 		->where('transaksi.id', $id)
+		->where($where)
 		->group_by("transaksi.id")->get()->row_array();
 
 		$transaksi["item"] = $this->db->select('
@@ -144,7 +164,7 @@ class Transaksi_model extends CI_Model {
 			tipe_produk_pelanggan.harga,
 			tipe_produk_pelanggan.diskon
 		')->from('transaksi_item')
-		->join('transaksi', 'transaksi_item.transaksi_id = transaksi.id', 'left')
+		->join('transaksi', 'transaksi_item.transaksi_id = transaksi.id AND $where', 'left')
 		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')
 		->join('produk', 'produk.id = transaksi_item.produk_id', 'left')
 		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')

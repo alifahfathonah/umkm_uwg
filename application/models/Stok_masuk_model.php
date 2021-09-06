@@ -7,11 +7,17 @@ class Stok_masuk_model extends CI_Model {
 
 	public function create($data)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+		
 		return $this->db->insert($this->table, $data);
 	}
 
 	public function read()
-	{
+	{	
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("stok_masuk.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->select('stok_masuk.tanggal, stok_masuk.jumlah, stok_masuk.harga, stok_masuk.keterangan, produk.barcode, produk.nama_produk');
 		$this->db->from($this->table);
 		$this->db->join('produk', 'produk.id = stok_masuk.barcode');
@@ -20,6 +26,9 @@ class Stok_masuk_model extends CI_Model {
 
 	public function laporan()
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("stok_masuk.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->select('stok_masuk.tanggal, stok_masuk.jumlah, stok_masuk.harga, stok_masuk.keterangan, produk.barcode, produk.nama_produk, supplier.nama as supplier');
 		$this->db->from($this->table);
 		$this->db->join('produk', 'produk.id = stok_masuk.barcode');
@@ -43,7 +52,10 @@ class Stok_masuk_model extends CI_Model {
 
 	public function stokHari($hari)
 	{
-		return $this->db->query("SELECT SUM(jumlah) AS total FROM stok_masuk WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$hari'")->row();
+		$userdata = $this->session->userdata();
+		$where = ($userdata["role"] != 1)? 'stok_masuk.toko_id ='.$userdata["toko"]["id"] : '1=1';
+
+		return $this->db->query("SELECT SUM(jumlah) AS total FROM stok_masuk WHERE DATE_FORMAT(tanggal, '%d %m %Y') = '$hari' AND $where")->row();
 	}
 
 }

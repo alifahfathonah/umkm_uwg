@@ -5,7 +5,7 @@ $user = $this->session->userdata();
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="<?php echo site_url('') ?>" class="brand-link text-center">
-    <span class="brand-text font-weight-light"><?php echo !empty($user["toko"]) && $user["role"] == "2"? $user["user"]->nama : "Super Admin"; ?></span>
+    <span class="brand-text font-weight-light"><?php echo !empty($user["toko"]) && $user["role"] == "2"? $user["toko"]["nama"] : "Super Admin"; ?></span>
   </a>
   <?php $uri = $this->uri->segment(1) ?>
   <?php $role = $this->session->userdata('role'); ?>

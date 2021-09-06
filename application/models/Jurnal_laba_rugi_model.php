@@ -5,6 +5,10 @@ class Jurnal_laba_rugi_model extends CI_Model {
 
     public function read()
 	{
+        $userdata = $this->session->userdata();
+        $where_trans = ($userdata['role'] != 1)? 'transaksi.toko_id = '.$userdata["toko"]["id"] : '1=1';
+        $where_stok = ($userdata['role'] != 1)? 'stok_masuk.toko_id = '.$userdata["toko"]["id"] : '1=1';
+
         $q = $this->db->query("
             ( SELECT 
                 transaksi.id,
@@ -31,7 +35,7 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 FROM transaksi
                 LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
                 LEFT JOIN produk ON transaksi_item.produk_id = produk.id
-                WHERE produk.nama_produk IS NOT NULL
+                WHERE produk.nama_produk IS NOT NULL AND $where_trans
                 GROUP BY transaksi.id, produk.id
             ) UNION (
                 SELECT 
@@ -50,11 +54,11 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 (stok_masuk.harga * stok_masuk.jumlah) kredit
                 FROM stok_masuk
                 LEFT JOIN produk ON produk.id = stok_masuk.barcode
-                WHERE produk.nama_produk IS NOT NULL
+                WHERE produk.nama_produk IS NOT NULL AND $where_stok
                 GROUP BY stok_masuk.id, produk.id
             ) ORDER BY tanggal ASC, id ASC, produk_id ASC
         ");
-
+ 
         return $q->result_array();
     }
 

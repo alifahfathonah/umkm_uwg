@@ -96,6 +96,9 @@ function add() {
     url = "add";
     $(".modal-title").html("Add Data");
     $('.modal button[type="submit"]').html("Add");
+
+    $('[name="toko"]').append(`<option value='${toko.id}'>${toko.nama}</option>`);
+    $('[name="toko"]').val((toko.id != null)? toko.id : "").trigger('change');
 }
 
 function edit(id) {
@@ -112,8 +115,8 @@ function edit(id) {
             $('[name="nama"]').val(res.nama);
             $('[name="role"]').append(`<option value='${res.role_id}'>${res.role}</option>`);
             $('[name="role"]').val((res.role_id != null)? res.role_id : "").trigger('change');
-            $('[name="toko"]').append(`<option value='${res.toko_id}'>${res.toko}</option>`);
-            $('[name="toko"]').val((res.toko_id != null)? res.toko_id : "").trigger('change');
+            $('[name="toko"]').append(`<option value='${toko.id}'>${toko.nama}</option>`);
+            $('[name="toko"]').val((toko.id != null)? toko.id : "").trigger('change');
             $(".modal").modal("show");
             $(".modal-title").html("Edit Data");
             $('.modal button[type="submit"]').html("Edit");

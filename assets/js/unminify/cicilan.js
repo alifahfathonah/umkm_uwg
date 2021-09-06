@@ -15,6 +15,8 @@ let url, cicilan = $("#cicilan").DataTable({
     }, {
         data: "nota"
     }, {
+        data: "pelanggan"
+    }, {
         data: "total_bayar"
     }, {
         data: "hutang"

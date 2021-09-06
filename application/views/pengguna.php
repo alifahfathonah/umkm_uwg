@@ -94,7 +94,7 @@
           </div>
           <div class="form-group">
             <label>Toko</label>
-            <select id="toko" class="form-control select2" placeholder="Toko" name="toko"></select>
+            <select id="toko" class="form-control select2" placeholder="Toko" name="toko" disabled></select>
           </div>
           <button class="btn btn-success" type="submit">Add</button>
           <button class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -119,6 +119,7 @@
   var getPenggunaUrl = '<?php echo site_url('pengguna/get_pengguna') ?>';
   var roleSearchUrl = '<?php echo site_url('pengguna/search_role') ?>';
   var tokoSearchUrl = '<?php echo site_url('pengguna/search_toko') ?>';
+  var toko = <?=json_encode($this->session->userdata("toko")); ?>;
 </script>
 <script src="<?php echo base_url('assets/js/unminify/pengguna.js') ?>"></script>
 </body>

@@ -42,8 +42,9 @@
                 <tr>
                   <th>No</th>
                   <th>Nota</th>
+                  <th>Pelanggan</th>
                   <th>Total Bayar</th>
-                  <th>Sisa Kekurangan</th>
+                  <th>Sisa Piutang</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>

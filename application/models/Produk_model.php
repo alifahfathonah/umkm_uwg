@@ -10,6 +10,9 @@ class Produk_model extends CI_Model {
 		$pelanggan = $data["pelanggan"];
 		unset($data["pelanggan"]);
 
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+
 		$this->db->insert($this->table, $data);
 		$produk_id = $this->db->insert_id();
 
@@ -33,6 +36,9 @@ class Produk_model extends CI_Model {
 
 	public function read()
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("produk.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->select('produk.id, produk.barcode, produk.nama_produk, tipe_pelanggan.nama pelanggan, tipe_produk_pelanggan.harga, tipe_produk_pelanggan.diskon, produk.stok, kategori_produk.kategori, satuan_produk.satuan')
 		->from($this->table)
 		->join('tipe_produk_pelanggan', 'produk.id = tipe_produk_pelanggan.produk', 'left')
@@ -48,6 +54,9 @@ class Produk_model extends CI_Model {
 	{
 		$pelanggan = $data["pelanggan"];
 		unset($data["pelanggan"]);
+
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
 		
 		$this->db->trans_start();
 		$this->db->where('id', $id);
@@ -130,6 +139,9 @@ class Produk_model extends CI_Model {
 
 	public function getBarcode($search='')
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("produk.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->select('produk.id, produk.barcode');
 		$this->db->like('barcode', $search);
 		return $this->db->get($this->table)->result();
@@ -137,6 +149,9 @@ class Produk_model extends CI_Model {
 
 	public function getNama($id)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("produk.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->select('nama_produk, stok');
 		$this->db->where('id', $id);
 		return $this->db->get($this->table)->row();
@@ -144,24 +159,36 @@ class Produk_model extends CI_Model {
 
 	public function getStok($id)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("produk.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->select('stok, nama_produk, harga, barcode');
 		$this->db->where('id', $id);
 		return $this->db->get($this->table)->row();
 	}
 
 	public function produkTerlaris()
-	{
-		return $this->db->query('SELECT produk.nama_produk, produk.terjual FROM `produk` 
+	{	
+		$userdata = $this->session->userdata();
+		$where = ($userdata["role"] != 1)? 'produk.toko_id='.$userdata["toko"]["id"] : '1=1';
+
+		return $this->db->query('SELECT produk.nama_produk, produk.terjual FROM `produk` WHERE '.$where.'
 		ORDER BY CONVERT(terjual,decimal)  DESC LIMIT 5')->result();
 	}
 
 	public function dataStok()
 	{
-		return $this->db->query('SELECT produk.nama_produk, produk.stok FROM `produk` ORDER BY CONVERT(stok, decimal) DESC LIMIT 50')->result();
+		$userdata = $this->session->userdata();
+		$where = ($userdata["role"] != 1)? 'produk.toko_id='.$userdata["toko"]["id"] : '1=1';
+
+		return $this->db->query('SELECT produk.nama_produk, produk.stok FROM `produk` WHERE '.$where.' ORDER BY CONVERT(stok, decimal) DESC LIMIT 50')->result();
 	}
 
 	public function getListProduk()
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("produk.toko_id", $userdata["toko"]["id"]);
+		
 		$this->db->select('*, nama_produk text');
 		return $this->db->get($this->table)->result_array();
 	}

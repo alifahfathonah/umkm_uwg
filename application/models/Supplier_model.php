@@ -7,16 +7,25 @@ class Supplier_model extends CI_Model {
 
 	public function create($data)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+
 		return $this->db->insert($this->table, $data);
 	}
 
 	public function read()
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("supplier.toko_id", $userdata["toko"]["id"]);
+
 		return $this->db->get($this->table);
 	}
 
 	public function update($id, $data)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+
 		$this->db->where('id', $id);
 		return $this->db->update($this->table, $data);
 	}
@@ -35,6 +44,9 @@ class Supplier_model extends CI_Model {
 
 	public function search($search="")
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $this->db->where("supplier.toko_id", $userdata["toko"]["id"]);
+
 		$this->db->like('nama', $search);
 		return $this->db->get($this->table)->result();
 	}

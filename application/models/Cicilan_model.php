@@ -2,16 +2,26 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cicilan_model extends CI_Model {
-
 	private $table = 'transaksi_utang';
 
 	public function create($data)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+
 		return $this->db->insert($this->table, $data);
 	}
 
 	public function read()
 	{	
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1){
+			$this->db->where("transaksi.toko_id", $userdata["toko"]["id"]);
+			$where = 'WHERE transaksi_cicilan.toko_id ='.$userdata["toko"]["id"];
+		} else {
+			$where = 'WHERE 1=1';
+		}
+
 		$this->db->select('
 			transaksi_utang.id,
 			transaksi.nota,
@@ -22,13 +32,16 @@ class Cicilan_model extends CI_Model {
 
 		')->from($this->table)
 		->join('transaksi', 'transaksi_utang.transaksi_id = transaksi.id','left')
-		->join('(SELECT id,utang_id,sisa FROM transaksi_cicilan ORDER BY tanggal DESC, id DESC LIMIT 1) last_cicilan', 'transaksi_utang.id = last_cicilan.utang_id','left')
+		->join('(SELECT id,utang_id,sisa FROM transaksi_cicilan '.$where.' ORDER BY tanggal DESC, id DESC LIMIT 1) last_cicilan', 'transaksi_utang.id = last_cicilan.utang_id','left')
 		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')->order_by("transaksi_utang.id DESC");
 		return $this->db->get();
 	}
 
 	public function update($id, $data)
 	{
+		$userdata = $this->session->userdata();
+		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+
 		$this->db->where('id', $id);
 		return $this->db->update($this->table, $data);
 	}
@@ -75,6 +88,8 @@ class Cicilan_model extends CI_Model {
 
 	public function create_cicilan($id, $cicilan)
 	{
+		$userdata = $this->session->userdata();
+
 		$this->db->trans_start();
 		
 		foreach ($cicilan as $key => $item) {
@@ -91,6 +106,7 @@ class Cicilan_model extends CI_Model {
 						'tanggal' => $item->tanggal,
 						'trans_terakhir' => $item->trans_terakhir,
 						'sisa' => $sisa,
+						"toko_id" => ($userdata["role"] != 1)? $userdata["toko"]["id"] : 0
 					]);
 				}
 				

@@ -41,7 +41,8 @@ class Pengguna extends CI_Controller {
 	}
 
 	public function add()
-	{
+	{	
+		$userdata = $this->session->userdata();
 		$data = array(
 			'username' => $this->input->post('username'),
 			'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
@@ -49,6 +50,11 @@ class Pengguna extends CI_Controller {
 			'role' => $this->input->post('role'),
 			'toko_id' => $this->input->post('toko')
 		);
+
+		if($userdata["role"] != 1){
+			$data["toko_id"] = $userdata["toko"]["id"];
+		}
+
 		if ($this->pengguna_model->create($data)) {
 			echo json_encode('sukses');
 		}
@@ -88,9 +94,10 @@ class Pengguna extends CI_Controller {
 
 	public function search_role()
 	{
+		$userdata = $this->session->userdata();
 		header('Content-type: application/json');
 		$role = $this->input->post('role');
-		$search = $this->pengguna_model->search_role($role);
+		$search = $this->pengguna_model->search_role($role, $userdata["role"]);
 		foreach ($search as $role) {
 			$data[] = array(
 				'id' => $role->id,
