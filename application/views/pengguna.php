@@ -65,43 +65,43 @@
 </div>
 
 <div class="modal fade" id="modal">
-<div class="modal-dialog">
-<div class="modal-content">
-  <div class="modal-header">
-    <h5 class="modal-title">Add Data</h5>
-    <button class="close" data-dismiss="modal">
-      <span>&times;</span>
-    </button>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Data</h5>
+        <button class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form">
+          <input type="hidden" name="id">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" placeholder="Username" name="username" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+          </div>
+          <div class="form-group">
+            <label>Nama</label>
+            <input type="text" class="form-control" placeholder="Nama" name="nama" required>
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select id="role" class="form-control select2" placeholder="Role" name="role" required></select>
+          </div>
+          <div class="form-group">
+            <label>Toko</label>
+            <select id="toko" class="form-control select2" placeholder="Toko" name="toko"></select>
+          </div>
+          <button class="btn btn-success" type="submit">Add</button>
+          <button class="btn btn-danger" data-dismiss="modal">Close</button>
+        </form>
+      </div>
+    </div>
   </div>
-  <div class="modal-body">
-    <form id="form">
-      <input type="hidden" name="id">
-      <div class="form-group">
-        <label>Username</label>
-        <input type="text" class="form-control" placeholder="Username" name="username" required>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" class="form-control" placeholder="Password" name="password" required>
-      </div>
-      <div class="form-group">
-        <label>Nama</label>
-        <input type="text" class="form-control" placeholder="Nama" name="nama" required>
-      </div>
-      <div class="form-group">
-        <label>Role</label>
-        <select id="role" class="form-control select2" placeholder="Role" name="role" required></select>
-      </div>
-      <div class="form-group">
-        <label>Toko</label>
-        <select id="toko" class="form-control select2" placeholder="Toko" name="toko"></select>
-      </div>
-      <button class="btn btn-success" type="submit">Add</button>
-      <button class="btn btn-danger" data-dismiss="modal">Close</button>
-    </form>
-  </div>
-</div>
-</div>
 </div>
 <!-- ./wrapper -->
 <?php $this->load->view('includes/footer'); ?>

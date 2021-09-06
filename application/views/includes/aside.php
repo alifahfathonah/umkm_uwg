@@ -18,6 +18,7 @@ $user = $this->session->userdata();
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
+        <?php if ($role == 2 || $role == 3): ?>
         <li class="nav-item">
           <a href="<?php echo site_url('dashboard') ?>" class="nav-link <?php echo $uri == 'dashboard' || $uri == '' ? 'active' : 'no' ?>">
             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -143,7 +144,8 @@ $user = $this->session->userdata();
             </li>
           </ul>
         </li>
-        <?php if ($role == 1): ?>
+        <?php endif; ?>
+        <?php if ($role == 1 || $role == 2): ?>
           <li class="nav-item">
             <a href="<?php echo site_url('pengaturan') ?>" class="nav-link <?php echo $uri == 'pengaturan' ? 'active' : 'no' ?>">
               <i class="fas fa-cog nav-icon"></i>
@@ -156,7 +158,7 @@ $user = $this->session->userdata();
               <p>Pengguna</p>
             </a>
           </li>
-        <?php endif ?>
+        <?php endif; ?>
        
       </ul>
     </nav>

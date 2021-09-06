@@ -20,8 +20,7 @@ CREATE TABLE `umkm_db`.`transaksi_cicilan` ( `id` INT NOT NULL AUTO_INCREMENT , 
 
 -- Role Pengguna
 CREATE TABLE `umkm_db`.`role_pengguna` ( `id` INT NOT NULL AUTO_INCREMENT , `nama` VARCHAR(20) NOT NULL , `deskripsi` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-INSERT INTO `role_pengguna` (`id`, `nama`, `deskripsi`) VALUES ('1', 'Admin', 'Memiliki hak akses untuk mengelola seluruh pengguna toko'), ('2', 'Admin Toko', 'Hanya memiliki akses untuk toko yang terkait')
-
+INSERT INTO `role_pengguna` (`id`, `nama`, `deskripsi`) VALUES ('1', 'Admin', 'Memiliki hak akses untuk mengelola seluruh pengguna toko'), ('2', 'Admin Toko', 'Hanya memiliki akses untuk toko yang terkait'), ('3', 'Kasir', 'Hanya memiliki hak akses untuk mengelola transaksi di toko yang terkait')
 -- Toko
 ALTER TABLE `pengguna` ADD `toko_id` INT NULL;
 ALTER TABLE `pelanggan` ADD `toko_id` INT NULL;

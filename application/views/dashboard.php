@@ -1,3 +1,6 @@
+<?php 
+$role = $this->session->userdata('role'); 
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +21,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col">
-            <h1 class="m-0 text-dark">Dashboard</h1>
+            <h1 class="m-0 text-dark"><?=($role!=1)? 'Dashboard' : 'Welcome Super Admin' ?></h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -27,6 +30,7 @@
 
     <!-- /.content-header -->
 
+    <?php if($role != 1): ?>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -117,6 +121,7 @@
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
+    <?php endif; ?>
   </div>
   <!-- /.content-wrapper -->
 

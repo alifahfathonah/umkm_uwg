@@ -16,12 +16,13 @@ class Pengguna extends CI_Controller {
 	{
 		$this->load->view('pengguna');
 	}
-
+	
 	public function read()
 	{
+		$userdata = $this->session->userdata();
 		header('Content-type: application/json');
-		if ($this->pengguna_model->read()->num_rows() > 0) {
-			foreach ($this->pengguna_model->read()->result() as $pengguna) {
+		if ($this->pengguna_model->read($userdata)->num_rows() > 0) {
+			foreach ($this->pengguna_model->read($userdata)->result() as $pengguna) {
 				$data[] = array(
 					'username' => $pengguna->username,
 					'nama' => $pengguna->nama,
