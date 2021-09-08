@@ -26,15 +26,25 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 NULL buy_produk, 
                 NULL buy_qty,  
                 NULL buy_harga,
-                ((SELECT 
+                /*((SELECT 
                     harga FROM tipe_produk_pelanggan 
                     WHERE pelanggan = transaksi.pelanggan 
                         AND produk.id = tipe_produk_pelanggan.produk 
-                LIMIT 1) * transaksi_item.qty) debet,
+                LIMIT 1) * transaksi_item.qty) debet,*/
+                (transaksi.jumlah_uang + transaksi_utang.cicilan) debet,
                 0 kredit
                 FROM transaksi
                 LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
                 LEFT JOIN produk ON transaksi_item.produk_id = produk.id
+                LEFT JOIN (
+                	SELECT 
+                        transaksi_utang.transaksi_id, 
+                        SUM(transaksi_cicilan.trans_terakhir) cicilan 
+                    FROM transaksi_utang 
+                    LEFT JOIN transaksi_cicilan 
+                        ON transaksi_utang.id = transaksi_cicilan.utang_id 
+                    GROUP BY transaksi_utang.transaksi_id
+                ) transaksi_utang ON transaksi_utang.transaksi_id = transaksi.id 
                 WHERE produk.nama_produk IS NOT NULL AND $where_trans
                 GROUP BY transaksi.id, produk.id
             ) UNION (
