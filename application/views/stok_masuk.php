@@ -86,7 +86,7 @@
         <select name="barcode" id="barcode" class="form-control select2" required></select>
       </div>
       <div class="form-group">
-        <label>Jumlah</label>
+        <label>Total Stok</label>
         <input type="number" class="form-control" placeholder="Jumlah" name="jumlah" required>
       </div>
       <div class="form-group">

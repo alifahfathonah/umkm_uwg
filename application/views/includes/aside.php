@@ -78,7 +78,7 @@ $user = $this->session->userdata();
             </li>
           </ul>
         </li>
-       <li class="nav-item has-treeview <?php echo $uri == 'stok_masuk' || $uri == 'stok_keluar' ? 'menu-open' : 'no' ?>">
+       <li class="nav-item has-treeview <?php echo $uri == 'stok_masuk' || $uri == 'stok_keluar' || $uri == 'rekapitulasi_stok' ? 'menu-open' : 'no' ?>">
           <a href="#" class="nav-link <?php echo $uri == 'stok_masuk' || $uri == 'stok_keluar' ? 'active' : 'no' ?>">
             <i class="fas fa-archive nav-icon"></i>
             <p>Stok</p>
@@ -94,7 +94,13 @@ $user = $this->session->userdata();
             <li class="nav-item">
               <a href="<?php echo site_url('stok_keluar') ?>" class="nav-link <?php echo $uri == 'stok_keluar' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Stok Keluar</p>
+                <p>Retur Produk / Stok</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo site_url('rekapitulasi_stok') ?>" class="nav-link <?php echo $uri == 'rekapitulasi_stok' ? 'active' : 'no' ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Rekapituasi Stok</p>
               </a>
             </li>
           </ul>
