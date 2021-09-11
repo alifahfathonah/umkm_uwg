@@ -9,7 +9,7 @@ class Rekapitulasi_stok_model extends CI_Model {
         if ($userdata['role'] != 1) $this->db->where('produk.toko_id', $userdata["toko"]["id"]);
         
         $q = $this->db->select('
-        produk.nama_produk produk,
+            produk.nama_produk produk,
             IFNULL(SUM(stok_masuk.jumlah), 0) stok_awal,
             IFNULL(SUM(stok_keluar.jumlah), 0) stok_keluar,
             IFNULL(SUM(transaksi_item.qty), 0) stok_jual,
