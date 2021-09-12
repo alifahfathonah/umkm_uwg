@@ -18,7 +18,7 @@ $user = $this->session->userdata();
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
-        <?php if ($role == 2 || $role == 3): ?>
+        <?php if ($role == 2): ?>
         <li class="nav-item">
           <a href="<?php echo site_url('dashboard') ?>" class="nav-link <?php echo $uri == 'dashboard' || $uri == '' ? 'active' : 'no' ?>">
             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -43,6 +43,8 @@ $user = $this->session->userdata();
             </p>
           </a>
         </li>
+        <?php endif; ?>
+        <?php if ($role == 1 || $role == 2): ?>
         <li class="nav-item has-treeview <?php echo $uri == 'produk' || $uri == 'kategori_produk' || $uri == 'satuan_produk' ? 'menu-open' : 'no' ?>">
           <a href="#" class="nav-link <?php echo $uri == 'produk' || $uri == 'kategori_produk' || $uri == 'satuan_produk' ? 'active' : 'no' ?>">
             <i class="nav-icon fas fa-box"></i>
@@ -52,6 +54,7 @@ $user = $this->session->userdata();
             <i class="right fas fa-angle-right"></i>
           </a>
           <ul class="nav nav-treeview">
+            <?php if ($role == 1): ?>
             <li class="nav-item">
               <a href="<?php echo site_url('kategori_produk') ?>" class="nav-link <?php echo $uri == 'kategori_produk' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
@@ -68,6 +71,8 @@ $user = $this->session->userdata();
                 </p>
               </a>
             </li>
+            <?php endif; ?>
+            <?php if ($role == 2): ?>
             <li class="nav-item">
               <a href="<?php echo site_url('produk') ?>" class="nav-link <?php echo $uri == 'produk' ? 'active' : 'no' ?>">
                 <i class="far fa-circle nav-icon"></i>
@@ -76,8 +81,11 @@ $user = $this->session->userdata();
                 </p>
               </a>
             </li>
+             <?php endif; ?>
           </ul>
         </li>
+        <?php endif; ?>
+        <?php if ($role == 2): ?>
        <li class="nav-item has-treeview <?php echo $uri == 'stok_masuk' || $uri == 'stok_keluar' || $uri == 'rekapitulasi_stok' ? 'menu-open' : 'no' ?>">
           <a href="#" class="nav-link <?php echo $uri == 'stok_masuk' || $uri == 'stok_keluar' ? 'active' : 'no' ?>">
             <i class="fas fa-archive nav-icon"></i>
@@ -151,7 +159,7 @@ $user = $this->session->userdata();
           </ul>
         </li>
         <?php endif; ?>
-        <?php if ($role == 1 || $role == 2): ?>
+        <?php if ($role == 1): ?>
           <li class="nav-item">
             <a href="<?php echo site_url('pengaturan') ?>" class="nav-link <?php echo $uri == 'pengaturan' ? 'active' : 'no' ?>">
               <i class="fas fa-cog nav-icon"></i>
