@@ -7,9 +7,9 @@ let url, pengguna = $("#pengguna").DataTable({
         orderable: false,
         targets: 0
     }],
-    order: [
-        [1, "asc"]
-    ],
+    // order: [
+    //     [1, "asc"]
+    // ],
     columns: [{
         data: null
     }, {
@@ -35,10 +35,13 @@ function addData() {
         type: "post",
         dataType: "json",
         data: $("#form").serialize(),
-        success: () => {
-            $(".modal").modal("hide");
-            Swal.fire("Sukses", "Sukses Menambahkan Data", "success");
-            reloadTable()
+        success: (res) => {
+            if(res.success){
+                $(".modal").modal("hide");
+                Swal.fire("Sukses", res.message, "success"), reloadTable()
+            }else{
+                Swal.fire("Gagal", res.message, "warning")
+            }
         },
         error: err => {
             console.log(err)
@@ -64,9 +67,12 @@ function remove(id) {
                 data: {
                     id: id
                 },
-                success: () => {
-                    Swal.fire("Sukses", "Sukses Menghapus Data", "success");
-                    reloadTable()
+                success: (res) => {
+                    if(res.success){
+                        Swal.fire("Sukses", res.message, "success"), reloadTable()
+                    }else{
+                        Swal.fire("Gagal", res.message, "warning")
+                    }
                 },
                 error: err => {
                     console.log(err)
@@ -82,9 +88,13 @@ function editData() {
         type: "post",
         dataType: "json",
         data: $("#form").serialize(),
-        success: () => {
-            $(".modal").modal("hide");
-            Swal.fire("Sukses", "Sukses Mengedit Data", "success"), reloadTable()
+        success: (res) => {
+            if(res.success){
+                $(".modal").modal("hide");
+                Swal.fire("Sukses", res.message, "success"), reloadTable()
+            }else{
+                Swal.fire("Gagal", res.message, "warning")
+            }
         },
         error: err => {
             console.log(err)
@@ -115,8 +125,15 @@ function edit(id) {
             $('[name="nama"]').val(res.nama);
             $('[name="role"]').append(`<option value='${res.role_id}'>${res.role}</option>`);
             $('[name="role"]').val((res.role_id != null)? res.role_id : "").trigger('change');
-            $('[name="toko"]').append(`<option value='${toko.id}'>${toko.nama}</option>`);
-            $('[name="toko"]').val((toko.id != null)? toko.id : "").trigger('change');
+            
+            if(res.role_id != 1){
+                enableToko();
+                $('[name="toko"]').append(`<option value='${res.toko_id}'>${res.toko}</option>`);
+                $('[name="toko"]').val(res.toko_id).trigger('change');
+            }else{
+                disableToko();
+            }
+            
             $(".modal").modal("show");
             $(".modal-title").html("Edit Data");
             $('.modal button[type="submit"]').html("Edit");
@@ -127,6 +144,7 @@ function edit(id) {
         }
     })
 }
+
 pengguna.on("order.dt search.dt", () => {
     pengguna.column(0, {
         search: "applied",
@@ -135,6 +153,7 @@ pengguna.on("order.dt search.dt", () => {
         el.innerHTML = err + 1
     })
 });
+
 $("#form").validate({
     errorElement: "span",
     errorPlacement: (err, el) => {
@@ -144,6 +163,7 @@ $("#form").validate({
         "edit" == url ? editData() : addData()
     }
 });
+
 $(".modal").on("hidden.bs.modal", () => {
     $("#form")[0].reset();
     $("#form").validate().resetForm();
@@ -151,8 +171,37 @@ $(".modal").on("hidden.bs.modal", () => {
     $('[name="toko"]').val("").trigger("change");
 });
 
+function enableToko(){
+    $("#toko").select2({
+        placeholder: "Toko",
+        disabled: false,
+        ajax: {
+            url: tokoSearchUrl,
+            type: "post",
+            dataType: "json",
+            data: params => ({
+                toko: params.term
+            }),
+            processResults: data => ({
+                results: data
+            }),
+            cache: true
+        }
+    });
+}
+
+function disableToko(){
+    $("#toko").select2({
+        placeholder: "Toko",
+        disabled: true,
+    });
+    $('[name="toko"]').val("").trigger('change');
+}
+
+disableToko();
 $("#role").select2({
     placeholder: "Role",
+    readonly: false,
     ajax: {
         url: roleSearchUrl,
         type: "post",
@@ -165,20 +214,16 @@ $("#role").select2({
         }),
         cache: true
     }
-});
-
-$("#toko").select2({
-    placeholder: "Toko",
-    ajax: {
-        url: tokoSearchUrl,
-        type: "post",
-        dataType: "json",
-        data: params => ({
-            toko: params.term
-        }),
-        processResults: data => ({
-            results: data
-        }),
-        cache: true
+}).on('select2:select', function (e) {
+    var data = e.params.data;
+    if(data.id != 1){
+        enableToko();        
+    }else{
+        disableToko();        
     }
 });
+
+// $('#mySelect2').on('select2:select', function (e) {
+//     var data = e.params.data;
+//     console.log(data);
+// });

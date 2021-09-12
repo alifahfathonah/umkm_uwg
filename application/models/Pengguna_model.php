@@ -18,7 +18,8 @@ class Pengguna_model extends CI_Model {
 		$this->db->select("pengguna.*, pengguna.role role_id, role_pengguna.nama role, toko.nama toko")
 		->from($this->table)
 		->join("role_pengguna", "pengguna.role = role_pengguna.id", "left")
-		->join("toko", "pengguna.toko_id = toko.id", "left");
+		->join("toko", "pengguna.toko_id = toko.id", "left")
+		->order_by("pengguna.role ASC, pengguna.id ASC");
 
 		if($user["role"] != 1){
 			$this->db->where("pengguna.role != 1");

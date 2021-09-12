@@ -56,7 +56,9 @@ class Pengguna extends CI_Controller {
 		}
 
 		if ($this->pengguna_model->create($data)) {
-			echo json_encode('sukses');
+			echo json_encode(["success"=>true, "message"=>"Create Data Success"]);
+		}else{
+			echo json_encode(["success"=>false, "message"=>"Create Data Failed"]);
 		}
 	}
 
@@ -64,22 +66,35 @@ class Pengguna extends CI_Controller {
 	{
 		$id = $this->input->post('id');
 		if ($this->pengguna_model->delete($id)) {
-			echo json_encode('sukses');
+	
+			echo json_encode(["success"=>true, "message"=>"Delete Data Success"]);
+		}else{
+			echo json_encode(["success"=>false, "message"=>"Delete Data Failed"]);
 		}
 	}
 
 	public function edit()
 	{
 		$id = $this->input->post('id');
-		$data = array(
-			'username' => $this->input->post('username'),
-			'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-			'nama' => $this->input->post('nama'),
-			'role' => $this->input->post('role'),
-			'toko_id' => $this->input->post('toko')
-		);
-		if ($this->pengguna_model->update($id,$data)) {
-			echo json_encode('sukses');
+		$pengguna = $this->pengguna_model->getPengguna($id)->row_array();
+		if($pengguna){
+			$data = array(
+				'username' => $this->input->post('username'),
+				'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+				'nama' => $this->input->post('nama'),
+				'role' => $this->input->post('role'),
+				'toko_id' => $this->input->post('toko')
+			);
+
+			if(empty($this->input->post('password'))) unset($data["password"]);
+
+			if ($this->pengguna_model->update($id,$data)) {
+				echo json_encode(["success"=>true, "message"=>"Update Data Success"]);
+			}else{
+				echo json_encode(["success"=>false, "message"=>"Update Data Failed"]);
+			}
+		}else{
+			echo json_encode(["success"=>false, "message"=>"Invalid ID"]);
 		}
 	}
 

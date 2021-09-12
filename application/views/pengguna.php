@@ -82,7 +82,7 @@
           </div>
           <div class="form-group">
             <label>Password</label>
-            <input type="password" class="form-control" placeholder="Password" name="password" required>
+            <input type="password" class="form-control" placeholder="Password" name="password">
           </div>
           <div class="form-group">
             <label>Nama</label>
@@ -94,7 +94,7 @@
           </div>
           <div class="form-group">
             <label>Toko</label>
-            <select id="toko" class="form-control select2" placeholder="Toko" name="toko" disabled></select>
+            <select id="toko" class="form-control select2" placeholder="Toko" name="toko"></select>
           </div>
           <button class="btn btn-success" type="submit">Add</button>
           <button class="btn btn-danger" data-dismiss="modal">Close</button>
