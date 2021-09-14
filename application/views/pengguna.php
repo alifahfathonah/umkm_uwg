@@ -49,7 +49,7 @@
                   <th>Username</th>
                   <th>Nama</th>
                   <th>Role</th>
-                  <th>Toko</th>
+                  <th>Koperasi</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -93,8 +93,8 @@
             <select id="role" class="form-control select2" placeholder="Role" name="role" required></select>
           </div>
           <div class="form-group">
-            <label>Toko</label>
-            <select id="toko" class="form-control select2" placeholder="Toko" name="toko"></select>
+            <label>Koperasi</label>
+            <select id="toko" class="form-control select2" placeholder="Koperasi" name="toko"></select>
           </div>
           <button class="btn btn-success" type="submit">Add</button>
           <button class="btn btn-danger" data-dismiss="modal">Close</button>

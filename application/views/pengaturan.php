@@ -48,8 +48,8 @@ $role = $this->session->userdata('role');
               <div class="form-row">
                 <div class="col-6">
                   <div class="form-group">
-                    <label>Nama Toko</label>
-                    <input type="text" class="form-control" placeholder="Nama Toko" name="nama" value="<?php echo $toko->nama ?>" required>
+                    <label>Nama Koperasi</label>
+                    <input type="text" class="form-control" placeholder="Nama Koperasi" name="nama" value="<?php echo $toko->nama ?>" required>
                   </div>
                   <div class="form-group">
                     <label>Alamat</label>
@@ -95,8 +95,8 @@ $role = $this->session->userdata('role');
         <form id="form">
           <input type="hidden" name="id">
           <div class="form-group">
-            <label>Nama Toko</label>
-            <input type="text" class="form-control" placeholder="Nama Toko" name="nama" required>
+            <label>Nama Koperasi</label>
+            <input type="text" class="form-control" placeholder="Nama Koperasi" name="nama" required>
           </div>
           <div class="form-group">
             <label>Alamat</label>
