@@ -3,16 +3,23 @@ let produk = $("#produk").DataTable({
     responsive: true,
     scrollX: true,
     ajax: readUrl,
-    columnDefs: [{
-        searcable: false,
-        orderable: false,
-        targets: 0
-    }],
+    columnDefs: [
+        {
+            searcable: false,
+            orderable: false,
+            targets: 0
+        },
+        {
+            visible: false,
+            targets: 1,
+        }
+    ],
     order: [
-        [1, "asc"]
+        [1, "desc"]
     ],
     columns: [
         { name: null, title: "No", data: null }, 
+        { name: "id", title: "ID", data: "id" },
         { name: "barcode", title: "Kode Item", data: "barcode" },
         { name: "nama", title: "Nama Barang", data: "nama" },
         { name: "satuan", title: "Satuan", data: "satuan" },
@@ -24,6 +31,7 @@ let produk = $("#produk").DataTable({
         { name: "action", title: "Actions", data: "action" }
     ],
     rowsGroup: [
+        'id:name',
         'barcode:name',
         'nama:name',
         'satuan:name',

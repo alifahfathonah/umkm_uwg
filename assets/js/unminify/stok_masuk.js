@@ -8,7 +8,7 @@ let stok_masuk = $("#stok_masuk").DataTable({
         targets: 0
     }],
     order: [
-        [1, "asc"]
+        [1, "desc"]
     ],
     columns: [{
         data: null
@@ -93,7 +93,17 @@ $("#barcode").select2({
         }),
         cache: true
     }
+}).on('select2:select', function (e) {
+    var data = e.params.data;
+    let produk = listProduk.filter((r)=>r.id == data.id)
+
+    if (produk.length > 0){
+        $('[name="nama_produk"]').val(produk[0].nama_produk);
+    }else{
+        $('[name="nama_produk"]').val("");
+    }
 });
+
 $("#supplier").select2({
     placeholder: "Supplier",
     ajax: {
@@ -112,6 +122,7 @@ $("#supplier").select2({
 $(".modal").on("hidden.bs.modal", () => {
     $("#form")[0].reset();
     $("#form").validate().resetForm()
+    $("#barcode").val("").trigger("change");
 })
 $(".modal").on("show.bs.modal", () => {
     let a = moment().format("D-MM-Y H:mm:ss");

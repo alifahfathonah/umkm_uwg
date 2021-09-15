@@ -45,7 +45,8 @@ class Produk_model extends CI_Model {
 		->join('tipe_pelanggan', 'tipe_pelanggan.id = tipe_produk_pelanggan.tipe', 'left')
 		->join('kategori_produk', 'produk.kategori = kategori_produk.id', 'left')
 		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')
-		->group_by("tipe_produk_pelanggan.id");
+		->group_by("tipe_produk_pelanggan.id")
+		->order_by("produk.id", "DESC");
 
 		return $this->db->get();
 	}

@@ -9,12 +9,13 @@ class Stok_masuk extends CI_Controller {
 		if ($this->session->userdata('status') !== 'login' ) {
 			redirect('/');
 		}
-		$this->load->model('stok_masuk_model');
+		$this->load->model(['stok_masuk_model', 'produk_model']);
 	}
 
 	public function index()
 	{
-		$this->load->view('stok_masuk');
+		$d["list_produk"] = $this->produk_model->getListProduk();
+		$this->load->view('stok_masuk', $d);
 	}
 
 	public function read()

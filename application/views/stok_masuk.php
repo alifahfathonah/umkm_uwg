@@ -86,6 +86,10 @@
         <select name="barcode" id="barcode" class="form-control select2" required></select>
       </div>
       <div class="form-group">
+        <label>Nama Produk</label>
+        <input type="text" readonly="true" class="form-control" placeholder="Nama Produk" name="nama_produk" required>
+      </div>
+      <div class="form-group">
         <label>Total Stok</label>
         <input type="number" class="form-control" placeholder="Jumlah" name="jumlah" required>
       </div>
@@ -130,6 +134,7 @@
   var addUrl = '<?php echo site_url('stok_masuk/add') ?>';
   var getBarcodeUrl = '<?php echo site_url('produk/get_barcode') ?>';
   var supplierSearchUrl = '<?php echo site_url('supplier/search') ?>';
+  var listProduk = <?=json_encode($list_produk); ?>
 </script>
 <script src="<?php echo base_url('assets/js/unminify/stok_masuk.js') ?>"></script>
 </body>

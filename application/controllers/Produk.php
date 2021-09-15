@@ -27,6 +27,7 @@ class Produk extends CI_Controller {
 		if ($this->produk_model->read()->num_rows() > 0) {
 			foreach ($this->produk_model->read()->result() as $produk) {
 				$data[] = array(
+					'id' => $produk->id,
 					'barcode' => $produk->barcode,
 					'nama' => $produk->nama_produk,
 					'kategori' => $produk->kategori,
