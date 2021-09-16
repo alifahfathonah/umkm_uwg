@@ -7,9 +7,6 @@ let url, cicilan = $("#cicilan").DataTable({
         orderable: false,
         targets: 0
     }],
-    order: [
-        [1, "asc"]
-    ],
     columns: [{
         data: null
     }, {
@@ -122,6 +119,14 @@ function edit(id) {
             }else{
                 $("#btn-add-cicilan").show();                
                 $("#btn-save-cicilan").attr("disabled", false);
+            }
+
+            if(res.barang.length > 0) {
+                res.barang.forEach((r)=>{
+                    $("#list-barang").append(`<span class="span-produk">${r.nama_produk} (${r.qty})</span>`);
+                });
+            }else{
+                $("#list-barang").html("");
             }
 
             if(res.cicilan.length > 0) {

@@ -10,6 +10,17 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css') ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/vendor/adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>">
   <?php $this->load->view('partials/head'); ?>
+  <style>
+  .span-produk{
+    margin-top: 5px;
+    margin-right: 10px;
+    background: #e6e6e6;
+    color: #404040;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 5px 10px; 
+  }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -83,6 +94,10 @@
       <div class="form-group">
         <label>Status</label>
         <input type="text" class="form-control" placeholder="Status" name="status" disabled="true">
+      </div>
+      <div class="form-group">
+        <label>Barang</label>
+        <div style="margin-top: 5px;" id="list-barang"></div>
       </div>
       <div class="form-group mt-4 mb-5">
         <div class="my-2" style="

@@ -65,6 +65,13 @@ class Cicilan_model extends CI_Model {
 			->where("transaksi_utang.id = $id")
 			->get()->row_array();
 		$detail["cicilan"] = $this->db->order_by("sisa", "desc")->get_where("transaksi_cicilan", ["utang_id" => $id])->result_array();
+		$detail["barang"] = $this->db->select("
+			produk.id,
+			produk.nama_produk,
+			transaksi_item.qty
+		")->from("transaksi_item")
+		->join("produk", "produk.id = transaksi_item.produk_id", "left")
+		->where("transaksi_item.transaksi_id", $detail["transaksi_id"])->get()->result_array();
 
 		return $detail;
 	}
