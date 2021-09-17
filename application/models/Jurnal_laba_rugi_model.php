@@ -14,15 +14,17 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 transaksi.id,
                 produk.id produk_id,
                 DATE_FORMAT(transaksi.tanggal, '%d-%m-%Y') tanggal,
+                transaksi.tanggal full_tanggal,
                 produk.barcode, 
                 transaksi.nota, 
                 produk.nama_produk sell_produk, 
                 transaksi_item.qty sell_qty,  
-                ((SELECT 
+                /* ((SELECT 
                     harga FROM tipe_produk_pelanggan 
                     WHERE pelanggan = transaksi.pelanggan 
                         AND produk.id = tipe_produk_pelanggan.produk 
-                LIMIT 1) * transaksi_item.qty) sell_harga,
+                LIMIT 1) * transaksi_item.qty) sell_harga, */
+                transaksi.jumlah_uang sell_harga,
                 NULL buy_produk, 
                 NULL buy_qty,  
                 NULL buy_harga,
@@ -31,7 +33,7 @@ class Jurnal_laba_rugi_model extends CI_Model {
                     WHERE pelanggan = transaksi.pelanggan 
                         AND produk.id = tipe_produk_pelanggan.produk 
                 LIMIT 1) * transaksi_item.qty) debet,*/
-                (transaksi.jumlah_uang + transaksi_utang.cicilan) debet,
+                (transaksi.jumlah_uang + IFNULL(transaksi_utang.cicilan, 0)) debet,
                 0 kredit
                 FROM transaksi
                 LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
@@ -52,6 +54,7 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 stok_masuk.id,
                 produk.id produk_id,
                 DATE_FORMAT(stok_masuk.tanggal, '%d-%m-%Y') tanggal,
+                stok_masuk.tanggal full_tanggal,
                 produk.barcode, 
                 NULL nota, 
                 NULL sell_produk, 
@@ -66,7 +69,7 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 LEFT JOIN produk ON produk.id = stok_masuk.barcode
                 WHERE produk.nama_produk IS NOT NULL AND $where_stok
                 GROUP BY stok_masuk.id, produk.id
-            ) ORDER BY tanggal ASC, id ASC, produk_id ASC
+            ) ORDER BY full_tanggal ASC, produk_id ASC
         ");
  
         return $q->result_array();

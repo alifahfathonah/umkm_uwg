@@ -12,13 +12,13 @@
   <?php $this->load->view('partials/head'); ?>
   <style>
   .span-produk{
-    margin-top: 5px;
     margin-right: 10px;
     background: #e6e6e6;
     color: #404040;
     font-weight: bold;
     border-radius: 5px;
     padding: 5px 10px; 
+    display: inline-table;
   }
   </style>
 </head>

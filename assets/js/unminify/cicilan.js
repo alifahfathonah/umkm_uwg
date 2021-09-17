@@ -121,12 +121,11 @@ function edit(id) {
                 $("#btn-save-cicilan").attr("disabled", false);
             }
 
+            $("#list-barang").html("");
             if(res.barang.length > 0) {
                 res.barang.forEach((r)=>{
                     $("#list-barang").append(`<span class="span-produk">${r.nama_produk} (${r.qty})</span>`);
                 });
-            }else{
-                $("#list-barang").html("");
             }
 
             if(res.cicilan.length > 0) {
