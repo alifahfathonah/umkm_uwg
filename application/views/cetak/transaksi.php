@@ -20,9 +20,9 @@
 		<br>
 		<center>
 			<h2 style="font-weight:bold;">
-				<?php echo $this->session->userdata('toko')->nama; ?><br>
+				<?php echo $this->session->userdata('toko')["nama"]; ?><br>
 			</h2>
-			<?php echo $this->session->userdata('toko')->alamat; ?><br><br>
+			<?php echo $this->session->userdata('toko')["alamat"]; ?><br><br>
 			<table width="100%">
 				<tr>
 					<td><?php echo $nota ?></td>
@@ -86,7 +86,7 @@
 			</table>
 			<br>
 			Terima Kasih <br>
-			<?php echo $this->session->userdata('toko')->nama; ?>
+			<?php echo $this->session->userdata('toko')["nama"]; ?>
 		</center>
 	</div>
 	<script>

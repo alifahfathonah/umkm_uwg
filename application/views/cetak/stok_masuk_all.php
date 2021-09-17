@@ -48,9 +48,9 @@
 		<br>
 		<center>
 			<h2 style="font-weight:bold;">
-				<?php echo $this->session->userdata('toko')->nama; ?> | Laporan Stok Masuk<br>
+				<?php echo $this->session->userdata('toko')["nama"]; ?> | Laporan Stok Masuk<br>
 			</h2>
-			<?php echo $this->session->userdata('toko')->alamat; ?><br><br>
+			<?php echo $this->session->userdata('toko')["alamat"]; ?><br><br>
 			<hr><br/>
 			<table width="100%" class="my-table">
 				<tr>

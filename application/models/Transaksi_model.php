@@ -57,7 +57,7 @@ class Transaksi_model extends CI_Model {
 			transaksi.jumlah_uang, 
 			pelanggan.id pelanggan_id,
 			pelanggan.nama as pelanggan,
-			CONCAT(\'<a class="btn btn-sm btn-success" href="'.site_url('transaksi/cetak/').'\', transaksi.id, \'">Print</a> <button class="btn btn-sm btn-danger" onclick="remove(\', transaksi.id, \')">Delete</button>\') action,
+			CONCAT(\'<a class="btn btn-sm btn-success" target="_blank" href="'.site_url('transaksi/cetak/').'\', transaksi.id, \'">Print</a> <button class="btn btn-sm btn-danger" onclick="remove(\', transaksi.id, \')">Delete</button>\') action,
 			GROUP_CONCAT(\'<span class="label-produk">\',produk.nama_produk,\' <strong>(\',transaksi_item.qty, satuan_produk.satuan, \')</strong>\',\'</span>\' SEPARATOR \' \') produk
 		')->from($this->table)
 		->join('transaksi_item', 'transaksi.id = transaksi_item.transaksi_id', 'left')
@@ -164,7 +164,7 @@ class Transaksi_model extends CI_Model {
 			tipe_produk_pelanggan.harga,
 			tipe_produk_pelanggan.diskon
 		')->from('transaksi_item')
-		->join('transaksi', 'transaksi_item.transaksi_id = transaksi.id AND $where', 'left')
+		->join('transaksi', "transaksi_item.transaksi_id = transaksi.id AND $where", 'left')
 		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')
 		->join('produk', 'produk.id = transaksi_item.produk_id', 'left')
 		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')
