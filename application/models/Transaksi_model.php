@@ -53,6 +53,7 @@ class Transaksi_model extends CI_Model {
 			transaksi.id, 
 			transaksi.nota, 
 			transaksi.tanggal, 
+			transaksi.ongkir, 
 			transaksi.total_bayar, 
 			transaksi.jumlah_uang, 
 			pelanggan.id pelanggan_id,

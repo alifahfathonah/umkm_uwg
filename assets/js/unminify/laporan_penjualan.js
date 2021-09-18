@@ -18,6 +18,9 @@ let laporan_penjualan = $("#laporan_penjualan").DataTable( {
             data: "produk"
         }
         , {
+            data: "ongkir"
+        }
+        , {
             data: "total_bayar"
         }
         , {

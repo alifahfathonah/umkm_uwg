@@ -29,6 +29,7 @@ class Stok_keluar extends CI_Controller {
 					'nama_produk' => $stok_keluar->nama_produk,
 					'jumlah' => $stok_keluar->jumlah,
 					'keterangan' => $stok_keluar->keterangan,
+					'action' => '<button class="btn btn-sm btn-info" onclick="retur('.$stok_keluar->id.')">Pengembalian</button>'
 				);
 			}
 		} else {
@@ -53,7 +54,7 @@ class Stok_keluar extends CI_Controller {
 				'tanggal' => $tanggal->format('Y-m-d H:i:s'),
 				'barcode' => $id,
 				'jumlah' => $jumlah,
-				'keterangan' => $this->input->post('keterangan')
+				'keterangan' => $this->input->post('keterangan'),
 			);
 			if ($this->stok_keluar_model->create($data)) {
 				echo json_encode('sukses');
@@ -69,6 +70,15 @@ class Stok_keluar extends CI_Controller {
 			echo json_encode($kategori->row());
 		}
 	}
+
+	public function retur()
+	{
+		$id = $this->input->post('id');
+		if ($this->stok_keluar_model->retur($id)) {
+			echo json_encode('sukses');
+		}
+	}
+	
 
 }
 

@@ -57,6 +57,7 @@
 					<th>No</th>
 					<th>Tanggal</th>
 					<th>Produk</th>
+					<th>Ongkir</th>
 					<th>Total Bayar</th>
 					<th>Jumlah Uang</th>
 					<th>Pelanggan</th>
@@ -66,6 +67,7 @@
 						<td><?=$no++ ?></td>
 						<td><?=$key["tanggal"] ?></td>
 						<td><?=$key["produk"] ?></td>
+						<td><?=$key["ongkir"] ?></td>
 						<td><?=$key["total_bayar"] ?></td>
 						<td><?=$key["jumlah_uang"] ?></td>
 						<td><?=$key["pelanggan"] ?></td>

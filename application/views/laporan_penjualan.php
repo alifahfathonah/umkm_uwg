@@ -59,6 +59,7 @@
                   <th>No</th>
                   <th>Tanggal</th>
                   <th>Produk</th> 
+                  <th>Ongkir</th> 
                   <th>Total Bayar</th> 
                   <th>Jumlah Uang</th> 
                   <th>Pelanggan</th> 

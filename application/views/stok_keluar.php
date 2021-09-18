@@ -52,6 +52,7 @@
                   <th>Nama Produk</th>
                   <th>Jumlah</th>
                   <th>Keterangan</th>
+                  <th>Action</th>
                 </tr>
               </thead>
             </table>
@@ -116,8 +117,9 @@
 <script>
   var readUrl = '<?php echo site_url('stok_keluar/read') ?>';
   var addUrl = '<?php echo site_url('stok_keluar/add') ?>';
+  var returUrl = '<?php echo site_url('stok_keluar/retur') ?>';
   var getBarcodeUrl = '<?php echo site_url('produk/get_barcode') ?>';
 </script>
-<script src="assets/js/stok_keluar.min.js"></script>
+<script src="assets/js/unminify/stok_keluar.js"></script>
 </body>
 </html>

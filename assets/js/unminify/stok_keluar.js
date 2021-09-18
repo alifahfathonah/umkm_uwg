@@ -22,6 +22,8 @@ let stok_keluar = $("#stok_keluar").DataTable({
         data: "jumlah"
     }, {
         data: "keterangan"
+    }, {
+        data: "action"
     }]
 });
 
@@ -45,6 +47,37 @@ function addData() {
         }
     })
 }
+
+function retur(id) {
+    Swal.fire({
+        title: "Pengembalian",
+        text: "Anda yakin ingin mengembalikan barang ini?",
+        type: "info",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: `Yes`,
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: returUrl,
+                type: "post",
+                dataType: "json",
+                data: {
+                    id: id
+                },
+                success: () => {
+                    Swal.fire("Sukses", "Sukses Mengembalikan Data", "success");
+                    reloadTable();
+                },
+                error: () => {
+                    console.log(a);
+                }
+            })
+        }
+    })
+}
+
 stok_keluar.on("order.dt search.dt", () => {
     stok_keluar.column(0, {
         search: "applied",
