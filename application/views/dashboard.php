@@ -80,48 +80,54 @@ $role = $this->session->userdata('role');
           <div class="col-12 row">
             <h1 class="mt-2 mb-3 h2 text-dark col-md-6">Grafik</h1>
             <div class="col-md-6 pull-right" style="gap: 10px; display: flex; align-items: center;">
-              <select name="tahun" id="select-tahun" class="form-control" style="width:150px">
-                  <?php
-                    for($i=2020; $i<=date("Y"); $i++){
-                      $selected = ($i == date("Y"))? "selected" : "";
-                      echo "<option $selected value='$i'>$i</option>";
-                    }
-                  ?>
-              </select>
-              <select name="bulan" id="select-bulan" class="form-control" style="width:200px">
-                  <?php
-                    $bulan = [
-                      "Januari",
-                      "Februari",
-                      "Maret",
-                      "April",
-                      "Mei",
-                      "Juni",
-                      "Juli",
-                      "Agustus",
-                      "September",
-                      "Oktober",
-                      "November",
-                      "Desember"
-                    ];
+              <form id="form-filter" style="display: contents;">
+                <select name="tahun" id="select-tahun" class="form-control" style="width:150px">
+                    <?php
+                      $year = !empty($_GET["tahun"])? $_GET["tahun"] : date("Y");
+                      for($i=2020; $i<=date("Y"); $i++){
+                        $selected = ($i == $year)? "selected" : "";
+                        echo "<option $selected value='$i'>$i</option>";
+                      }
+                    ?>
+                </select>
+                <select name="bulan" id="select-bulan" class="form-control" style="width:200px">
+                    <?php
+                      $bulan = [
+                        "Januari",
+                        "Februari",
+                        "Maret",
+                        "April",
+                        "Mei",
+                        "Juni",
+                        "Juli",
+                        "Agustus",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Desember"
+                      ];
 
-                    for($i=1; $i<=12; $i++){
-                      $val = str_pad($i, 2, '0', STR_PAD_LEFT);
-                      $selected = ($val == date("m"))? "selected" : "";
-                      echo "<option $selected value='$val'>".$bulan[$i-1]."</option>";
-                    }
-                  ?>
-              </select>
-              <select name="tanggal" id="select-tanggal" class="form-control" style="width:150px">
-                  <?php
-                    for($i=1; $i<=31; $i++){
-                      $val = str_pad($i, 2, '0', STR_PAD_LEFT);
-                      $selected = ($val == date("d"))? "selected" : "";
-                      echo "<option $selected value='$val'>$val</option>";
-                    }
-                  ?>
-              </select>
-              <button class="btn btn-info"><i class="fa fa-search"></i></button>
+                      $month = !empty($_GET["bulan"])? $_GET["bulan"] : date("m");
+                      for($i=1; $i<=12; $i++){
+                        $val = str_pad($i, 2, '0', STR_PAD_LEFT);
+                        $selected = ($val == $month)? "selected" : "";
+                        echo "<option $selected value='$val'>".$bulan[$i-1]."</option>";
+                      }
+                    ?>
+                </select>
+                <select name="hari" id="select-hari" class="form-control" style="width:150px">
+                    <option value="all">All</option>
+                    <?php
+                      $day = !empty($_GET["hari"])? $_GET["hari"] : date("d");
+                      for($i=1; $i<=31; $i++){
+                        $val = str_pad($i, 2, '0', STR_PAD_LEFT);
+                        $selected = ($val == $day)? "selected" : "";
+                        echo "<option $selected value='$val'>$val</option>";
+                      }
+                    ?>
+                </select>
+                <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
+              </form>
             </div>
           </div>
           <div class="col-md-6">
@@ -183,6 +189,9 @@ $role = $this->session->userdata('role');
   var produk_terlarisUrl = '<?php echo site_url('produk/produk_terlaris') ?>';
   var data_stokUrl = '<?php echo site_url('produk/data_stok') ?>';
   var penjualan_bulanUrl = '<?php echo site_url('transaksi/penjualan_bulan') ?>';
+  var year = '<?php echo !empty($_GET["tahun"])? $_GET["tahun"] : date("Y"); ?>';
+  var month = '<?php echo !empty($_GET["bulan"])? $_GET["bulan"] : date("m"); ?>';
+  var day = '<?php echo !empty($_GET["hari"])? $_GET["hari"] : date("d"); ?>';
 </script>
 <script src="<?php echo base_url('assets/js/unminify/dashboard.js') ?>"></script>
 </body>

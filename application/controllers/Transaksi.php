@@ -93,8 +93,11 @@ class Transaksi extends CI_Controller {
 	{
 		header('Content-type: application/json');
 		$day = $this->input->post('day');
+		$tahun = !empty($this->input->post("year"))? $this->input->post("year") : date("Y") ;
+		$bulan = !empty($this->input->post("month"))? $this->input->post("month") : date("m") ;
+
 		foreach ($day as $key => $value) {
-			$now = date("Y-m") . "-" . $day[$value];
+			$now = $tahun . "-" . $bulan . "-" . $day[$value];
 			if ($qty = $this->transaksi_model->penjualanBulan($now) !== []) {
 				$data[] = array_sum($this->transaksi_model->penjualanBulan($now));
 			} else {

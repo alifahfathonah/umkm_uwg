@@ -168,11 +168,23 @@ class Produk_model extends CI_Model {
 		return $this->db->get($this->table)->row();
 	}
 
-	public function produkTerlaris($date)
+	public function produkTerlaris($p)
 	{	
 		$userdata = $this->session->userdata();
 		$where = ($userdata["role"] != 1)? 'produk.toko_id='.$userdata["toko"]["id"] : '1=1';
 
+		if(!empty($p["tahun"])){
+			$where .= " AND DATE_FORMAT(transaksi.tanggal, '%Y') = '".$p['tahun']."'";
+		}
+
+		if(!empty($p["bulan"])){
+			$where .= " AND DATE_FORMAT(transaksi.tanggal, '%m') = '".$p['bulan']."'";
+		}
+
+		if(!empty($p["hari"]) && $p["hari"] != "all"){
+			$where .= " AND DATE_FORMAT(transaksi.tanggal, '%d') = '".$p['hari']."'";
+		}
+ 
 		return $this->db->query("
 			SELECT 
 				produk.nama_produk, 
@@ -182,7 +194,7 @@ class Produk_model extends CI_Model {
 				ON produk.id = transaksi_item.produk_id 
 			LEFT JOIN transaksi 
 				ON transaksi.id = transaksi_item.transaksi_id
-			WHERE $where AND DATE_FORMAT(transaksi.tanggal, '%Y-%m-%d') = '$date' 
+			WHERE $where 
 			GROUP BY produk.id 
 			ORDER BY SUM(transaksi_item.qty) 
 			DESC LIMIT 5

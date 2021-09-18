@@ -35,7 +35,7 @@ $.ajax( {
     }
 });
 $.ajax( {
-    url:produk_terlarisUrl,
+    url:produk_terlarisUrl+"?"+$.param({tahun:year, bulan:month, hari:day}),
     type:"get",
     dataType:"json",
     success:res=> {
@@ -74,7 +74,9 @@ $.ajax( {
     url:penjualan_bulanUrl,
     type:"post",
     data: {
-        day: getDays()
+        day: getDays(),
+        year:year, 
+        month:month,
     },
     dataType:"json",
     success:res=> {

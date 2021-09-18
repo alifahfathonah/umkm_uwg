@@ -152,15 +152,20 @@ class Produk extends CI_Controller {
 
 	public function produk_terlaris()
 	{
-		$date = !empty($this->input->get("date"))? $this->input->get("date") : date("Y-m-d") ;
+		$tahun = !empty($this->input->get("tahun"))? $this->input->get("tahun") : date("Y") ;
+		$bulan = !empty($this->input->get("bulan"))? $this->input->get("bulan") : date("m") ;
+		$hari = !empty($this->input->get("hari"))? $this->input->get("hari") : date("d") ;
+
 		header('Content-type: application/json');
-		$produk = $this->produk_model->produkTerlaris($date);
+		$produk = $this->produk_model->produkTerlaris(["tahun"=>$tahun, "bulan"=>$bulan, "hari"=>$hari]);
+		
 		$label = [];
 		$data = [];
 		foreach ($produk as $key) {
 			$label[] = $key->nama_produk;
 			$data[] = $key->terjual;
 		}
+
 		$result = array(
 			'label' => $label,
 			'data' => $data,
