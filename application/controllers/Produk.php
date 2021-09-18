@@ -152,8 +152,11 @@ class Produk extends CI_Controller {
 
 	public function produk_terlaris()
 	{
+		$date = !empty($this->input->get("date"))? $this->input->get("date") : date("Y-m-d") ;
 		header('Content-type: application/json');
-		$produk = $this->produk_model->produkTerlaris();
+		$produk = $this->produk_model->produkTerlaris($date);
+		$label = [];
+		$data = [];
 		foreach ($produk as $key) {
 			$label[] = $key->nama_produk;
 			$data[] = $key->terjual;

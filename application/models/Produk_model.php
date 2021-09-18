@@ -168,13 +168,25 @@ class Produk_model extends CI_Model {
 		return $this->db->get($this->table)->row();
 	}
 
-	public function produkTerlaris()
+	public function produkTerlaris($date)
 	{	
 		$userdata = $this->session->userdata();
 		$where = ($userdata["role"] != 1)? 'produk.toko_id='.$userdata["toko"]["id"] : '1=1';
 
-		return $this->db->query('SELECT produk.nama_produk, produk.terjual FROM `produk` WHERE '.$where.'
-		ORDER BY CONVERT(terjual,decimal)  DESC LIMIT 5')->result();
+		return $this->db->query("
+			SELECT 
+				produk.nama_produk, 
+				SUM(transaksi_item.qty) terjual 
+			FROM produk 
+			LEFT JOIN transaksi_item 
+				ON produk.id = transaksi_item.produk_id 
+			LEFT JOIN transaksi 
+				ON transaksi.id = transaksi_item.transaksi_id
+			WHERE $where AND DATE_FORMAT(transaksi.tanggal, '%Y-%m-%d') = '$date' 
+			GROUP BY produk.id 
+			ORDER BY SUM(transaksi_item.qty) 
+			DESC LIMIT 5
+			")->result();
 	}
 
 	public function dataStok()
