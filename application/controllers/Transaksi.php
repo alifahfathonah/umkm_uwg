@@ -32,7 +32,7 @@ class Transaksi extends CI_Controller {
 		$tanggal = new DateTime($this->input->post('tanggal'));
 		$data = [
 			'tanggal' => $tanggal->format('Y-m-d H:i:s'),
-			'total_bayar' => $this->input->post('total_bayar') - $this->input->post('ongkir'),
+			'total_bayar' => $this->input->post('total_bayar') - (!empty($this->input->post('ongkir'))? $this->input->post('ongkir') : 0),
 			'jumlah_uang' => $this->input->post('jumlah_uang'),
 			'ongkir' => $this->input->post('ongkir'),
 			'pelanggan' => $this->input->post('pelanggan'),
