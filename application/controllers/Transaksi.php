@@ -119,12 +119,9 @@ class Transaksi extends CI_Controller {
 	public function transaksi_terakhir($value='')
 	{
 		header('Content-type: application/json');
-		$now = date('Y-m-d');
-		foreach ($this->transaksi_model->transaksiTerakhir($now) as $key) {
-			$total = explode(',', $key);
-		}
-		echo json_encode($total->total == null ? 0 : $total);
-		// echo json_encode($total);
+		$now = date('Y-m');
+		$lastTrans = $this->transaksi_model->transaksiTerakhir($now);
+		echo json_encode(!empty($lastTrans) ? $lastTrans->total : 0);
 	}
 
 }

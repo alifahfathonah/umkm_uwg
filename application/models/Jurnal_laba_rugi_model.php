@@ -64,7 +64,7 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 stok_masuk.jumlah buy_jumlah,
                 stok_masuk.harga buy_harga,
                 0 debet,
-                (stok_masuk.harga * stok_masuk.jumlah) kredit
+                stok_masuk.harga kredit
                 FROM stok_masuk
                 LEFT JOIN produk ON produk.id = stok_masuk.barcode
                 WHERE produk.nama_produk IS NOT NULL AND $where_stok

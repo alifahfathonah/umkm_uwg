@@ -125,10 +125,10 @@ class Transaksi_model extends CI_Model {
 		$where = ($userdata["role"] != 1)? 'transaksi.toko_id ='.$userdata["toko"]["id"] : '1=1';
 
 		return $this->db->query("
-			SELECT SUM(transaksi_item.qty) qty
+			SELECT SUM(transaksi_item.qty) total
 			FROM transaksi
 			LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
-			WHERE DATE(tanggal) = '$hari' AND $where
+			WHERE DATE_FORMAT(tanggal, '%Y-%m') = '$hari' AND $where
 			GROUP BY transaksi.id
 			LIMIT 1")->row();
 	}
@@ -142,6 +142,7 @@ class Transaksi_model extends CI_Model {
 			transaksi.id,   
 			transaksi.nota, 
 			transaksi.tanggal, 
+			transaksi.ongkir, 
 			transaksi.total_bayar, 
 			transaksi.jumlah_uang, 
 			(transaksi.jumlah_uang - transaksi.total_bayar) kembalian,

@@ -254,7 +254,10 @@ function add() {
         success: res => {
             if (isCetak) {
                 Swal.fire("Sukses", "Sukses Membayar", "success").
-                    then(() => window.location.href = `${cetakUrl}${res}`)
+                    then(() => {
+                        window.open(cetakUrl+"/"+res, "_blank"); 
+                        setTimeout(()=>window.location.reload(), 0);
+                })
             } else {
                 Swal.fire("Sukses", "Sukses Membayar", "success").
                     then(() => window.location.reload())

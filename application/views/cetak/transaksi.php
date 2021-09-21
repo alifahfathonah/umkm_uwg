@@ -56,6 +56,14 @@
 						<?php echo $total_bayar ?>
 					</td>
 				</tr>
+				<tr>
+					<td width="76%" align="right">
+						Ongkir
+					</td>
+					<td width="23%" align="right">
+						<?php echo !empty($ongkir)? $ongkir : 0 ?>
+					</td>
+				</tr>
 			</table>
 			<hr>
 			<table width="100%">
@@ -64,7 +72,7 @@
 						Total
 					</td>
 					<td width="23%" align="right">
-						<?php echo $total_bayar ?>
+						<?php echo (!empty($total_bayar)? $total_bayar : 0) + (!empty($ongkir) ? $ongkir : 0) ?>
 					</td>
 				</tr>
 				<tr>
@@ -80,7 +88,7 @@
 						Kembalian
 					</td>
 					<td width="23%" align="right">
-						<?php echo $kembalian ?>
+						<?php echo (!empty($jumlah_uang)? $jumlah_uang : 0 ) - ((!empty($total_bayar)? $total_bayar : 0) + (!empty($ongkir) ? $ongkir : 0)) ?>
 					</td>
 				</tr>
 			</table>
