@@ -158,6 +158,12 @@ $user = $this->session->userdata();
             </li>
           </ul>
         </li>
+        <li class="nav-item">
+          <a href="<?php echo site_url('pengguna/setting') ?>" class="nav-link <?php echo $uri == 'pengguna' ? 'active' : 'no' ?>">
+            <i class="fas fa-cogs nav-icon"></i>
+            <p>Setting</p>
+          </a>
+        </li>
         <?php endif; ?>
         <?php if ($role == 1): ?>
           <li class="nav-item">

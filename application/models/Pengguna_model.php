@@ -32,7 +32,7 @@ class Pengguna_model extends CI_Model {
 	public function update($id, $data)
 	{
 		$userdata = $this->session->userdata();
-		if($userdata["role"] != 1) $data["toko_id"] = $userdata["toko"]["id"];
+		if($userdata["role"] != 1 && isset($userdata["toko"]["id"])) $data["toko_id"] = $userdata["toko"]["id"];
 
 		$this->db->where('id', $id);
 		return $this->db->update($this->table, $data);

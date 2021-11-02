@@ -75,7 +75,24 @@ function remove(id) {
     })
 }
 
+function getSisa(){
+    let arr = cicilan_now.filter((a) => a.sisa != undefined);
+    if (arr.length > 0){
+        return arr[arr.length - 1].sisa;
+    }else{
+        return 0;
+    }
+}
+
 function editData() {
+    let totalSisa = getSisa();
+    let totalTrans = cicilan_now.reduce((a, b)=>parseFloat(a.trans_terakhir)+parseFloat(b.trans_terakhir));
+
+    if (totalSisa < totalTrans){
+        Swal.fire("Error", "Nominal pembayaran, melebihi hutang", "error");
+        return false;
+    }
+    
     $.ajax({
         url: editUrl,
         type: "post",
@@ -215,7 +232,6 @@ function updateCicilan(id) {
             }
         });
     }else{
-        console.log("push")
         cicilan_now.push({
             "id": id,
             "tanggal": $(`[name="date_${id}"]`).val(),
@@ -247,7 +263,7 @@ $("#form").validate({
     errorElement: "span",
     errorPlacement: (err, el) => {
         err.addClass("invalid-feedback");
-        el.closest(".form-group").append(a)
+        el.closest(".form-group").append(err)
     },
     submitHandler: () => {
         "edit" == url ? editData() : addData()

@@ -16,6 +16,12 @@ class Pengguna extends CI_Controller {
 	{
 		$this->load->view('pengguna');
 	}
+
+	public function setting()
+	{	
+		$d["userdata"] = $this->session->userdata();
+		$this->load->view('setting_pengguna', $d);
+	}
 	
 	public function read()
 	{
@@ -87,6 +93,8 @@ class Pengguna extends CI_Controller {
 			);
 
 			if(empty($this->input->post('password'))) unset($data["password"]);
+			if(empty($this->input->post('role'))) unset($data["role"]);
+			if(empty($this->input->post('toko_id'))) unset($data["toko_id"]);
 
 			if ($this->pengguna_model->update($id,$data)) {
 				echo json_encode(["success"=>true, "message"=>"Update Data Success"]);
