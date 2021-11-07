@@ -41,12 +41,9 @@ class Stok_keluar_model extends CI_Model {
 
 	public function update($id, $data)
 	{
-		$detail = $this->db->get_where($this->table, ["id"=>$id])->row_array();
+		$detail_before = $this->db->get_where($this->table, ["id"=>$id])->row_array();
 
-		print_r($detail);
-		exit;
-
-		if(!empty($detail)){
+		if(!empty($detail_before)){
 			$this->db->trans_start();
 			
 			$this->db->where('id', $id);
@@ -55,9 +52,20 @@ class Stok_keluar_model extends CI_Model {
 			$detail = $this->db->get_where($this->table, ["id"=>$id])->row_array();
 			
 			$stok_now = $this->getStok($detail["barcode"]);
-			$stok = $stok_now->stok + $detail["jumlah"]; 
+			$stok = 0;
+			
+			if($detail_before["jumlah"] > $detail["jumlah"]){
+				$stok = $stok_now->stok + ($detail_before["jumlah"] - $detail["jumlah"]);
+			}else{
+				$stok = $stok_now->stok - ($detail["jumlah"] - $detail_before["jumlah"]);
+			}
 			
 			$this->addStok($detail["barcode"], $stok);
+			
+			if($detail["jumlah"] == 0){
+				$this->db->where('id', $id)
+				->delete($this->table);
+			}
 			
 			if($this->db->trans_status() === FALSE){
 				$this->db->trans_rollback();
@@ -76,43 +84,34 @@ class Stok_keluar_model extends CI_Model {
 	{
 		$this->db->trans_start();
 
+		$detail = $this->db->get_where($this->table, ["id"=>$id])->row_array();
+		$stok_now = $this->getStok($detail["barcode"]);
+		$stok = $stok_now->stok + $detail["jumlah"];
+
+		$this->addStok($detail["barcode"], $stok);
+
 		$this->db->where('id', $id)
 		->delete($this->table);
-
-		if($this->db->affected_rows() > 0){
-			$this->db->where('produk', $id)->delete("tipe_produk_pelanggan");
-		}
 		
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			return;
 		}else{
 			$this->db->trans_complete();
-			print_r($this->db->trans_complete());
 			return true;
 		}
 	}
 
 	public function getStokKeluar($id)
 	{
-		$produk = [];
-
-		$q1 = $this->db->select('produk.id, produk.barcode, produk.nama_produk,  produk.stok, produk.kategori kategori_id, kategori_produk.kategori, produk.satuan satuan_id, satuan_produk.satuan')
-		->from($this->table)
-		->join('kategori_produk', 'produk.kategori = kategori_produk.id', 'left')
-		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')
-		->where('produk.id', $id);
-		$produk = $q1->get()->row_array();
-
-		$q2 = $this->db->select('tipe_produk_pelanggan.id, tipe_pelanggan.nama pelanggan, harga, diskon')
-		->from('tipe_produk_pelanggan')
-		->join('tipe_pelanggan', 'tipe_pelanggan.id = tipe_produk_pelanggan.tipe', 'left')
-		->where('tipe_produk_pelanggan.produk', $id);
-		$pelanggan = $q2->get()->result_array();
-		
-		if (!empty($pelanggan)) $produk["pelanggan"] = $pelanggan;
-
-		return $produk;
+		return $this->db->select("
+			stok_keluar.*,
+			stok_keluar.Keterangan keterangan,
+			produk.barcode barcode_name
+		")->from($this->table)
+		->join("produk", "produk.id = stok_keluar.barcode", "LEFT")
+		->where("stok_keluar.id",$id)
+		->get()->row_array();
 	}
 
 	public function retur($id)

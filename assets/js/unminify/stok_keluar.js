@@ -48,6 +48,53 @@ function addData() {
     })
 }
 
+function remove(id) {
+	Swal.fire({
+		title: "Hapus",
+		text: "Hapus data ini?",
+		type: "warning",
+		showDenyButton: true,
+		showCancelButton: true,
+		confirmButtonText: `Yes`,
+		denyButtonText: `No`,
+	}).then((result) => {
+		if (result.value) {
+			$.ajax({
+				url: deleteUrl,
+				type: "post",
+				dataType: "json",
+				data: {
+					id: id,
+				},
+				success: (a) => {
+					Swal.fire("Sukses", "Sukses Menghapus Data", "success");
+					reloadTable();
+				},
+				error: (a) => {
+					console.log(a);
+				},
+			});
+		}
+	});
+}
+
+function editData() {
+	$.ajax({
+		url: editUrl,
+		type: "post",
+		dataType: "json",
+		data: $("#form").serialize(),
+		success: () => {
+			$(".modal").modal("hide");
+			Swal.fire("Sukses", "Sukses Mengedit Data", "success");
+			reloadTable();
+		},
+		error: (err) => {
+			console.log(err);
+		},
+	});
+}
+
 function retur(id) {
     Swal.fire({
         title: "Pengembalian",
@@ -78,6 +125,40 @@ function retur(id) {
     })
 }
 
+function add() {
+	url = "add";
+	$(".modal-title").html("Add Data");
+	$('.modal button[type="submit"]').html("Add");
+    $("#barcode").val("").trigger("change");
+}
+
+function edit(id) {
+	$("#barcode").val("").trigger("change");
+	$.ajax({
+		url: getDetailUrl + "?id=" + id,
+		type: "get",
+		dataType: "json",
+		success: (res) => {
+			$('[name="id"]').val(res.id);
+			$('[name="tanggal"]').val(res.tanggal);
+			$('[name="barcode"]').append(
+				`<option value='${res.barcode}'>${res.barcode_name}</option>`
+			);
+			$("#barcode").val(res.barcode).trigger("change");
+            $('[name="jumlah"]').val(res.jumlah);
+			$('[name="keterangan"]').val(res.keterangan);
+            
+			$(".modal").modal("show");
+			$(".modal-title").html("Edit Data");
+			$('.modal button[type="submit"]').html("Edit");
+			url = "edit";
+		},
+		error: (err) => {
+			console.log(err);
+		},
+	});
+}
+
 stok_keluar.on("order.dt search.dt", () => {
     stok_keluar.column(0, {
         search: "applied",
@@ -92,7 +173,7 @@ $("#form").validate({
         err.addClass("invalid-feedback"), el.closest(".form-group").append(err)
     },
     submitHandler: () => {
-        addData()
+        "edit" == url ? editData() : addData();
     }
 });
 $("#tanggal").datetimepicker({

@@ -40,7 +40,7 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">
-            <button class="btn btn-success" data-toggle="modal" data-target="#modal">Add</button>
+            <button class="btn btn-success" data-toggle="modal" data-target="#modal" onclick="add()">Add</button>
           </div>
           <div class="card-body">
             <table class="table w-100 table-bordered table-hover" id="stok_keluar">
@@ -77,6 +77,7 @@
   </div>
   <div class="modal-body">
     <form id="form">
+      <input type="hidden" name="id">
       <div class="form-group">
         <label>Tanggal</label>
         <input id="tanggal" type="text" class="form-control" placeholder="Kategori" name="tanggal" required>
@@ -119,6 +120,9 @@
   var addUrl = '<?php echo site_url('stok_keluar/add') ?>';
   var returUrl = '<?php echo site_url('stok_keluar/retur') ?>';
   var getBarcodeUrl = '<?php echo site_url('produk/get_barcode') ?>';
+  var deleteUrl = '<?php echo site_url('stok_keluar/delete') ?>';
+  var editUrl = '<?php echo site_url('stok_keluar/edit') ?>';
+  var getDetailUrl = '<?php echo site_url('stok_keluar/get_stok_keluar') ?>';
 </script>
 <script src="assets/js/unminify/stok_keluar.js"></script>
 </body>

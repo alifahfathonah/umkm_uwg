@@ -40,7 +40,7 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">
-            <button class="btn btn-success" data-toggle="modal" data-target="#modal">Add</button>
+            <button class="btn btn-success" data-toggle="modal" data-target="#modal" onclick="add()">Add</button>
           </div>
           <div class="card-body">
             <table class="table w-100 table-bordered table-hover" id="stok_masuk">
@@ -53,6 +53,7 @@
                   <th>Jumlah</th>
                   <th>Harga</th>
                   <th>Keterangan</th>
+                  <th>Action</th>
                 </tr>
               </thead>
             </table>
@@ -77,6 +78,7 @@
   </div>
   <div class="modal-body">
     <form id="form">
+      <input type="hidden" name="id">
       <div class="form-group">
         <label>Tanggal</label>
         <input id="tanggal" type="text" class="form-control" placeholder="Kategori" name="tanggal" required>
@@ -134,7 +136,10 @@
   var addUrl = '<?php echo site_url('stok_masuk/add') ?>';
   var getBarcodeUrl = '<?php echo site_url('produk/get_barcode') ?>';
   var supplierSearchUrl = '<?php echo site_url('supplier/search') ?>';
-  var listProduk = <?=json_encode($list_produk); ?>
+  var listProduk = <?=json_encode($list_produk); ?>;
+  var deleteUrl = '<?php echo site_url('stok_masuk/delete') ?>';
+  var editUrl = '<?php echo site_url('stok_masuk/edit') ?>';
+  var getDetailUrl = '<?php echo site_url('stok_masuk/get_stok_masuk') ?>';
 </script>
 <script src="<?php echo base_url('assets/js/unminify/stok_masuk.js') ?>"></script>
 </body>

@@ -70,8 +70,16 @@ class Stok_masuk extends CI_Controller {
 	public function delete()
 	{
 		$id = $this->input->post('id');
-		if ($this->produk_model->delete($id)) {
-			echo json_encode('sukses');
+		if ($this->stok_masuk_model->delete($id)) {
+			echo json_encode([
+				"success" => true,
+				"message"=>"Sukses hapus data"
+			]);
+		}else{
+			echo json_encode([
+				"success" => false,
+				"message"=>"Gagal hapus data"
+			]);
 		}
 	}
 
@@ -79,28 +87,24 @@ class Stok_masuk extends CI_Controller {
 	{
 		$id = $this->input->post('id');
 		$data = array(
+			'tanggal' => $this->input->post('tanggal'),
 			'barcode' => $this->input->post('barcode'),
-			'nama_produk' => $this->input->post('nama_produk'),
-			'satuan' => $this->input->post('satuan'),
-			'kategori' => $this->input->post('kategori'),
-			'stok' => $this->input->post('stok')
+			'jumlah' => $this->input->post('jumlah'),
+			'harga' => $this->input->post('harga'),
+			'keterangan' => $this->input->post('keterangan'),
+			'supplier' => $this->input->post('supplier')
 		);
-
-		$tipe_pelanggan = $this->pelanggan_model->get_tipe();
-		if(!empty($tipe_pelanggan)){
-			foreach($tipe_pelanggan as $key => $value){
-				$pelanggan = strtolower($value->nama);
-				$data["pelanggan"][] = [
-					"tipe" => $value->id,
-					"id" => $this->input->post("id_".$pelanggan),
-					"harga" => $this->input->post("harga_".$pelanggan),
-					"diskon" => $this->input->post("diskon_".$pelanggan),
-				];
-			}
-		}
 		
-		if ($this->produk_model->update($id,$data)) {
-			echo json_encode('sukses');
+		if ($this->stok_masuk_model->update($id,$data)) {
+			echo json_encode([
+				"success" => true,
+				"message"=>"Sukses edit data"
+			]);
+		}else{
+			echo json_encode([
+				"success" => false,
+				"message"=>"Gagal edit data"
+			]);
 		}
 	}
 
@@ -109,8 +113,8 @@ class Stok_masuk extends CI_Controller {
 		header('Content-type: application/json');
 		$id = !empty($this->input->post('id'))? $this->input->post('id') : !empty($this->input->get('id'))? $this->input->get('id') : null ;
 		
-		$produk = $this->produk_model->getProduk($id);
-		echo json_encode($produk);
+		$stok_masuk = $this->stok_masuk_model->getStokMasuk($id);
+		echo json_encode($stok_masuk);
 	}
 
 	public function get_barcode()
