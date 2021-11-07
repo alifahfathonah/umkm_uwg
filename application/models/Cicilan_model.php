@@ -104,19 +104,25 @@ class Cicilan_model extends CI_Model {
 			$last_trans = $this->last_trans($id);
 			$sisa = $last_trans - $item->trans_terakhir;
 
-			if(!$get_cicillan){
-				$utang = $this->get_utang($id);
-				
-				if($utang["status"] != "Lunas"){
-					$this->db->insert("transaksi_cicilan", [
-						'utang_id' => $id,
-						'tanggal' => $item->tanggal,
-						'trans_terakhir' => $item->trans_terakhir,
-						'sisa' => $sisa,
-						"toko_id" => ($userdata["role"] != 1)? $userdata["toko"]["id"] : 0
-					]);
+			if(is_numeric($item->id)) continue;
+
+			if($sisa >= 0){
+				if(!$get_cicillan){
+					$utang = $this->get_utang($id);
+					
+					if($utang["status"] != "Lunas"){
+						$this->db->insert("transaksi_cicilan", [
+							'utang_id' => $id,
+							'tanggal' => $item->tanggal,
+							'trans_terakhir' => $item->trans_terakhir,
+							'sisa' => $sisa,
+							"toko_id" => ($userdata["role"] != 1)? $userdata["toko"]["id"] : 0
+						]);
+					}
+					
 				}
-				
+			}else{
+				return $sisa;
 			}
 
 			if($sisa == 0){

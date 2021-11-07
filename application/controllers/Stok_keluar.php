@@ -29,7 +29,7 @@ class Stok_keluar extends CI_Controller {
 					'nama_produk' => $stok_keluar->nama_produk,
 					'jumlah' => $stok_keluar->jumlah,
 					'keterangan' => $stok_keluar->keterangan,
-					'action' => '<button class="btn btn-sm btn-info" onclick="retur('.$stok_keluar->id.')">Pengembalian</button>'
+					'action' => '<button class="btn btn-sm btn-info" onclick="retur('.$stok_keluar->id.')">Pengembalian</button> <button class="btn btn-sm btn-success" onclick="edit('.$stok_keluar->id.')"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="remove('.$stok_keluar->id.')"><i class="fas fa-trash"></i></button>'
 				);
 			}
 		} else {
@@ -62,6 +62,52 @@ class Stok_keluar extends CI_Controller {
 		}
 	}
 
+	public function delete()
+	{
+		$id = $this->input->post('id');
+		if ($this->stok_keluar_model->delete($id)) {
+			echo json_encode('sukses');
+		}
+	}
+
+	public function edit()
+	{
+		$id = $this->input->post('id');
+		$data = array(
+			'barcode' => $this->input->post('barcode'),
+			'nama_produk' => $this->input->post('nama_produk'),
+			'satuan' => $this->input->post('satuan'),
+			'kategori' => $this->input->post('kategori'),
+			'stok' => $this->input->post('stok')
+		);
+
+		$tipe_pelanggan = $this->pelanggan_model->get_tipe();
+		if(!empty($tipe_pelanggan)){
+			foreach($tipe_pelanggan as $key => $value){
+				$pelanggan = strtolower($value->nama);
+				$data["pelanggan"][] = [
+					"tipe" => $value->id,
+					"id" => $this->input->post("id_".$pelanggan),
+					"harga" => $this->input->post("harga_".$pelanggan),
+					"diskon" => $this->input->post("diskon_".$pelanggan),
+				];
+			}
+		}
+		
+		if ($this->stok_keluar_model->update($id,$data)) {
+			echo json_encode('sukses');
+		}
+	}
+
+	public function get_stok_keluar()
+	{
+		header('Content-type: application/json');
+		$id = !empty($this->input->post('id'))? $this->input->post('id') : !empty($this->input->get('id'))? $this->input->get('id') : null ;
+		
+		$stok_keluar = $this->stok_keluar_model->getStokKeluar($id);
+		echo json_encode($stok_keluar);
+	}
+
 	public function get_barcode()
 	{
 		$barcode = $this->input->post('barcode');
@@ -78,7 +124,6 @@ class Stok_keluar extends CI_Controller {
 			echo json_encode('sukses');
 		}
 	}
-	
 
 }
 

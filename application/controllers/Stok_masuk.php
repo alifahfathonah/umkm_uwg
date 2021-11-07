@@ -30,7 +30,8 @@ class Stok_masuk extends CI_Controller {
 					'nama_produk' => $stok_masuk->nama_produk,
 					'jumlah' => $stok_masuk->jumlah,
 					'harga' => $stok_masuk->harga,
-					'keterangan' => $stok_masuk->keterangan
+					'keterangan' => $stok_masuk->keterangan,
+					'action' => '<button class="btn btn-sm btn-success" onclick="edit('.$stok_masuk->id.')"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="remove('.$stok_masuk->id.')"><i class="fas fa-trash"></i></button>'
 				);
 			}
 		} else {
@@ -64,6 +65,52 @@ class Stok_masuk extends CI_Controller {
 				echo json_encode('sukses');
 			}
 		}
+	}
+
+	public function delete()
+	{
+		$id = $this->input->post('id');
+		if ($this->produk_model->delete($id)) {
+			echo json_encode('sukses');
+		}
+	}
+
+	public function edit()
+	{
+		$id = $this->input->post('id');
+		$data = array(
+			'barcode' => $this->input->post('barcode'),
+			'nama_produk' => $this->input->post('nama_produk'),
+			'satuan' => $this->input->post('satuan'),
+			'kategori' => $this->input->post('kategori'),
+			'stok' => $this->input->post('stok')
+		);
+
+		$tipe_pelanggan = $this->pelanggan_model->get_tipe();
+		if(!empty($tipe_pelanggan)){
+			foreach($tipe_pelanggan as $key => $value){
+				$pelanggan = strtolower($value->nama);
+				$data["pelanggan"][] = [
+					"tipe" => $value->id,
+					"id" => $this->input->post("id_".$pelanggan),
+					"harga" => $this->input->post("harga_".$pelanggan),
+					"diskon" => $this->input->post("diskon_".$pelanggan),
+				];
+			}
+		}
+		
+		if ($this->produk_model->update($id,$data)) {
+			echo json_encode('sukses');
+		}
+	}
+
+	public function get_stok_masuk()
+	{
+		header('Content-type: application/json');
+		$id = !empty($this->input->post('id'))? $this->input->post('id') : !empty($this->input->get('id'))? $this->input->get('id') : null ;
+		
+		$produk = $this->produk_model->getProduk($id);
+		echo json_encode($produk);
 	}
 
 	public function get_barcode()

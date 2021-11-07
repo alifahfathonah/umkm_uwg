@@ -85,13 +85,6 @@ function getSisa(){
 }
 
 function editData() {
-    let totalSisa = getSisa();
-    let totalTrans = cicilan_now.reduce((a, b)=>parseFloat(a.trans_terakhir)+parseFloat(b.trans_terakhir));
-
-    if (totalSisa < totalTrans){
-        Swal.fire("Error", "Nominal pembayaran, melebihi hutang", "error");
-        return false;
-    }
     
     $.ajax({
         url: editUrl,
@@ -101,10 +94,15 @@ function editData() {
             "id": $('[name="id"]').val(),
             "cicilan": JSON.stringify(cicilan_now)
         },
-        success: () => {
+        success: (res) => {
             $(".modal").modal("hide");
-            Swal.fire("Sukses", "Sukses Mengedit Data", "success");
-            reloadTable()
+            
+            if(res.success){
+                Swal.fire("Sukses", "Sukses Mengedit Data", "success");
+                reloadTable()
+            }else{
+                Swal.fire("Faied", res.message, "warning");
+            }
         },
         error: err => {
             console.log(err)

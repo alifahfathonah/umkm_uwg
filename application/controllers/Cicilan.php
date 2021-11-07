@@ -48,16 +48,24 @@ class Cicilan extends CI_Controller {
 		
 		if($utang){
 			$create = $this->cicilan_model->create_cicilan($id, $cicilan);
-			if($create){
+
+			if(is_bool($create)){
 				echo json_encode([
 					"success" => true,
 					"message" => "create success",
 				]);
 			}else{
-				echo json_encode([
-					"success" => false,
-					"message" => "create failed",
-				]);
+				if(is_bool($create)){
+					echo json_encode([
+						"success" => false,
+						"message" => "create failed",
+					]);
+				}else{
+					echo json_encode([
+						"success" => false,
+						"message" => "Nominal pembayaran, melebihi hutang",
+					]);
+				}
 			}
 		}else{
 			echo json_encode([

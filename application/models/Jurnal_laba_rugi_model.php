@@ -19,25 +19,17 @@ class Jurnal_laba_rugi_model extends CI_Model {
                 transaksi.nota, 
                 produk.nama_produk sell_produk, 
                 transaksi_item.qty sell_qty,  
-                /* ((SELECT 
-                    harga FROM tipe_produk_pelanggan 
-                    WHERE pelanggan = transaksi.pelanggan 
-                        AND produk.id = tipe_produk_pelanggan.produk 
-                LIMIT 1) * transaksi_item.qty) sell_harga, */
-                transaksi.jumlah_uang sell_harga,
+                tipe_produk_pelanggan.harga - ((tipe_produk_pelanggan.harga * tipe_produk_pelanggan.diskon) / 100) sell_harga,
                 NULL buy_produk, 
                 NULL buy_qty,  
                 NULL buy_harga,
-                /*((SELECT 
-                    harga FROM tipe_produk_pelanggan 
-                    WHERE pelanggan = transaksi.pelanggan 
-                        AND produk.id = tipe_produk_pelanggan.produk 
-                LIMIT 1) * transaksi_item.qty) debet,*/
-                (transaksi.jumlah_uang + IFNULL(transaksi_utang.cicilan, 0)) debet,
+                ( (transaksi.jumlah_uang - IF(transaksi.jumlah_uang >= transaksi.total_bayar, (transaksi.jumlah_uang - transaksi.total_bayar), 0) ) + IFNULL(transaksi_utang.cicilan, 0)) debet,
                 0 kredit
                 FROM transaksi
                 LEFT JOIN transaksi_item ON transaksi.id = transaksi_item.transaksi_id
                 LEFT JOIN produk ON transaksi_item.produk_id = produk.id
+		        LEFT JOIN pelanggan ON transaksi.pelanggan = pelanggan.id
+		        LEFT JOIN tipe_produk_pelanggan ON produk.id = tipe_produk_pelanggan.produk and tipe_produk_pelanggan.tipe = pelanggan.tipe
                 LEFT JOIN (
                 	SELECT 
                         transaksi_utang.transaksi_id, 
