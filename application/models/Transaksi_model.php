@@ -61,8 +61,8 @@ class Transaksi_model extends CI_Model {
 			CONCAT(\'<a class="btn btn-sm btn-success" target="_blank" href="'.site_url('transaksi/cetak/').'\', transaksi.id, \'">Print</a> <button class="btn btn-sm btn-danger" onclick="remove(\', transaksi.id, \')">Delete</button>\') action,
 			GROUP_CONCAT(\'<span class="label-produk">\',produk.nama_produk,\' <strong>(\',transaksi_item.qty, satuan_produk.satuan, \')</strong>\',\'</span>\' SEPARATOR \' \') produk
 		')->from($this->table)
-		->join('transaksi_item', 'transaksi.id = transaksi_item.transaksi_id', 'left')
-		->join('produk', 'produk.id = transaksi_item.produk_id', 'left')
+		->join('transaksi_item', 'transaksi.id = transaksi_item.transaksi_id')
+		->join('produk', 'produk.id = transaksi_item.produk_id')
 		->join('satuan_produk', 'produk.satuan = satuan_produk.id', 'left')
 		->join('pelanggan', 'transaksi.pelanggan = pelanggan.id', 'left')
 		->group_by("transaksi.id");
@@ -71,8 +71,33 @@ class Transaksi_model extends CI_Model {
 
 	public function delete($id)
 	{
-		$this->db->where('id', $id);
-		return $this->db->delete($this->table);
+		$list_item = $this->db->select("transaksi_item.*")
+			->from($this->table)
+			->join('transaksi_item', 'transaksi.id = transaksi_item.transaksi_id', 'left')
+			->where('transaksi.id', $id)->get()->result_array();
+			
+		
+		$this->db->trans_start();
+		
+		if(count($list_item)){
+			foreach($list_item as $key => $item) {
+				$produk = $this->db->get_where('produk', ["id"=>$item["produk_id"]])->row_array();
+				$new_stok = $produk["stok"] + $item["qty"];
+				
+				$this->db->where('id', $item["produk_id"])->update('produk', ["stok" => $new_stok]);
+			}
+		}
+
+		$this->db->where('id', $id)->delete($this->table);
+		$this->db->where('transaksi_id', $id)->delete("transaksi_item");
+
+		if($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return;
+		}else{
+			$this->db->trans_complete();
+			return true;
+		}
 	}
 
 	public function getProduk($barcode, $qty)
