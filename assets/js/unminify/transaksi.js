@@ -222,8 +222,8 @@ function remove(id) {
     jumlah = parseFloat(product_cart[removeIndex[0]].jumlah),
     harga = parseFloat(product_cart[removeIndex[0]].harga),
     diskon = parseFloat(product_cart[removeIndex[0]].diskon),
-        total = parseFloat($("#total").html());
-        akhir = total - (jumlah * ((diskon > 0)? harga-(harga * diskon/100): harga))
+    total = parseFloat($("#total").html());
+    akhir = total - (jumlah * ((diskon > 0)? harga-(harga * diskon/100): harga))
 
     $("#total").html(akhir);
 
@@ -237,36 +237,41 @@ function remove(id) {
 }
 
 function add() {
-    $('#total').html($('.total_bayar').html())
-    $.ajax({
-        url: addUrl,
-        type: "post",
-        dataType: "json",
-        data: {
-            produk: JSON.stringify(product_cart),
-            tanggal: $("#tanggal").val(),
-            total_bayar: $(".total_bayar").html(),
-            jumlah_uang: $('[name="jumlah_uang"]').val(),
-            ongkir: $('[name="ongkir"]').val(),
-            pelanggan: $("#pelanggan").val(),
-            nota: $("#nota").html()
-        },
-        success: res => {
-            if (isCetak) {
-                Swal.fire("Sukses", "Sukses Membayar", "success").
-                    then(() => {
-                        window.open(cetakUrl+"/"+res, "_blank"); 
-                        setTimeout(()=>window.location.reload(), 0);
-                })
-            } else {
-                Swal.fire("Sukses", "Sukses Membayar", "success").
-                    then(() => window.location.reload())
-            }
-        },
-        error: err => {
-            console.log(err)
-        }
-    })
+    if ($('[name="ongkir"]').val() > $('[name="jumlah_uang"]').val()) {
+        Swal.fire("Gagal", "Jumlah uang harus lebih besar atau sama dengan ongkir", "warning");
+    } else {
+        $("#total").html($(".total_bayar").html());
+        $.ajax({
+            url: addUrl,
+            type: "post",
+            dataType: "json",
+            data: {
+                produk: JSON.stringify(product_cart),
+                tanggal: $("#tanggal").val(),
+                total_bayar: $(".total_bayar").html(),
+                jumlah_uang: $('[name="jumlah_uang"]').val(),
+                ongkir: $('[name="ongkir"]').val(),
+                pelanggan: $("#pelanggan").val(),
+                nota: $("#nota").html(),
+            },
+            success: (res) => {
+                if (isCetak) {
+                    Swal.fire("Sukses", "Sukses Membayar", "success").then(() => {
+                        window.open(cetakUrl + "/" + res, "_blank");
+                        setTimeout(() => window.location.reload(), 0);
+                    });
+                } else {
+                    Swal.fire("Sukses", "Sukses Membayar", "success").then(() =>
+                        window.location.reload()
+                    );
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    }
+
 }
 
 function kembalian() {
