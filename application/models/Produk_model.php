@@ -213,6 +213,9 @@ class Produk_model extends CI_Model {
 	{
 		$userdata = $this->session->userdata();
 		if($userdata["role"] != 1) $this->db->where("produk.toko_id", $userdata["toko"]["id"]);
+
+		$barcode = $this->input->post("barcode");
+		if(!empty($barcode)) $this->db->like("nama_produk", $barcode, "after");
 		
 		$this->db->select('*, nama_produk text');
 		return $this->db->get($this->table)->result_array();

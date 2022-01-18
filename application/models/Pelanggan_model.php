@@ -75,6 +75,9 @@ class Pelanggan_model extends CI_Model {
 		$userdata = $this->session->userdata();
 		if($userdata["role"] != 1) $this->db->where("pelanggan.toko_id", $userdata["toko"]["id"]);
 
+		$pelanggan = $this->input->post("pelanggan");
+		if(!empty($pelanggan)) $this->db->like("nama", $pelanggan, "after");
+
 		$this->db->select('*, nama text');
 		return $this->db->get($this->table)->result_array();
 	}
