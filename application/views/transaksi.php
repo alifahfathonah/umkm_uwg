@@ -201,6 +201,6 @@
   let product_now = {};
   let product_cart = [];
 </script>
-<script src="<?php echo base_url('assets/js/unminify/transaksi.js?2022') ?>"></script>
+<script src="<?php echo base_url('assets/js/unminify/transaksi.js?202201') ?>"></script>
 </body>
 </html>

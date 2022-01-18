@@ -279,8 +279,8 @@ function kembalian() {
         jumlah_uang = parseFloat(($('[name="jumlah_uang"').val())? $('[name="jumlah_uang"').val() : 0 ),
         ongkir = parseFloat(($('[name="ongkir"').val())? $('[name="ongkir"').val() : 0 );
 
-    $('.total_bayar').html(total+ongkir);
-    $(".kembalian").html(jumlah_uang - (total+ongkir));
+    $('.total_bayar').html(total);
+    $(".kembalian").html(jumlah_uang - total);
     checkUang()
 }
 $("#produk").select2({
